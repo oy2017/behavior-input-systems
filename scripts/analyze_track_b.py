@@ -9,9 +9,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from input_systems.games import ROLES, RANGE, normalize
 
 ap = argparse.ArgumentParser(); ap.add_argument("--model", default="gemini-3.5-flash")
-ap.add_argument("--min-history", type=int, default=1); a = ap.parse_args()
+ap.add_argument("--min-history", type=int, default=1); ap.add_argument("--conditions", nargs="*"); a = ap.parse_args()
 d = Path(f"outputs/track_b/{a.model}")
-conds = [p.stem for p in sorted(d.glob("*.jsonl")) if p.stem not in ("fits",)]
+conds = a.conditions or [p.stem for p in sorted(d.glob("*.jsonl")) if p.stem not in ("fits",)]
 rows = {c: [json.loads(l) for l in (d / f"{c}.jsonl").read_text().splitlines()] for c in conds}
 # restrict to records present in every condition (fair comparison) and with enough history
 common = set.intersection(*[{r["record_idx"] for r in v} for v in rows.values()])

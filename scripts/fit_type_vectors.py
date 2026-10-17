@@ -15,7 +15,7 @@ ap = argparse.ArgumentParser(); ap.add_argument("--model", default="gemini-3.5-f
 table = collections.defaultdict(list)  # (vector key, role) -> choices
 for l in Path(f"outputs/type_table/{a.model}.jsonl").read_text().splitlines():
     d = json.loads(l)
-    if d["choice"] is not None:
+    if isinstance(d["choice"], (int, float)):  # push_pull is categorical and never a history game
         table[(json.dumps(d["type_vector"], sort_keys=True), d["role"])].append(d["choice"])
 med = {k: statistics.median(v) for k, v in table.items()}
 vectors = sorted({k[0] for k in med})
