@@ -18,7 +18,7 @@ URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
 
 class GeminiClient:
     def __init__(self, model: str = "gemini-3.5-flash", cache_dir: Path = Path("outputs/cache"),
-                 workers: int = 8, thinking: bool = False, max_retries: int = 8):
+                 workers: int = 8, thinking: bool = False, max_retries: int = 14):
         self.model, self.workers, self.thinking, self.max_retries = model, workers, thinking, max_retries
         self.key = os.environ.get("GEMINI_API_KEY") or _read_env_key()
         if not self.key:
@@ -51,7 +51,7 @@ class GeminiClient:
                 return d["choices"][0]["message"]["content"] or ""
             except urllib.error.HTTPError as e:
                 if e.code in (429, 500, 502, 503, 504) and attempt < self.max_retries - 1:
-                    time.sleep(min(60, 2 ** attempt) * (0.5 + random.random()))
+                    time.sleep(min(120, 2 ** attempt) * (0.5 + random.random()))
                     continue
                 raise
             except (urllib.error.URLError, TimeoutError, OSError):

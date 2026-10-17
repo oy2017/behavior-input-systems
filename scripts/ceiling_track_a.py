@@ -19,7 +19,7 @@ def feats(row, answers, kind, target):
     x = []
     if "demographics" in kind: x += [float(row["age"]), float(row["gender"]), float(row["race"]), float(row["hand"]), float(row["engnat"]), float(hash(row["country"]) % 1000)]
     if "big_five" in kind: x += list(big_five_scores(answers).values())
-    if "history" in kind: x += [answers[c] if c != target else np.nan for c in COLS]
+    if "history" in kind: x += [answers[c] for c in COLS if c != target]
     return x
 train = [(i, r) for i, r in enumerate(raw) if i not in test_rows and all(r[c].isdigit() and r[c] != "0" for c in COLS) and r["age"].isdigit() and int(r["age"]) < 100]
 print(f"train respondents {len(train)}, test records {len(recs)}")
