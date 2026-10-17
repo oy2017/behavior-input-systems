@@ -43,6 +43,7 @@ Means over the eight numeric games (0 to 100 scale; W floor from human bootstrap
 | raw choices in other games (BehaviorBench Across-Ctx prompt) | 25.0 | 14.5 | 0.65 |
 | fitted type vector (R, S, T), predicted from the type table (no new call) | 25.4 | 9.7 | 0.70 |
 | fitted type vector in the system prompt, model re-queried | 28.0 | 10.2 | 0.94 |
+| raw history + type vector in the prompt | 26.9 | 9.8 | 0.96 |
 | supervised ceiling, HistGBT on the same history | 20.6 | - | - |
 
 1. **No information = collapse.** With nothing about the subject the model reproduces 30%
@@ -53,8 +54,10 @@ Means over the eight numeric games (0 to 100 scale; W floor from human bootstrap
    prompt (25.4 vs 25.0) and a third lower W (9.7 vs 14.5).
 3. **Putting the type in the prompt restores human-level diversity but costs accuracy.**
    sd ratio 0.94 vs 0.65 for history, W 10.2, but MAE 28.0: a single stochastic draw per
-   record is noisier than the table median. Averaging several draws, or combining with
-   history (last condition, pending), should recover this.
+   record is noisier than the table median. Adding the raw history alongside the type
+   recovers part of it (MAE 26.9, W 9.8, sd ratio 0.96): the best distributional result of
+   any prompt, at an individual cost of 1.8 points versus history alone. On the 3+ history
+   stratum the combination is within 0.9 of history (26.1 vs 25.2) with W 9.5 vs 13.2.
 4. **The games differ in which input works.** History is best where the held-out game is
    a close relative of the observed ones (Responder 18.1 vs 26.2 for the type; Proposer).
    The type is best where the history prompt does nothing: on Bomb the history prompt is
@@ -83,7 +86,7 @@ Means over the eight numeric games (0 to 100 scale; W floor from human bootstrap
 
 ## Next
 
-1. Finish `history+type_vector`; add a 5-draw-average variant of `type_vector`.
+1. Add a 5-draw-average variant of `type_vector` and `history+type_vector`.
 2. Track A type vectors (survey-side table, 3-level scale to keep it to ~13k calls).
 3. Second model (GPT-4.1 or GLM-5.2 via OpenRouter) on both tracks.
 4. Behavior foundation model arm (needs Jin: Be.FM-1.5 or the fine-tuned Qwen3-4B).
