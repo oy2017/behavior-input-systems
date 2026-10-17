@@ -58,14 +58,11 @@ def play_history(subject: Subject) -> str:
 
 
 def type_vector(subject: Subject) -> str:
-    """Type-vector framing from Jackson, Manning, Xie, Yuan & Mei (2026).
-
-    e.g. "You are a player characterized by the following profile:
-          Risk Aversion: 2 out of 5, Strategic Sophistication: 4 out of 5, Trust: 3 out of 5."
-    """
+    """Type-vector framing, exact format of Jackson, Manning, Xie, Yuan & Mei (2026), Figure 1."""
     tv = subject["type_vector"]  # dict trait -> int in 1..5
-    parts = ", ".join(f"{t}: {tv[t]} out of 5" for t in TYPE_VECTOR_TRAITS if t in tv)
-    return f"You are a player characterized by the following profile: {parts}."
+    bullets = "\n".join(f"- {t}: {tv[t]} out of 5" for t in TYPE_VECTOR_TRAITS if t in tv)
+    return ("You are a player characterized by the following profile (each dimension is measured on a "
+            "Likert scale, where 1 is the lowest level and 5 is the highest).\n" + bullets)
 
 
 def combine(*conds: Condition) -> Condition:
