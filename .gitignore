@@ -5,3 +5,4 @@ outputs/
 __pycache__/
 *.pyc
 .DS_Store
+docs/UPDATE_FOR_JIN.md
