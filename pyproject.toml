@@ -1,0 +1,25 @@
+[project]
+name = "input-systems"
+version = "0.1.0"
+description = "Comparing input systems (demographics, Big Five, type vectors, play history) for LLM behavior prediction on BehaviorBench"
+requires-python = ">=3.11"
+dependencies = [
+    "behaviorbench @ git+https://github.com/umich-foreseer/behaviorbench_eval.git",
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.11",
+    "openai>=1.0",
+    "tenacity>=8.0",
+    "python-dotenv>=1.0",
+    "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4", "ruff>=0.5"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/input_systems"]
