@@ -36,7 +36,7 @@ for cond in a.conditions:
     t0 = time.time(); print(f"[{cond}] {len(jobs)} records", flush=True)
     def run(job):
         i, rec = job; system, user = build(rec, cond, i)
-        text = client.complete(system, user, sample=0)
+        text = client.complete(system, user, sample=i)  # one independent draw per record
         return {"record_idx": i, "user_id": rec["user_id"], "target_game": rec["target_game"],
                 "history_count": len(rec["history"]), "condition": cond, "truth": rec["target_answer"],
                 "raw": text, "prediction": parse_answer(text, rec["target_game"])}
