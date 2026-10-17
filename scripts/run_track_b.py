@@ -15,6 +15,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--model", default="gemini-3.5-flash"); ap.add_argument("--conditions", nargs="+", default=["none", "history"])
 ap.add_argument("--workers", type=int, default=8); ap.add_argument("--limit", type=int, default=None)
 ap.add_argument("--fits", type=Path, default=None, help="jsonl of {record_idx, type_vector} from fit_type_vectors.py")
+ap.add_argument("--draws", type=int, default=1, help="draws per record; >1 writes <cond>_x<draws>.jsonl with all predictions")
 a = ap.parse_args()
 recs = [json.loads(l) for l in Path("data/track_b_subjects.jsonl").read_text().splitlines()][: a.limit]
 fits = {}
@@ -31,15 +32,19 @@ def build(rec, cond, idx):
     return system, user
 
 for cond in a.conditions:
-    out = Path(f"outputs/track_b/{a.model}/{cond}.jsonl"); out.parent.mkdir(parents=True, exist_ok=True)
+    out = Path(f"outputs/track_b/{a.model}/{cond}{'_x%d' % a.draws if a.draws > 1 else ''}.jsonl"); out.parent.mkdir(parents=True, exist_ok=True)
     jobs = [(i, rec) for i, rec in enumerate(recs) if "type_vector" not in cond or i in fits]
     t0 = time.time(); print(f"[{cond}] {len(jobs)} records", flush=True)
     def run(job):
         i, rec = job; system, user = build(rec, cond, i)
-        text = client.complete(system, user, sample=i)  # one independent draw per record
-        return {"record_idx": i, "user_id": rec["user_id"], "target_game": rec["target_game"],
-                "history_count": len(rec["history"]), "condition": cond, "truth": rec["target_answer"],
-                "raw": text, "prediction": parse_answer(text, rec["target_game"])}
+        # draw k uses sample index i for k=0 (shares the cache with the single-draw run) and 10_000*k + i otherwise
+        texts = [client.complete(system, user, sample=(i if k == 0 else 10_000 * k + i)) for k in range(a.draws)]
+        preds = [parse_answer(t, rec["target_game"]) for t in texts]
+        d = {"record_idx": i, "user_id": rec["user_id"], "target_game": rec["target_game"],
+             "history_count": len(rec["history"]), "condition": cond, "truth": rec["target_answer"],
+             "raw": texts[0], "prediction": preds[0]}
+        if a.draws > 1: d["predictions"] = preds
+        return d
     with open(out, "w") as f:
         for s in range(0, len(jobs), 500):
             for d in client.map(jobs[s:s + 500], run):

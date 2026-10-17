@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse, collections, json, sys
 from pathlib import Path
 import numpy as np
+import statistics
 from scipy.stats import wasserstein_distance
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from input_systems.games import ROLES, RANGE, normalize
@@ -23,16 +24,21 @@ for game in ROLES:
         rs = [r for r in rows[c] if r["record_idx"] in common and r["target_game"] == game and r["history_count"] >= a.min_history]
         if not rs: continue
         unp = sum(r["prediction"] is None for r in rs)
+        def ind(r):  # individual-level prediction: median of draws if available, else the single draw
+            ps = [p for p in r.get("predictions", [r["prediction"]]) if p is not None]
+            if not ps: return None
+            return statistics.median(ps) if game != "push_pull" else max(set(ps), key=ps.count)
         if game == "push_pull":
-            ok = [r for r in rs if r["prediction"] is not None]
-            acc = np.mean([r["prediction"] == r["truth"] for r in ok]) if ok else float("nan")
+            ok = [r for r in rs if ind(r) is not None]
+            acc = np.mean([ind(r) == r["truth"] for r in ok]) if ok else float("nan")
             ph = np.mean([r["truth"] == "Push" for r in rs]); pm = np.mean([r["prediction"] == "Push" for r in ok]) if ok else float("nan")
             summary[(game, c)] = {"n": len(rs), "acc": acc, "push_rate_human": ph, "push_rate_model": pm, "unparsed": unp}
             print(f"{game:20s} {c:24s} {len(rs):5d} {acc:8.3f} {'-':>7s} {'-':>8s} {unp:8d}")
             continue
-        ok = [r for r in rs if r["prediction"] is not None]
+        ok = [r for r in rs if r["prediction"] is not None and ind(r) is not None]
         t = np.array([normalize(float(r["truth"]), game) for r in ok]); p = np.array([normalize(r["prediction"], game) for r in ok])
-        mae = float(np.mean(np.abs(t - p))) if len(ok) else float("nan")
+        pm = np.array([normalize(ind(r), game) for r in ok])
+        mae = float(np.mean(np.abs(t - pm))) if len(ok) else float("nan")
         W = float(wasserstein_distance(t, p)) if len(ok) else float("nan")
         sd = float(p.std() / t.std()) if len(ok) and t.std() > 0 else float("nan")
         summary[(game, c)] = {"n": len(rs), "mae": mae, "W": W, "sd_ratio": sd, "unparsed": unp}
