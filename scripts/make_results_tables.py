@@ -5,13 +5,15 @@ A = json.load(open("outputs/track_a/gemini-3.5-flash/summary.json")); Ac = json.
 B = json.load(open("outputs/track_b/gemini-3.5-flash/summary.json")); Bc = json.load(open("outputs/track_b/ceiling.json"))
 L = ["# Result tables (generated; model = gemini-3.5-flash, thinking off)\n"]
 L += ["## Track A: survey item prediction, 997 matched subject-item pairs\n", "| Condition | LLM acc | LLM MAE | LLM W(item) | sd ratio | Supervised ceiling acc | Ceiling W(item) |", "|---|---|---|---|---|---|---|"]
-for c in ["none", "demographics", "big_five", "demographics+big_five", "history", "demographics+history"]:
+for c in ["none", "demographics", "big_five", "demographics+big_five", "history", "demographics+history",
+          "type_table_econ", "type_vector_econ", "history+type_vector_econ", "type_table_bigfive", "type_vector_bigfive", "history+type_vector_bigfive"]:
     a = A.get(c); ce = Ac.get(c)
-    ce_acc = f"{ce['acc']:.3f}" if ce else "(per-item mode 0.313)"; ce_w = f"{ce['W_item']:.3f}" if ce else "-"
+    if a is None: continue
+    ce_acc = f"{ce['acc']:.3f}" if ce else ("(per-item mode 0.313)" if c == "none" else "-"); ce_w = f"{ce['W_item']:.3f}" if ce else "-"
     L.append(f"| {c} | {a['acc']:.3f} | {a['mae']:.3f} | {a['W_item']:.3f} | {a['sd_ratio']:.2f} | {ce_acc} | {ce_w} |")
 L += ["", "## Track B: held-out game prediction, 6,262 records, per game\n"]
 conds = sorted({k.split("|")[1] for k in B})
-order = [c for c in ["none", "history", "type_table", "type_vector", "history+type_vector"] if c in conds]
+order = [c for c in ["none", "history", "type_table", "type_vector", "type_vector_x5", "history+type_vector", "history+type_vector_x5"] if c in conds]
 L += ["| Game | n | " + " | ".join(f"{c} MAE / W" for c in order) + " | HistGBT MAE | W floor |", "|---|---|" + "---|" * len(order) + "---|---|"]
 for g in ["dictator", "ultimatum_proposer", "ultimatum_responder", "trust_investor", "trust_banker", "public_goods", "bomb", "guessing"]:
     cells = []

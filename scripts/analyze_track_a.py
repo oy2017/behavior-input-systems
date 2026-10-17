@@ -7,7 +7,7 @@ import numpy as np
 from scipy.stats import wasserstein_distance
 ap = argparse.ArgumentParser(); ap.add_argument("--model", default="gemini-3.5-flash"); ap.add_argument("--conditions", nargs="*"); a = ap.parse_args()
 d = Path(f"outputs/track_a/{a.model}")
-conds = a.conditions or [p.stem for p in sorted(d.glob("*.jsonl"))]
+conds = a.conditions or [p.stem for p in sorted(d.glob("*.jsonl")) if not p.stem.startswith("fits")]
 rows = {c: [json.loads(l) for l in (d / f"{c}.jsonl").read_text().splitlines()] for c in conds}
 common = set.intersection(*[{r["record_idx"] for r in v} for v in rows.values()])
 print(f"model={a.model} records={len(common)}")
