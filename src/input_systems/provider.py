@@ -48,7 +48,7 @@ class GeminiClient:
                                      headers={"Authorization": f"Bearer {self.key}", "Content-Type": "application/json"})
         for attempt in range(self.max_retries):
             try:
-                with urllib.request.urlopen(req, timeout=120) as r:
+                with urllib.request.urlopen(req, timeout=(60 if self.thinking else 120)) as r:  # Pro calls occasionally stall; a normal Pro answer takes ~4 s
                     d = json.load(r)
                 return d["choices"][0]["message"]["content"] or ""
             except urllib.error.HTTPError as e:
