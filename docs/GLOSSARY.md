@@ -133,9 +133,16 @@ used: MACH (Machiavellianism), DASS (depression, anxiety, stress), NPAS (nerdy a
 **SocSci210** (Kolluri et al. 2025). 210 reconstructed social-science experiments with participant
 demographic profiles and responses; we use 40 studies from three shards.
 
-**WVS.** World Values Survey, wave 7 (2017 to 2022), 66 countries. Its *value indices* (secular values,
-emancipative values, post-materialism, autonomy) are computed by WVS from survey items and serve as
-measured traits; the items feeding them are excluded from the targets.
+**WVS.** World Values Survey, wave 7 (2017 to 2022), 66 countries.
+
+**Value indices (WVS).** Four summary scores that WVS computes for each respondent from blocks of their
+answers and ships as columns; our *measured traits* for WVS. Secular values (SACSECVAL, 0 traditional to
+1 secular: religiosity, respect for authority, national pride, rule-bending); emancipative values
+(RESEMAVAL, 0 to 1: autonomy, gender equality, personal choice, political voice; the target of the KDD
+mixture paper); post-materialism (Y001, 0 to 5: Inglehart's priority of self-expression over material
+security); autonomy (Y003, -2 to 2: independence and determination versus obedience and faith as
+qualities for children). The survey items that feed each index are excluded from the target pool so the
+trait cannot contain the answer.
 
 **Likert scale.** A rating scale with a few ordered options, such as 1 = disagree to 5 = agree.
 
