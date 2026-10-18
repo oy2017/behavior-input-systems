@@ -8,7 +8,7 @@ ITEMS = ["health","satfin","happy","class","finrela","natroad","natpark","natsoc
          "helppoor","helpsick","conbus","spanking","consci","wrkwayup","conclerg","premarsx","xmarsex","helpblk","conlabor","helpnot","homosex","affrmact",
          "nateduc","natenvir","natheal","natcrime","natdrug","natarms","natfare","nataid","natrace","cappun","fear","gunlaw"]
 DEMO = ["age","sex","race","degree","region","income","marital","relig"]; TRAITS = ["polviews","partyid"]
-ap = argparse.ArgumentParser(); ap.add_argument("--raw-root", default="/Users/fanyang/LLMBehavior/datasets_scan"); ap.add_argument("--n", type=int, default=1000); ap.add_argument("--min-items", type=int, default=12); a = ap.parse_args()
+ap = argparse.ArgumentParser(); ap.add_argument("--raw-root", default="/Users/fanyang/LLMBehavior/datasets_scan"); ap.add_argument("--n", type=int, default=1000); ap.add_argument("--out-dir", default="data/suite"); ap.add_argument("--min-items", type=int, default=12); a = ap.parse_args()
 f = glob.glob(f"{a.raw_root}/gss2022/**/*.dta", recursive=True)[0]
 df, meta = pyreadstat.read_dta(f, usecols=ITEMS + DEMO + TRAITS)
 lab = meta.column_names_to_labels; vl = meta.variable_value_labels
@@ -44,7 +44,7 @@ for _, r in df.iterrows():
     if len(traits) < 2: continue
     recs.append((items, demo, traits))
 rng.shuffle(recs); recs = recs[: a.n]
-out = Path("data/suite/gss2022.jsonl")
+out = Path(a.out_dir) / "gss2022.jsonl"
 with open(out, "w") as fo:
     for i, (items, demo, traits) in enumerate(recs):
         tgt = rng.choice(list(items)); o = items[tgt]["options"]

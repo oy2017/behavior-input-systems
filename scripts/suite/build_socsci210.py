@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse, glob, json, random, re
 from pathlib import Path
 import pandas as pd
-ap = argparse.ArgumentParser(); ap.add_argument("--raw-root", default="/Users/fanyang/LLMBehavior/datasets_scan"); ap.add_argument("--n", type=int, default=1000); a = ap.parse_args()
+ap = argparse.ArgumentParser(); ap.add_argument("--raw-root", default="/Users/fanyang/LLMBehavior/datasets_scan"); ap.add_argument("--n", type=int, default=1000); ap.add_argument("--out-dir", default="data/suite"); a = ap.parse_args()
 rng = random.Random(0); pairs = []
 for f in sorted(glob.glob(f"{a.raw_root}/socsci210/shard*.parquet")):
     df = pd.read_parquet(f, columns=["study_id", "participant", "demographic", "stimuli", "response", "task_num", "condition_num"])
@@ -14,7 +14,7 @@ for f in sorted(glob.glob(f"{a.raw_root}/socsci210/shard*.parquet")):
         if len(g) < 2 or g.stimuli.nunique() < 2: continue
         pairs.append((sid, pid, g))
 rng.shuffle(pairs); pairs = pairs[: a.n]
-out = Path("data/suite/socsci210.jsonl")
+out = Path(a.out_dir) / "socsci210.jsonl"
 with open(out, "w") as fo:
     for i, (sid, pid, g) in enumerate(pairs):
         g = g.drop_duplicates("stimuli"); rows = list(g.itertuples())

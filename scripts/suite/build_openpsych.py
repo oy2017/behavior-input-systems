@@ -47,7 +47,7 @@ def demo(row):
     add("Handedness", HAND.get(row.get("hand"))); add("University major", (row.get("major") or "").strip()[:40] or None)
     return out
 
-ap = argparse.ArgumentParser(); ap.add_argument("--raw-root", default="/Users/fanyang/LLMBehavior/datasets_scan"); ap.add_argument("--n", type=int, default=1000)
+ap = argparse.ArgumentParser(); ap.add_argument("--raw-root", default="/Users/fanyang/LLMBehavior/datasets_scan"); ap.add_argument("--n", type=int, default=1000); ap.add_argument("--out-dir", default="data/suite")
 ap.add_argument("--datasets", nargs="*", default=list(CFG)); a = ap.parse_args()
 rng = random.Random(0)
 for name in a.datasets:
@@ -71,7 +71,7 @@ for name in a.datasets:
         if not (13 <= age <= 90) or r.get("gender") not in ("1", "2", "3"): continue
         good.append((r, ans, tp))
     rng.shuffle(good); good = good[: a.n]
-    out = Path(f"data/suite/{name}.jsonl")
+    out = Path(a.out_dir) / f"{name}.jsonl"
     with open(out, "w") as f:
         for i, (r, ans, tp) in enumerate(good):
             tgt = rng.choice(list(ans))

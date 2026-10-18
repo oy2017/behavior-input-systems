@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse, json, random
 from pathlib import Path
 import pandas as pd, pycountry
-ap = argparse.ArgumentParser(); ap.add_argument("--raw-root", default="/Users/fanyang/LLMBehavior/datasets_scan"); ap.add_argument("--n", type=int, default=1000); ap.add_argument("--min-items", type=int, default=25); a = ap.parse_args()
+ap = argparse.ArgumentParser(); ap.add_argument("--raw-root", default="/Users/fanyang/LLMBehavior/datasets_scan"); ap.add_argument("--n", type=int, default=1000); ap.add_argument("--out-dir", default="data/suite"); ap.add_argument("--min-items", type=int, default=25); a = ap.parse_args()
 cb = json.load(open(f"{a.raw_root}/wvs7/wvs7_codebook.json"))
 # target pool: ordinal attitude/value items NOT used by the derived indices
 POOL = (["Q1","Q2","Q3","Q4","Q5","Q6"] + ["Q27","Q28","Q31","Q32","Q34","Q36","Q37","Q38","Q39","Q40","Q41"] + ["Q46","Q47","Q48","Q49","Q50"]
@@ -58,7 +58,7 @@ for _, r in df.sample(frac=1.0, random_state=0).iterrows():
     recs.append((items, demo, traits))
     if len(recs) >= a.n * 3: break
 rng.shuffle(recs); recs = recs[: a.n]
-out = Path("data/suite/wvs7.jsonl")
+out = Path(a.out_dir) / "wvs7.jsonl"
 with open(out, "w") as fo:
     for i, (items, demo, traits) in enumerate(recs):
         tgt = rng.choice(list(items)); m = items_meta[tgt]
