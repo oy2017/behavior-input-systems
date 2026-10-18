@@ -83,7 +83,7 @@ Accuracy, LLM / ceiling:
 | GSS 2022 | 47.7 / 50.3 | 47.3 / 52.3 | 45.6 / 52.0 | 55.7 / 59.2 |
 | WVS 7 | 34.7 / 42.6 | 41.8 / 47.3 | 39.6 / 45.4 | 53.2 / 56.0 |
 
-7. **The model is worst at using the inputs it is usually given.** With history it sits 3 to 9 points
+7. **Demographics are the input the model extracts the least from, and the one it is usually given.** With history it sits 3 to 9 points
    under the ceiling (NPAS is the outlier at 14). With demographics it sits 2 to 15 points under, and
    on six of eight datasets the LLM given demographics scores *below* the supervised model given
    nothing (the per-item modal answer). Demographics do carry 2 to 5 points of information

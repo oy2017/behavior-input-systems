@@ -75,7 +75,7 @@ added more than two points.
 | SocSci210 experiments | 26.2% | 27.4% | - | - | 42.5% |
 | World Values Survey | 34.7% | 41.8% | 39.6% | 38.4% | 53.2% |
 
-**3. The model is worst at using the input it is usually given.** The supervised control shows that
+**3. Demographics are the input the model extracts the least from, and the one it is usually given.** The supervised control shows that
 demographics *do* carry 2 to 5 points of information on every dataset. The language model recovers
 almost none of it: on six of eight datasets, the model given demographics scores *below* a supervised
 model given nothing but each item's most common answer. Given a profile, the model answers as a
