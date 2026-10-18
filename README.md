@@ -21,9 +21,13 @@ of describing the same person:
 | behavior history | what the person actually did elsewhere | their answers to other items, choices in other games |
 | best-fitting type vector | a type vector (Jackson et al. 2026): three trait intensities on a 1-to-5 scale, fitted to the person's behavior history | "Risk Aversion 2/5, Strategic Sophistication 4/5, Trust 3/5" |
 
-The type vector follows Jackson, Manning, Xie, Yuan and Mei (2026): ask the model how each of 125
-possible types would behave, then pick the type that best matches the person's *other* observed
-choices. The target choice is never used to fit.
+The type vector follows Jackson, Manning, Xie, Yuan and Mei (2026). A type is three traits (Risk
+Aversion, Strategic Sophistication, Trust), each at a level from 1 to 5, so there are 5 x 5 x 5 = 125
+possible types. Once per model we ask it how each type would play each game (125 types x 9 games x 10
+draws). To describe a person, we compare their choices in the games we observed against every type's
+choices in those same games and keep the closest type, their best-fitting type vector. The game we
+are predicting is never used to fit. For the survey datasets the same is done with three Big Five
+trait names at three levels (27 types) over the questionnaire's items.
 
 We score two things, following BehaviorBench (Huang et al. 2026): **individual accuracy** (did the
 model get this person's answer right?) and **distributional alignment** (does the spread of the
