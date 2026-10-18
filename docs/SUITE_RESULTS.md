@@ -55,8 +55,8 @@ predicted either by table lookup or by putting the type in the prompt).
 4. **Measured traits help only when the trait is the construct.** TIPI scores add 14.6 points on
    DASS (neuroticism is distress) and 11.6 on Big Five items (the same construct), but nothing on
    NIS, FTI, MACH, or NPAS. Political identity does not help on GSS; the WVS value indices add 5.
-5. **A fitted type beats measured traits on five of seven datasets** where both exist (MACH +7.1,
-   DASS +8.3, RIASEC +4.8, FTI +1.9, NIS +15.6), loses on NPAS and WVS, and loses to raw history
+5. **A fitted type beats measured traits on six of eight datasets** where both exist (MACH +7.1,
+   DASS +8.3, RIASEC +4.8, FTI +1.9, NIS +15.6, GSS +3.6), loses on NPAS and WVS, and loses to raw history
    everywhere (by 6 to 19 points). Fitting three trait levels to a person's own answers extracts
    more than their self-reported scores on the same traits, but a three-number type is a lossy
    summary of a response record. Where the fitted axes are wrong for the domain (nerdiness needs
