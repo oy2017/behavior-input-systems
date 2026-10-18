@@ -65,7 +65,7 @@ attributes, self-reported traits, observed behavior) and *how compressed it is*
 | `type_vector` | (R, S, T) on 1 to 5 fitted to the person's *other* observations through the LLM, exactly as in Jackson et al. | behavior, fitted | 3 numbers |
 | combinations | `demographics+big_five`, `history+type_vector`, `demographics+history` | | |
 
-`type_vector` is the "behavior code" input Jin referred to. The PNAS
+`type_vector` is the "behavior code" input. The PNAS
 behavioral codes are free-text motivation prompts tied to a behavior, not a
 person, so the person-level version is the Jackson et al. type vector; we
 follow its prompt format and its leave-one-game-out fitting rule (the target
@@ -111,7 +111,7 @@ prompt = unchanged BehaviorBench task prompt.
 | GPT-4.1 | Backbone of the type-vector paper; strongest non-reasoning GPT on BehaviorBench; its type-vector choices can be checked against the paper's Figure 2 |
 | Gemini 3.1 Flash (Pro if budget allows) | Free quota; Pro is #1 distributionally on BehaviorBench |
 | GLM-5.2 | Open-weight, already on the leaderboard (our PR), top-5 at both levels |
-| One behavior foundation model: BehaviorBench's fine-tuned Qwen3-4B or Be.FM-1.5-4B (ask Jin for weights) | Tests whether a model trained on behavior data uses x differently (H5) |
+| One behavior foundation model: BehaviorBench's fine-tuned Qwen3-4B or Be.FM-1.5-4B (weights from the lab) | Tests whether a model trained on behavior data uses x differently (H5) |
 
 Three general-purpose models plus one behavior foundation model is enough for
 the main claims; more can be added through the existing OpenRouter path.
@@ -182,7 +182,7 @@ check that the model responds to the traits monotonically.
 | 2 | Track A full run (E1, E3, E4) | week 5 |
 | 3 | Behavior foundation model (E5); write-up; results in BehaviorBench's leaderboard format | week 6 to 7 |
 
-## 8. Questions for Jin and Prof. Mei
+## 8. Open questions for the lab
 
 1. Is (Risk Aversion, Strategic Sophistication, Trust) the type vector you
    want as the "behavior code" condition, or also a learned-prompt condition in

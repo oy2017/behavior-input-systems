@@ -6,7 +6,7 @@ everything else is ordinary usage.
 ## The question and the design
 
 **Input system.** The way a person is described to the model before it is asked to behave like them.
-Jin Huang's phrase for the project. Our five input systems are listed under *conditions* below.
+Our five input systems are listed under *conditions* below.
 
 **p(y | x, c).** BehaviorBench's way of writing the problem: the probability of a behavior *y* given the
 subject's characteristics *x* and the context *c* (the task). An input system is a choice of *x*.
