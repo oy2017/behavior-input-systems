@@ -18,10 +18,12 @@ for i, r in enumerate(recs):
     for vk in vectors:
         errs = [abs(ans - med[(vk, t)]) / rng for t, ans in obs if (vk, t) in med]
         if errs: scored.append((sum(errs) / len(errs), vk))
-    if not scored or (vectors[0], r["items"][tgt]["text"]) not in med: continue
+    if not scored: continue
     scored.sort(); best = scored[0][0]; ties = [vk for e, vk in scored if e == best]
+    ttext = r["items"][tgt]["text"]; ties_t = [vk for vk in ties if (vk, ttext) in med]
+    if not ties_t: continue
     ff.write(json.dumps({"record_idx": i, "type_vector": json.loads(ties[0]), "fit_error": best, "ties": len(ties), "n_history": len(obs)}) + "\n")
-    pred = int(round(statistics.mean(med[(vk, r["items"][tgt]["text"])] for vk in ties)))
+    pred = int(round(statistics.mean(med[(vk, ttext)] for vk in ties_t)))
     tf.write(json.dumps({"record_idx": i, "subject_id": r["subject_id"], "target_item": tgt, "condition": "type_table", "truth": r["items"][tgt]["answer"],
                          "lo": sc["min"], "hi": sc["max"], "raw": f"ties={len(ties)}", "prediction": pred}) + "\n"); nf += 1
 print(f"{a.dataset}: fitted {nf}/{len(recs)}")
