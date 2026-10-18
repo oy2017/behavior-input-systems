@@ -22,8 +22,8 @@ tokens) before answering; the non-thinking model answers directly. Accuracy on t
 | | demographics | 41.2 | 42.3 | +1.1 | 47.3 |
 | | value indices | 38.5 | 39.8 | +1.3 | 45.4 |
 | | history | 52.7 | 56.3 | **+3.6** | 56.0 |
-| MobLab games (MAE) | nothing | 30.9 | (pending) | | |
-| | history | 25.0 | (pending) | | 20.6 |
+| MobLab games (MAE) | nothing | 30.9 | 29.5 | -1.4 | |
+| | history | 25.0 | 23.2 | **-1.8** | 20.6 (HistGBT) |
 
 ## Reading
 
@@ -35,7 +35,11 @@ tokens) before answering; the non-thinking model answers directly. Accuracy on t
 2. **Reasoning helps the model read numeric trait scores.** Measured scores gain 3.6 to 4.7 points on
    the three personality datasets, closing about half the gap to the ceiling. The model appears to
    work out what "Neuroticism: 42 out of 50" implies instead of pattern-matching on it.
-3. **Reasoning helps history a little**, +2 to +4 on three datasets, and on WVS reaches the ceiling.
+3. **Reasoning helps history a little**, +2 to +4 on three datasets, and on WVS reaches the ceiling. In
+   the games it lowers MAE from 25.0 to 23.2 and W from 14.5 to 13.3.
+5. **Reasoning does not cure the collapse.** Told nothing about the player, the thinking model still
+   gives one answer to everyone on Dictator and Bomb (sd ratio 0.00) and reproduces under 15% of the
+   human spread on Guessing and Public Goods; W with nothing is 26.6 vs 27.3 without thinking.
 4. **Reasoning changes the uninformed baseline unpredictably** (-7.7 on MACH, +7.1 on NIS): without
    subject information the model's answer depends on what it talks itself into.
 
