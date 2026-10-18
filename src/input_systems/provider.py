@@ -19,7 +19,9 @@ URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
 class GeminiClient:
     def __init__(self, model: str = "gemini-3.5-flash", cache_dir: Path = Path("outputs/cache"),
                  workers: int = 8, thinking: bool = False, max_retries: int = 14):
-        self.model, self.workers, self.thinking, self.max_retries = model, workers, thinking, max_retries
+        self.model, self.workers, self.max_retries = model, workers, max_retries
+        # Pro and Gemma models only run with thinking on (they reject reasoning_effort=none); Flash models default to off.
+        self.thinking = thinking or any(t in model for t in ("pro", "gemma"))
         self.key = os.environ.get("GEMINI_API_KEY") or _read_env_key()
         if not self.key:
             raise RuntimeError("GEMINI_API_KEY not set (put it in .env)")

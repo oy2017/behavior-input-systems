@@ -1,103 +1,152 @@
-# behavior-input-systems
+# What should you tell a language model about a person before asking it to behave like them?
 
-How does the **input system** — what we tell a language model about a person —
-change how well the model predicts that person's behavior?
+Owen Yang, with Jin Huang and Qiaozhu Mei (Foreseer lab, University of Michigan). October 2026.
 
-Project with Jin Huang and Prof. Qiaozhu Mei (Foreseer lab, UMich). Proposed
-in Slack on 2026-09-21: compare demographics vs. Big Five personality vs.
-behavior codes / type vectors as model inputs, using BehaviorBench as the
-first dataset.
+## The question
 
-Full proposal with literature grounding: [docs/PROPOSAL.md](docs/PROPOSAL.md). Data and model feasibility check: [docs/DATA_FEASIBILITY.md](docs/DATA_FEASIBILITY.md).
+Researchers increasingly use large language models as stand-ins for human subjects: predict how a
+person will answer a survey item, play an economic game, or respond in an experiment. To do that, the
+model has to be told who the person is. Almost everyone tells it the same thing: demographics (age,
+gender, country, education). Nobody had checked whether that is the right thing to tell it.
 
-First model: `gemini-3.5-flash` with thinking off (`reasoning_effort: "none"`); key in `.env` as `GEMINI_API_KEY`.
+So we asked a simple question. **Holding the model, the task, and the people fixed, how much does the
+description of the person change how well the model predicts their behavior?** We compare five ways
+of describing the same person:
 
-## Research question
+| Input system | What the model is told | Example |
+|---|---|---|
+| nothing | only the task | "You are a player in an economics game." |
+| demographics | the usual profile | "a 24-year-old female from Canada, graduate degree, Catholic, married..." |
+| measured traits | self-reported trait scores | Big Five scores, political identity, value indices |
+| behavior history | what the person actually did elsewhere | their answers to other items, choices in other games |
+| fitted type | three trait numbers inferred from their history | "Risk Aversion 2/5, Strategic Sophistication 4/5, Trust 3/5" |
 
-For the same target subjects and the same prediction tasks, hold the model
-fixed and vary only the description of the subject. Measure prediction
-quality at the individual level (error per subject) and the distribution
-level (Wasserstein distance between predicted and human response
-distributions), exactly as BehaviorBench does.
+The fitted type follows Jackson, Manning, Xie, Yuan and Mei (2026): ask the model how each of 125
+possible types would behave, then pick the type that best matches the person's *other* observed
+choices. The target choice is never used to fit.
 
-## Input systems (conditions)
+We score two things, following BehaviorBench (Huang et al. 2026): **individual accuracy** (did the
+model get this person's answer right?) and **distributional alignment** (does the spread of the
+model's answers across people look like the human spread? measured by Wasserstein distance, W).
+These can disagree: a model can be right about the average and wrong about everyone.
 
-| Condition | What the model is told about the subject | Source |
-| --- | --- | --- |
-| `none` | Nothing. Population prior. | — |
-| `demographics` | Age, gender, country, race, native language, handedness. | Big Five raw data |
-| `big_five` | Five OCEAN scores (10–50). | Big Five raw data |
-| `play_history` | Observed choices in other economic games (raw behavior). | MobLab `acrossgame` |
-| `type_vector` | Trait intensities (Risk Aversion, Strategic Sophistication, Trust, 1–5) fitted to the subject's other-game choices, per Jackson, Manning, Xie, Yuan & Mei (2026). | fitted from MobLab |
-| `demographics+big_five`, `play_history+type_vector` | Combinations. | — |
+## What we did
 
-## Two tracks
+- **Ten datasets, about 16,000 subject-task pairs, 240,000 model calls.** BehaviorBench's two sources
+  (MobLab economic games, 6,262 held-out game choices; a Big Five survey, 997 held-out items), six
+  openpsychometrics questionnaires with rich demographics and a measured Big Five (Machiavellianism,
+  depression-anxiety-stress, nerdiness, vocational interests, temperament, nonverbal behavior), the
+  2022 General Social Survey, SocSci210 (40 real social-science experiments with 16-field profiles),
+  and World Values Survey wave 7 (66 countries).
+- **One model so far:** Gemini 3.5 Flash with reasoning disabled, one answer per record, the dataset's
+  own task prompt. Only the description of the person changes between conditions.
+- **Controls.** For every input we also trained an ordinary supervised model (gradient boosting on
+  thousands of other respondents) on the same input to predict the same target. That tells us how much
+  information each input *contains*, so we can separate "demographics are uninformative" from "the
+  model cannot use them". We also report the human bootstrap floor on W and a multi-draw check.
 
-**Track A — Big Five subset.** Same 1,000 participants as BehaviorBench's
-`surv_resp_pred` / `pers_score_pred` tasks (recoverable via
-`behaviorbench_indices.json` against the public Kaggle OCEAN file). Targets:
-survey item responses and held-out personality dimensions. Conditions:
-`none`, `demographics`, `big_five`, `demographics+big_five`.
+## What we found
 
-**Track B — MobLab subset.** Same subjects as BehaviorBench's
-`acrossgame_behavior` tasks (`metadata.user_id`, 750 per target game).
-Target: first-round choice in the target game. Conditions: `none`,
-`play_history` (the existing BehaviorBench prompt), `type_vector`,
-`play_history+type_vector`.
+**1. Behavior history is the best input, everywhere.** On all ten datasets, the person's own prior
+answers or choices beat every other description, by 8 to 27 accuracy points over nothing.
 
-Type vectors are fitted cheaply: with a crafted system prompt the model is
-near-deterministic (see the KDD reproduction, finding 3), so we precompute a
-lookup table of 5×5×5 = 125 type vectors × 9 game roles per model (~1,125
-calls), then fit each subject by nearest match on their history games.
+**2. Demographics are usually close to worthless, and sometimes harmful.** Across ten datasets,
+demographics changed accuracy by -7 to +7 points. They helped only where they plausibly carry the
+answer (country for values on WVS, gender and age for nonverbal behavior). On three datasets they
+made the model worse than telling it nothing, and on real social-science experiments a sixteen-field
+profile including party and ideology added one point. Added on top of history, demographics never
+added more than two points.
 
-## Metrics
+| Dataset | nothing | demographics | measured traits | fitted type | history |
+|---|---|---|---|---|---|
+| MobLab games (MAE, lower is better) | 30.9 | - | - | 25.4 | 25.0 |
+| Big Five items | 29.2% | 30.9% | 40.8% | 37.2% | 48.4% |
+| Machiavellianism | 33.2% | 28.5% | 30.9% | 38.0% | 44.2% |
+| Depression-anxiety-stress | 25.5% | 30.1% | 40.1% | 48.4% | 52.9% |
+| Nerdiness | 34.4% | 27.3% | 33.0% | 28.9% | 37.7% |
+| Vocational interests | 22.5% | 27.5% | 26.1% | 30.9% | 49.7% |
+| Temperament | 40.7% | 42.2% | 41.6% | 43.5% | 55.7% |
+| Nonverbal behavior | 27.0% | 34.3% | 25.3% | 40.9% | 52.2% |
+| General Social Survey 2022 | 47.7% | 47.3% | 45.6% | 50.1% | 55.7% |
+| SocSci210 experiments | 26.2% | 27.4% | - | - | 42.5% |
+| World Values Survey | 34.7% | 41.8% | 39.6% | 38.4% | 53.2% |
 
-Reuse `behaviorbench` (the evaluation package) for parsing and scoring:
-individual error (MAE / accuracy) and distribution distance (Wasserstein).
-Report both per condition, per task, per model.
+**3. The model is worst at using the input it is usually given.** The supervised control shows that
+demographics *do* carry 2 to 5 points of information on every dataset. The language model recovers
+almost none of it: on six of eight datasets, the model given demographics scores *below* a supervised
+model given nothing but each item's most common answer. Given a profile, the model answers as a
+stereotype, and the stereotype is wrong more often than the mode. Given behavior history, the model
+sits only 3 to 9 points under the supervised ceiling.
 
-## Models
+**4. Measured traits help only when the trait is the construct being predicted.** Big Five scores add
+15 points on distress items (neuroticism) and 12 on Big Five items, and nothing on temperament,
+Machiavellianism, or nonverbal behavior. Political identity does not help on the GSS.
 
-Start with what is already available: Gemini (free quota), GLM-5.2 and
-Tencent HY3 via OpenRouter, and GPT-4o-mini for comparability with the KDD
-paper. Add one strong model later.
+**5. Three numbers inferred from behavior beat self-reported trait scores.** A type fitted to the
+person's other answers beat their measured Big Five scores on six of eight datasets (by 2 to 16
+points), and in the economic games it matched the full behavior history on individual accuracy while
+cutting distributional error by a third (W 9.7 vs 14.5). A fitted type is a lossy summary of a
+response record, though: it trailed raw history on every survey dataset, and it fails when the three
+fitted traits are the wrong axes for the domain (nerdiness, values).
 
-## Phases
+**6. Without any description, the model collapses.** Told nothing about the person, Gemini reproduces
+0 to 50% of the human spread of answers in the games and is below the per-item modal answer on every
+survey. Any behavior-derived input restores the spread; demographics restore some of it while lowering
+individual accuracy.
 
-1. **Scaffold (this week).** Subject table, prompt builders, dummy run.
-2. **Track A.** 4 conditions × 2 tasks × 2 models, n = 1,000.
-3. **Track B.** Type-vector lookup table, fit, 4 conditions × 7 games × 2 models.
-4. **Analysis + write-up.** Which input system helps which task, and whether
-   gains are individual-level, distribution-level, or both.
+## What is new here
 
-## Layout
+- Prior work fixes one description of the person and never compares alternatives: demographics in the
+  survey-simulation benchmarks (BehaviorBench, SubPOP, OpinionQA), prose personas in OdysSim, learned
+  latent prompts in the KDD mixture paper, behavior history in Centaur. This is the first side-by-side
+  comparison on the same subjects, tasks, and model, across ten datasets.
+- The supervised control is what makes the demographics result interpretable: the information is
+  there, the model does not use it. That points at prompting and training, not at data.
+- The fitted type is tested as a *prediction input* against measured traits and raw history, with a
+  leave-one-out protocol and a distributional score, which the type-vector paper did not do.
+- The multi-draw check in the games showed that a tie-breaking rule, not sampling noise, explained the
+  gap between putting a type in the prompt and reading it from a table; one-game subjects are where
+  it matters.
 
-```
-src/input_systems/
-  conditions.py    # input-system prompt builders (the experimental conditions)
-  subjects.py      # matched subject tables for Track A and Track B
-  type_vector.py   # type-vector lookup table and per-subject fit
-scripts/run_track.py
-data/      # not committed: Kaggle OCEAN data.csv, BehaviorBench bundle, joint.csv
-outputs/   # not committed: model outputs and scores
-docs/      # plan, update drafts
-```
+## Caveats
 
-## Setup
+One model, one draw per record, 1,000 subjects per dataset. The fitted type used the same three trait
+names (Extraversion, Agreeableness, Neuroticism) on every survey dataset; domain-matched traits would
+likely do better. openpsychometrics samples are self-selected; GSS and WVS are probability samples. The
+BehaviorBench survey conditions use its first-person framing, so absolute accuracies are not comparable
+to its leaderboard. A Gemini 3.1 Pro (reasoning) arm is in progress to test finding 3 on a stronger model.
+
+## Documents
+
+- [docs/PROPOSAL.md](docs/PROPOSAL.md): the literature and the design.
+- [docs/DATA_FEASIBILITY.md](docs/DATA_FEASIBILITY.md): how subjects were matched across sources.
+- [docs/RESULTS.md](docs/RESULTS.md): BehaviorBench runs 1 and 2 (games and Big Five), with tables in
+  [docs/results_tables.md](docs/results_tables.md).
+- [docs/SUITE_RESULTS.md](docs/SUITE_RESULTS.md): the nine additional datasets, with tables in
+  [docs/suite_tables.md](docs/suite_tables.md).
+
+## Reproducing
 
 ```bash
-uv sync
-# BehaviorBench evaluation data (public)
-git clone https://huggingface.co/datasets/befm/BehaviorBench data/behaviorbench
-# Big Five raw file (same data as the Kaggle file BehaviorBench cites; no login needed)
-mkdir -p data/big5_raw && curl -L -o data/big5_raw/BIG5.zip https://openpsychometrics.org/_rawdata/BIG5.zip && unzip -q data/big5_raw/BIG5.zip -d data/big5_raw
-# MobLab joint table (same participant across games):
-curl -L -o data/joint.csv https://raw.githubusercontent.com/oy2017/prompt-mixture-alignment/main/data/joint.csv
+uv venv .venv && uv pip install --python .venv/bin/python numpy scipy pandas scikit-learn pyarrow pyreadstat pycountry
+echo 'GEMINI_API_KEY=...' > .env
+# data: see docs/DATA_FEASIBILITY.md (BehaviorBench + openpsychometrics BIG5) and scripts/suite/build_*.py
+python3 scripts/build_type_table.py            # 125 types x 9 games x 10 draws
+python3 scripts/run_track_b.py --conditions none history
+python3 scripts/fit_type_vectors.py && python3 scripts/type_table_predict.py
+python3 scripts/run_track_b.py --conditions type_vector history+type_vector --fits outputs/track_b/gemini-3.5-flash/fits.jsonl
+.venv/bin/python scripts/analyze_track_b.py
+python3 scripts/suite/build_openpsych.py && python3 scripts/suite/run_suite.py --dataset mach   # etc.
 ```
 
-## Related work in this lab
+Layout: `src/input_systems/` (prompt conditions, provider, subject loaders, games, suite format),
+`scripts/` (BehaviorBench tracks), `scripts/suite/` (the nine-dataset suite), `docs/` (write-ups).
+`data/` and `outputs/` are not committed; `.env` holds the API key.
 
-- BehaviorBench (arXiv 2606.24162) — tasks, data, metrics.
-- Distributional Alignment via Mixture Modeling (Xie, Gao, Mei, KDD 2026) — reproduced in `oy2017/prompt-mixture-alignment`.
-- Modeling Human Behavior with Type Vectors (Jackson et al., arXiv 2608.18265) — the behavior-code input.
-- Categorizing Strategic Situations (Xie, Mei, Yuan, Jackson, PNAS 2025).
+## References
+
+- Huang, Xie, Song, Zhang, Yang, Yuan, Jackson, Mei. BehaviorBench: Benchmarking Foundation Models for Behavioral Science Tasks. arXiv 2606.24162.
+- Jackson, Manning, Xie, Yuan, Mei. Modeling Human Behavior with Type Vectors Using AI. arXiv 2608.18265.
+- Xie, Gao, Mei. Distributional Alignment for Social Simulation with LLMs: A Mixture Modeling Approach. KDD 2026.
+- Xie, Mei, Yuan, Jackson. Using LLMs to Categorize Strategic Situations and Decipher Motivations Behind Human Behaviors. PNAS 2025.
+- Ziems et al. Will Scaling Improve Social Simulation with LLMs? arXiv 2607.02464. Zhou et al. OdysSim. arXiv 2606.14199.
