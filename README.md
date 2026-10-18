@@ -114,7 +114,12 @@ One model, one draw per record, 1,000 subjects per dataset. The fitted type used
 names (Extraversion, Agreeableness, Neuroticism) on every survey dataset; domain-matched traits would
 likely do better. openpsychometrics samples are self-selected; GSS and WVS are probability samples. The
 BehaviorBench survey conditions use its first-person framing, so absolute accuracies are not comparable
-to its leaderboard. A reasoning arm (Gemini 3.8 Flash with thinking on) is in progress to test finding 3.
+to its leaderboard.
+
+**Does reasoning change this?** We repeated four datasets with Gemini 3.8 Flash with thinking on
+([docs/REASONING_CHECK.md](docs/REASONING_CHECK.md)). Reasoning helps the model read numeric trait scores
+(+4 to +5 points) and history (+2 to +4), and does nothing for demographics (-1.6 to +1.1), which stay
+4 to 15 points under their information content. The input ordering is unchanged.
 
 ## Documents
 
@@ -124,6 +129,7 @@ to its leaderboard. A reasoning arm (Gemini 3.8 Flash with thinking on) is in pr
   [docs/results_tables.md](docs/results_tables.md).
 - [docs/SUITE_RESULTS.md](docs/SUITE_RESULTS.md): the nine additional datasets, with tables in
   [docs/suite_tables.md](docs/suite_tables.md).
+- [docs/REASONING_CHECK.md](docs/REASONING_CHECK.md): thinking on vs off on four datasets.
 
 ## Reproducing
 
