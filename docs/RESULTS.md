@@ -38,20 +38,20 @@ conditions in Track B and survey-side type vectors in Track A (~80k calls).
 
 | What the model is told | Accuracy | W per item |
 |---|---|---|
-| fitted econ type (Risk Aversion, Strategic Sophistication, Trust), table lookup | 33.9% | 0.69 |
+| best-fitting type vector over (Risk Aversion, Strategic Sophistication, Trust), type-based prediction | 33.9% | 0.69 |
 | same, in the prompt | 33.0% | 0.69 |
-| fitted Big Five type (Extraversion, Agreeableness, Neuroticism), table lookup | 37.6% | 0.58 |
+| best-fitting type vector over (Extraversion, Agreeableness, Neuroticism), type-based prediction | 37.6% | 0.58 |
 | same, in the prompt | 37.2% | 0.56 |
-| history + Big Five type in the prompt | 45.6% | 0.39 |
-| history + econ type in the prompt | 46.1% | 0.38 |
+| history + Big Five type vector as system prompt | 45.6% | 0.39 |
+| history + econ type vector as system prompt | 46.1% | 0.38 |
 
 5. **In the survey direction, trait names chosen for the domain win, mirroring Jackson et
    al.'s games result in reverse.** Big Five trait names beat the economic traits by 3.7
-   points as a fitted type. Both tables are internally coherent: each Big Five trait moves
+   points as a best-fitting type vector. Both tables are internally coherent: each Big Five trait moves
    its own keyed dimension from about 1.2 to 5.0 across three levels, and the economic
    traits map intuitively (Trust onto Agreeableness, Risk Aversion inversely onto
    Extraversion, Strategic Sophistication onto Conscientiousness and Openness).
-6. **A fitted 3-number type is a lossy summary of survey behaviour.** It lands between
+6. **A three-dimensional best-fitting type vector is a lossy summary of survey behaviour.** It lands between
    demographics (30.9%) and the five measured scores (40.8%), and below the raw answers
    (48.4%); added on top of history it slightly hurts. Measured traits beat fitted ones
    here, the opposite of the games, where no measured traits exist.
@@ -64,26 +64,26 @@ Means over the eight numeric games (0 to 100 scale; W floor from human bootstrap
 |---|---|---|---|
 | nothing | 30.9 | 27.3 | 0.30 |
 | raw choices in other games (BehaviorBench Across-Ctx prompt) | 25.0 | 14.5 | 0.65 |
-| fitted type vector (R, S, T), predicted from the type table (no new call) | 25.4 | 9.7 | 0.70 |
-| fitted type vector in the system prompt, model re-queried | 28.0 | 10.2 | 0.94 |
+| best-fitting type vector (R, S, T), type-based prediction (median of the type's generated choices; no new call) | 25.4 | 9.7 | 0.70 |
+| best-fitting type vector as the system prompt, model re-queried | 28.0 | 10.2 | 0.94 |
 | raw history + type vector in the prompt | 26.9 | 9.8 | 0.96 |
-| type in the prompt, median of 5 draws | 27.8 | 10.2 | 0.94 |
-| history + type in the prompt, median of 5 draws | 27.0 | 9.8 | 0.96 |
+| type vector as system prompt, median of 5 draws | 27.8 | 10.2 | 0.94 |
+| history + type vector as system prompt, median of 5 draws | 27.0 | 9.8 | 0.96 |
 | supervised ceiling, HistGBT on the same history | 20.6 | - | - |
 
 1. **No information = collapse.** With nothing about the subject the model reproduces 30%
    of human spread; three games sit at or below 15% (Responder 0%, Bomb 7%, Dictator 15%).
-2. **A three-number type matches raw history at the individual level and beats it
+2. **A best-fitting type vector (k = 3) matches raw history at the individual level and beats it
    distributionally (H3 supported).** Table-based prediction from the fitted (Risk Aversion,
    Strategic Sophistication, Trust) vector has the same MAE as the 1-to-7-choice history
    prompt (25.4 vs 25.0) and a third lower W (9.7 vs 14.5).
-3. **Putting the type in the prompt restores human-level diversity but costs accuracy,
+3. **Using the type vector as the system prompt restores human-level diversity but costs accuracy,
    and the cost is tie-breaking, not sampling noise.** sd ratio 0.94 vs 0.65 for history,
    W 10.2, but MAE 28.0. Taking the median of five draws changes almost nothing (27.8).
    Splitting on fit uniqueness explains it: for the 3,082 records with a unique fitted
-   type, the five-draw median equals the table lookup exactly (25.77 vs 25.77); for the
+   type, the five-draw median equals the type-based prediction exactly (25.77 vs 25.77); for the
    3,180 records with tied fits (mostly one observed game) the prompt used the first tie,
-   biased toward low trait values, and scores 30.2 vs 25.3 for the tie-averaged table.
+   biased toward low trait values, and scores 30.2 vs 25.3 for the tie-averaged type-based prediction.
    Fix for the next run: break ties toward the centroid of the tied vectors. Adding the raw history alongside the type
    recovers part of it (MAE 26.9, W 9.8, sd ratio 0.96): the best distributional result of
    any prompt, at an individual cost of 1.8 points versus history alone. On the 3+ history
@@ -95,7 +95,7 @@ Means over the eight numeric games (0 to 100 scale; W floor from human bootstrap
    17.7 to 6.8. On Trust Investor and Public Goods the type wins on both metrics.
 5. **Relative to Jackson et al.** Their best type-based held-out error was 1.11x the
    HistGBT benchmark on subjects with 4+ other games. Ours is 1.23x over all records
-   (most with only 1 to 2 history games) and the type table was built with 10 draws
+   (most with only 1 to 2 history games) and the type-vector choices were generated with 10 draws
    from a cheaper model. Restricting to 3+ history games does not change the ranking.
 6. **Fit quality degrades with history size as expected:** mean fit error on history games
    rises from 0.04 (1 game, trivially fittable) to 0.10 (5+ games); ties are common with

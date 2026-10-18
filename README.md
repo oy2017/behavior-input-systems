@@ -19,9 +19,9 @@ of describing the same person:
 | demographics | the usual profile | "a 24-year-old female from Canada, graduate degree, Catholic, married..." |
 | measured traits | self-reported trait scores | Big Five scores, political identity, value indices |
 | behavior history | what the person actually did elsewhere | their answers to other items, choices in other games |
-| fitted type | three trait numbers inferred from their history | "Risk Aversion 2/5, Strategic Sophistication 4/5, Trust 3/5" |
+| best-fitting type vector | a type vector (Jackson et al. 2026): three trait intensities on a 1-to-5 scale, fitted to the person's behavior history | "Risk Aversion 2/5, Strategic Sophistication 4/5, Trust 3/5" |
 
-The fitted type follows Jackson, Manning, Xie, Yuan and Mei (2026): ask the model how each of 125
+The type vector follows Jackson, Manning, Xie, Yuan and Mei (2026): ask the model how each of 125
 possible types would behave, then pick the type that best matches the person's *other* observed
 choices. The target choice is never used to fit.
 
@@ -57,7 +57,7 @@ made the model worse than telling it nothing, and on real social-science experim
 profile including party and ideology added one point. Added on top of history, demographics never
 added more than two points.
 
-| Dataset | nothing | demographics | measured traits | fitted type | history |
+| Dataset | nothing | demographics | measured traits | best-fitting type vector | history |
 |---|---|---|---|---|---|
 | MobLab games (MAE, lower is better) | 30.9 | - | - | 25.4 | 25.0 |
 | Big Five items | 29.2% | 30.9% | 40.8% | 37.2% | 48.4% |
@@ -82,10 +82,10 @@ sits only 3 to 9 points under the supervised ceiling.
 15 points on distress items (neuroticism) and 12 on Big Five items, and nothing on temperament,
 Machiavellianism, or nonverbal behavior. Political identity does not help on the GSS.
 
-**5. Three numbers inferred from behavior beat self-reported trait scores.** A type fitted to the
+**5. A best-fitting type vector beats self-reported trait scores.** A type vector fitted to the
 person's other answers beat their measured Big Five scores on six of eight datasets (by 2 to 16
 points), and in the economic games it matched the full behavior history on individual accuracy while
-cutting distributional error by a third (W 9.7 vs 14.5). A fitted type is a lossy summary of a
+cutting distributional error by a third (W 9.7 vs 14.5). A three-dimensional type vector is a lossy summary of a
 response record, though: it trailed raw history on every survey dataset, and it fails when the three
 fitted traits are the wrong axes for the domain (nerdiness, values).
 
@@ -102,15 +102,16 @@ individual accuracy.
   comparison on the same subjects, tasks, and model, across ten datasets.
 - The supervised control is what makes the demographics result interpretable: the information is
   there, the model does not use it. That points at prompting and training, not at data.
-- The fitted type is tested as a *prediction input* against measured traits and raw history, with a
+- The best-fitting type vector is tested as a *prediction input* against measured traits and raw history, with a
   leave-one-out protocol and a distributional score, which the type-vector paper did not do.
 - The multi-draw check in the games showed that a tie-breaking rule, not sampling noise, explained the
-  gap between putting a type in the prompt and reading it from a table; one-game subjects are where
+  gap between using the best-fitting type vector as the system prompt and the paper's type-based
+  prediction (the median of that type's generated choices); one-game subjects are where
   it matters.
 
 ## Caveats
 
-One model, one draw per record, 1,000 subjects per dataset. The fitted type used the same three trait
+One model, one draw per record, 1,000 subjects per dataset. The type vectors used the same three trait
 names (Extraversion, Agreeableness, Neuroticism) on every survey dataset; domain-matched traits would
 likely do better. openpsychometrics samples are self-selected; GSS and WVS are probability samples. The
 BehaviorBench survey conditions use its first-person framing, so absolute accuracies are not comparable

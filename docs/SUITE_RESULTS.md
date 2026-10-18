@@ -21,11 +21,11 @@ only the description of the subject varies; one draw per record; the target is o
 Conditions: `none`, `demographics`, `traits` (measured: TIPI scores, political identity, or WVS value
 indices), `history` (the subject's other answers), combinations, and a fitted three-trait type
 (Extraversion, Agreeableness, Neuroticism on a 3-level scale, fitted on the other answers only,
-predicted either by table lookup or by putting the type in the prompt).
+used either for type-based prediction or as the system prompt).
 
 ## Accuracy on the held-out item
 
-| Dataset | none | demographics | measured traits | fitted type (prompt) | history | demographics + history |
+| Dataset | none | demographics | measured traits | best-fitting type vector (as system prompt) | history | demographics + history |
 |---|---|---|---|---|---|---|
 | MACH | 33.2 | 28.5 | 30.9 | 38.0 | 44.2 | 45.1 |
 | DASS | 25.5 | 30.1 | 40.1 | 48.4 | 52.9 | 53.7 |
@@ -55,10 +55,10 @@ predicted either by table lookup or by putting the type in the prompt).
 4. **Measured traits help only when the trait is the construct.** TIPI scores add 14.6 points on
    DASS (neuroticism is distress) and 11.6 on Big Five items (the same construct), but nothing on
    NIS, FTI, MACH, or NPAS. Political identity does not help on GSS; the WVS value indices add 5.
-5. **A fitted type beats measured traits on six of eight datasets** where both exist (MACH +7.1,
+5. **A best-fitting type vector beats measured traits on six of eight datasets** where both exist (MACH +7.1,
    DASS +8.3, RIASEC +4.8, FTI +1.9, NIS +15.6, GSS +3.6), loses on NPAS and WVS, and loses to raw history
    everywhere (by 6 to 19 points). Fitting three trait levels to a person's own answers extracts
-   more than their self-reported scores on the same traits, but a three-number type is a lossy
+   more than their self-reported scores on the same traits, but a three-dimensional type vector is a lossy
    summary of a response record. Where the fitted axes are wrong for the domain (nerdiness needs
    openness and conscientiousness; values are not personality) it falls below the baseline.
 6. **Distributional alignment follows the same ordering** (see suite_tables.md): history brings W
@@ -100,7 +100,7 @@ Accuracy, LLM / ceiling:
 - One model (Gemini 3.5 Flash, thinking off), one draw per record, 1,000 subjects per dataset.
 - openpsychometrics samples are self-selected online test takers; GSS and WVS are probability
   samples; SocSci210 participants are US panel respondents.
-- The fitted type uses the same three Big Five trait names on every dataset. Domain-matched traits
+- The type vectors use the same three Big Five trait names on every dataset. Domain-matched traits
   (as the type-vector paper recommends) would likely raise the fitted-type numbers.
 - GSS items have item-specific scales; W is computed per item on the normalised 0-100 range.
 - SocSci210 has no raw-data ceiling (stimuli differ per study); its ceiling is 5-fold CV on the

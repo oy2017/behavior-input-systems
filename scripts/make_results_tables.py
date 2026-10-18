@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 A = json.load(open("outputs/track_a/gemini-3.5-flash/summary.json")); Ac = json.load(open("outputs/track_a/ceiling.json"))
 B = json.load(open("outputs/track_b/gemini-3.5-flash/summary.json")); Bc = json.load(open("outputs/track_b/ceiling.json"))
-L = ["# Result tables (generated; model = gemini-3.5-flash, thinking off)\n"]
+L = ["# Result tables (generated; model = gemini-3.5-flash, thinking off)\n", "Condition keys: `type_table` = type-based prediction from the best-fitting type vector (Jackson et al. 2026); `type_vector` = best-fitting type vector used as the system prompt; `history` = the subject's other observed choices or answers.\n"]
 L += ["## Track A: survey item prediction, 997 matched subject-item pairs\n", "| Condition | LLM acc | LLM MAE | LLM W(item) | sd ratio | Supervised ceiling acc | Ceiling W(item) |", "|---|---|---|---|---|---|---|"]
 for c in ["none", "demographics", "big_five", "demographics+big_five", "history", "demographics+history",
           "type_table_econ", "type_vector_econ", "history+type_vector_econ", "type_table_bigfive", "type_vector_bigfive", "history+type_vector_bigfive"]:

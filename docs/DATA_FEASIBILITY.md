@@ -72,8 +72,8 @@ caveats below.** All numbers measured on the files in `data/` (gitignored).
 
 | Piece | Calls |
 | --- | --- |
-| Type table, games: 125 vectors x 8 history roles + 9 targets (17 prompts) x 10 samples | 21,250 |
-| Type table, survey: 125 vectors x 50 items x 10 samples | 62,500 (or 3-level scale: 1,350 x 10) |
+| Type-vector choices, games: 125 vectors x 8 history roles + 9 targets (17 prompts) x 10 samples | 21,250 |
+| Type-vector choices, survey: 125 vectors x 50 items x 10 samples | 62,500 (or 3-level scale: 1,350 x 10) |
 | Track B main: 6,262 records x 4 conditions | 25,048 |
 | Track A main: 997 records x 6 conditions | 5,982 |
 

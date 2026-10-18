@@ -34,7 +34,7 @@ Three facts from these papers make the choice of x the open problem:
    attribute to the individual task needing p(y | x, c) rather than p(y | c).
    So the bottleneck for individual-level accuracy is x, not more behavioral
    training data.
-3. **A three-number type vector already rivals a supervised ML model.** Fitting
+3. **A three-dimensional type vector already rivals a supervised ML model.** Fitting
    (Risk Aversion, Strategic Sophistication, Trust) on a subject's other games
    and applying it to a held-out game gives error 1.11x a HistGBT model trained
    in-distribution on that game, vs 1.43x for a random human and 1.73x for a
@@ -108,7 +108,7 @@ prompt = unchanged BehaviorBench task prompt.
 
 | Model | Why |
 | --- | --- |
-| GPT-4.1 | Backbone of the type-vector paper; strongest non-reasoning GPT on BehaviorBench; its type table can be checked against the paper's Figure 2 |
+| GPT-4.1 | Backbone of the type-vector paper; strongest non-reasoning GPT on BehaviorBench; its type-vector choices can be checked against the paper's Figure 2 |
 | Gemini 3.1 Flash (Pro if budget allows) | Free quota; Pro is #1 distributionally on BehaviorBench |
 | GLM-5.2 | Open-weight, already on the leaderboard (our PR), top-5 at both levels |
 | One behavior foundation model: BehaviorBench's fine-tuned Qwen3-4B or Be.FM-1.5-4B (ask Jin for weights) | Tests whether a model trained on behavior data uses x differently (H5) |
@@ -134,7 +134,7 @@ artifact. It reproduces the Jackson et al. benchmark on our subjects.
 **E3. Compression.** Compare `history` (up to 49 raw values) vs `type_vector`
 (3 fitted values) vs `big_five` (5 measured values) at both levels.
 *RQ3: how much individual-level information survives compression to a
-3-number interpretable type, and does compression help distributional
+three-dimensional type vector, and does compression help distributional
 alignment?* Prediction from Jackson et al.: types spread the model's outputs
 across the human range where the default prompt collapses to one or two
 points, so W should improve even if MAE does not.
@@ -177,7 +177,7 @@ check that the model responds to the traits monotonically.
 
 | Phase | Deliverable | When |
 | --- | --- | --- |
-| 0 | Matched subject tables for both tracks; supervised ceilings (E2); type tables for GPT-4.1 and Gemini Flash | week 1 to 2 |
+| 0 | Matched subject tables for both tracks; supervised ceilings (E2); type-vector choice tables for GPT-4.1 and Gemini Flash | week 1 to 2 |
 | 1 | Track B full run, 3 models (E1, E3, E4) | week 3 to 4 |
 | 2 | Track A full run (E1, E3, E4) | week 5 |
 | 3 | Behavior foundation model (E5); write-up; results in BehaviorBench's leaderboard format | week 6 to 7 |
@@ -192,7 +192,7 @@ check that the model responds to the traits monotonically.
 3. Which behavior foundation model should be the fourth model: the fine-tuned
    Qwen3-4B from the BehaviorBench paper, Be.FM-1.5, or Centaur-70B?
 4. Budget for GPT-4.1 and Gemini 3.1 Pro calls (roughly 70k calls per model
-   across both tracks, plus the type tables).
+   across both tracks, plus the type-vector choice tables).
 
 ## References (local copies in ../papers_from_jin/)
 
