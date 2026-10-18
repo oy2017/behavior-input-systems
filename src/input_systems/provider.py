@@ -14,11 +14,16 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+NATIVE = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
 
 class GeminiClient:
     def __init__(self, model: str = "gemini-3.5-flash", cache_dir: Path = Path("outputs/cache"),
                  workers: int = 8, thinking: bool = False, max_retries: int = 14):
+        # "<model>@think" requests thinking on for a model that supports both modes; outputs are keyed by the full name.
+        self.label = model
+        if model.endswith("@think"):
+            model, thinking = model[:-len("@think")], True
         self.model, self.workers, self.max_retries = model, workers, max_retries
         # Pro and Gemma models only run with thinking on (they reject reasoning_effort=none); Flash models default to off.
         self.thinking = thinking or any(t in model for t in ("pro", "gemma"))
@@ -26,7 +31,7 @@ class GeminiClient:
         if not self.key:
             raise RuntimeError("GEMINI_API_KEY not set (put it in .env)")
         cache_dir.mkdir(parents=True, exist_ok=True)
-        self.cache_path = cache_dir / f"{model}.jsonl"
+        self.cache_path = cache_dir / f"{self.label}.jsonl"
         self._lock = threading.Lock()
         self._cache: dict[str, str] = {}
         if self.cache_path.exists():
@@ -41,15 +46,22 @@ class GeminiClient:
         return hashlib.sha1(f"{self.model}\x1f{self.thinking}\x1f{system}\x1f{user}\x1f{sample}".encode()).hexdigest()
 
     def _post(self, system: str, user: str) -> str:
-        body = {"model": self.model, "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}
-        if not self.thinking:
-            body["reasoning_effort"] = "none"
-        req = urllib.request.Request(URL, data=json.dumps(body).encode(),
-                                     headers={"Authorization": f"Bearer {self.key}", "Content-Type": "application/json"})
+        if self.thinking:
+            # thinking-only models (Pro, Gemma) stall on the OpenAI-compatible endpoint; use the native one
+            body = {"system_instruction": {"parts": [{"text": system}]}, "contents": [{"role": "user", "parts": [{"text": user}]}]}
+            req = urllib.request.Request(NATIVE.format(model=self.model), data=json.dumps(body).encode(),
+                                         headers={"x-goog-api-key": self.key, "Content-Type": "application/json"})
+        else:
+            body = {"model": self.model, "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}], "reasoning_effort": "none"}
+            req = urllib.request.Request(URL, data=json.dumps(body).encode(),
+                                         headers={"Authorization": f"Bearer {self.key}", "Content-Type": "application/json"})
         for attempt in range(self.max_retries):
             try:
                 with urllib.request.urlopen(req, timeout=(60 if self.thinking else 120)) as r:  # Pro calls occasionally stall; a normal Pro answer takes ~4 s
                     d = json.load(r)
+                if self.thinking:
+                    parts = (d.get("candidates") or [{}])[0].get("content", {}).get("parts", [])
+                    return "".join(p.get("text", "") for p in parts if not p.get("thought"))
                 return d["choices"][0]["message"]["content"] or ""
             except urllib.error.HTTPError as e:
                 if e.code in (429, 500, 502, 503, 504) and attempt < self.max_retries - 1:
