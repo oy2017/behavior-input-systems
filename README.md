@@ -114,7 +114,7 @@ One model, one draw per record, 1,000 subjects per dataset. The fitted type used
 names (Extraversion, Agreeableness, Neuroticism) on every survey dataset; domain-matched traits would
 likely do better. openpsychometrics samples are self-selected; GSS and WVS are probability samples. The
 BehaviorBench survey conditions use its first-person framing, so absolute accuracies are not comparable
-to its leaderboard. A Gemini 3.1 Pro (reasoning) arm is in progress to test finding 3 on a stronger model.
+to its leaderboard. A reasoning arm (Gemini 3.8 Flash with thinking on) is in progress to test finding 3.
 
 ## Documents
 
