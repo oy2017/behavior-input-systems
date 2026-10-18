@@ -13,7 +13,7 @@ for metric, title in [("acc", "Accuracy (exact answer)"), ("W_item", "W per targ
     for ds, S, C in rows:
         L.append(f"| {ds} | " + " | ".join((f"{S[c][metric]:.3f}" if metric == "acc" else f"{S[c][metric]:.2f}") if c in S else "" for c in conds) + " |")
     L.append("")
-L += ["## Supervised ceiling (pooled HistGBT, 5-fold CV on the same 1,000 records): accuracy\n", "| dataset | none | demographics | traits | history | demographics+traits | demographics+history |", "|---|---|---|---|---|---|---|"]
+L += ["## Supervised ceiling: accuracy (pooled HistGBT trained on 4,000 to 5,000 other respondents with every item as a target; SocSci210 uses 5-fold CV on the 1,000 records)\n", "| dataset | none | demographics | traits | history | demographics+traits | demographics+history |", "|---|---|---|---|---|---|---|"]
 for ds, S, C in rows:
     L.append(f"| {ds} | " + " | ".join(f"{C[c]['acc']:.3f}" if c in C else "" for c in ["none", "demographics", "traits", "history", "demographics+traits", "demographics+history"]) + " |")
 Path("docs/suite_tables.md").write_text("\n".join(L) + "\n"); print("\n".join(L))

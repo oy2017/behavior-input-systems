@@ -66,6 +66,35 @@ predicted either by table lookup or by putting the type in the prompt).
    condition collapses to a single answer on DASS (sd ratio 0.00) and to under half the human
    spread on RIASEC, FTI, NPAS.
 
+## Against the supervised ceiling
+
+Pooled HistGBT trained on 4,000 to 5,000 other respondents from the same raw file, with every item of every
+training respondent as a target and the item id as a feature; evaluated on the same 1,000 subject-item pairs.
+Accuracy, LLM / ceiling:
+
+| Dataset | none | demographics | measured traits | history |
+|---|---|---|---|---|
+| MACH | 33.2 / 38.6 | 28.5 / 42.3 | 30.9 / 42.0 | 44.2 / 52.8 |
+| DASS | 25.5 / 33.8 | 30.1 / 35.7 | 40.1 / 42.8 | 52.9 / 56.4 |
+| NPAS | 34.4 / 40.1 | 27.3 / 41.3 | 33.0 / 42.7 | 37.7 / 52.2 |
+| RIASEC | 22.5 / 31.3 | 27.5 / 36.7 | 26.1 / 35.1 | 49.7 / 53.1 |
+| FTI | 40.7 / 45.0 | 42.2 / 47.5 | 41.6 / 52.8 | 55.7 / 59.7 |
+| NIS | 27.0 / 35.7 | 34.3 / 36.5 | 25.3 / 40.4 | 52.2 / 56.4 |
+| GSS 2022 | 47.7 / 50.3 | 47.3 / 52.3 | 45.6 / 52.0 | 55.7 / 59.2 |
+| WVS 7 | 34.7 / 42.6 | 41.8 / 47.3 | 39.6 / 45.4 | 53.2 / 56.0 |
+
+7. **The model is worst at using the inputs it is usually given.** With history it sits 3 to 9 points
+   under the ceiling (NPAS is the outlier at 14). With demographics it sits 2 to 15 points under, and
+   on six of eight datasets the LLM given demographics scores *below* the supervised model given
+   nothing (the per-item modal answer). Demographics do carry 2 to 5 points of information
+   everywhere (ceiling column), so the problem is not that the information is absent; it is that the
+   model turns a demographic profile into a stereotype that is wrong more often than the mode.
+   Measured traits show the same gap (up to 15 points on NIS): the model under-reads numeric
+   trait scores. Behaviour history is the one input it reads close to its information content.
+8. **Without any subject information the LLM is below the per-item mode on every dataset**
+   (by 3 to 9 points), consistent with run 1's finding that the uninformed model collapses onto one
+   answer that is often not the modal one.
+
 ## Caveats
 
 - One model (Gemini 3.5 Flash, thinking off), one draw per record, 1,000 subjects per dataset.
@@ -74,6 +103,5 @@ predicted either by table lookup or by putting the type in the prompt).
 - The fitted type uses the same three Big Five trait names on every dataset. Domain-matched traits
   (as the type-vector paper recommends) would likely raise the fitted-type numbers.
 - GSS items have item-specific scales; W is computed per item on the normalised 0-100 range.
-- The supervised ceilings (pooled HistGBT trained on 4,000 to 5,000 other respondents, every item
-  as a target) are in suite_tables.md once computed; the 1,000-record CV ceilings there are
-  conservative.
+- SocSci210 has no raw-data ceiling (stimuli differ per study); its ceiling is 5-fold CV on the
+  1,000 records and is conservative.
