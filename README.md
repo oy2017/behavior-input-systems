@@ -124,6 +124,7 @@ to its leaderboard.
 
 ## Documents
 
+- [docs/GLOSSARY.md](docs/GLOSSARY.md): definitions of every non-obvious term (type vector, W, sd ratio, ceiling, conditions, datasets).
 - [docs/PROPOSAL.md](docs/PROPOSAL.md): the literature and the design.
 - [docs/DATA_FEASIBILITY.md](docs/DATA_FEASIBILITY.md): how subjects were matched across sources.
 - [docs/RESULTS.md](docs/RESULTS.md): BehaviorBench runs 1 and 2 (games and Big Five), with tables in
