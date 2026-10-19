@@ -36,14 +36,32 @@ We measure two things for every prediction:
   many people looks like the real mix. A model can get the average right while giving everyone the
   same answer, which is useless for studying how people differ. Lower W means the two mixes are closer.
 
+## The datasets
+
+Ten datasets, about 16,000 person-question pairs, 270,000 model calls in total. All are public; each
+link goes to the source. "What we predict" is the held-out answer the model has to produce for a person.
+
+| Name used here | What it is | Who the people are | What we predict | Facts available about each person | Source |
+|---|---|---|---|---|---|
+| MobLab games | Records of classic economics games (Dictator, Ultimatum, Trust, Public Goods, Bomb Risk, Beauty Contest, Push/Pull) played online. Part of BehaviorBench. | 3,929 players, mostly students, who played several games; 6,262 game choices | A player's first move in one game, given their moves in the other games | Only their other game choices (no demographics in the public release) | [BehaviorBench on Hugging Face](https://huggingface.co/datasets/befm/BehaviorBench), [paper](https://arxiv.org/abs/2606.24162) |
+| Big Five survey items | A 50-statement personality test ("I am the life of the party", rated 1 to 5). Part of BehaviorBench; we matched its people back to the public raw file. | 761 online test takers, 997 held-out answers | One statement's rating, given the other 49 | Age, gender, country, race, native language, handedness; the five Big Five scores | [BehaviorBench](https://huggingface.co/datasets/befm/BehaviorBench); raw file: [openpsychometrics BIG5](https://openpsychometrics.org/_rawdata/) |
+| Machiavellianism (MACH) | The MACH-IV test: 20 statements about manipulating and trusting others, rated 1 to 5 | 1,000 of 73,489 online test takers | One statement's rating | 14 demographic fields (age, gender, country, education, religion, orientation, race, marital status, ...) plus a 10-item Big Five measure (TIPI) | [openpsychometrics](https://openpsychometrics.org/_rawdata/) |
+| Depression-anxiety-stress (DASS) | 42 statements about how the person felt in the past week, rated 1 to 4 | 1,000 of 39,775 | One statement's rating | Same 14 fields plus TIPI | [openpsychometrics](https://openpsychometrics.org/_rawdata/) |
+| Nerdiness (NPAS) | The Nerdy Personality Attributes Scale, 26 statements rated 1 to 5 | 1,000 of 25,226 | One statement's rating | Same 14 fields plus TIPI | [openpsychometrics](https://openpsychometrics.org/_rawdata/) |
+| Vocational interests (RIASEC) | 48 job activities ("Lay brick or tile", "Write a song") rated dislike to enjoy, 1 to 5 | 1,000 of 145,828 | One activity's rating | Same 14 fields plus TIPI | [openpsychometrics](https://openpsychometrics.org/_rawdata/) |
+| Temperament (FTI) | The Fisher Temperament Inventory, 56 statements rated 1 to 4 | 1,000 of 4,967 | One statement's rating | Same 14 fields plus TIPI | [openpsychometrics](https://openpsychometrics.org/_rawdata/) |
+| Nonverbal behavior (NIS) | The Nonverbal Immediacy Scale: 26 statements about gestures, eye contact, and touch, rated never to very often | 1,000 of 151,864 | One statement's rating | Same 14 fields plus TIPI | [openpsychometrics](https://openpsychometrics.org/_rawdata/) |
+| General Social Survey 2022 | The long-running US national survey of social attitudes; we use 55 attitude questions (confidence in institutions, government spending, moral questions, happiness) | 1,000 of 4,149 respondents, a representative US sample | One attitude question, given the person's other answers | Age, sex, race, degree, region, income, marital status, religion; political views and party | [NORC GSS](https://gss.norc.org/get-the-data) |
+| SocSci210 experiments | 210 real social-science experiments reconstructed from a national panel, with each participant's demographic profile and responses | 1,000 participants from 40 studies | One response in a study, given the participant's other responses in that study | A 16-field profile: age, gender, education, employment, income, housing, location, party, ideology, ... | [SocSci210 on Hugging Face](https://huggingface.co/datasets/socratesft/SocSci210), [paper](https://arxiv.org/abs/2509.05830) |
+| World Values Survey | Wave 7 (2017 to 2022) of the global survey of values and beliefs; we use 92 questions on importance in life, trust, confidence, morality, politics, science | 1,000 of 97,220 respondents across 66 countries | One question, given the person's other answers | Country, sex, age, education, marital status, children, employment, social class, income, religion, urban/rural; four WVS value indices | [World Values Survey](https://www.worldvaluessurvey.org/WVSDocumentationWV7.jsp) (free download after a short form) |
+
+"TIPI" is the Ten Item Personality Inventory, a two-questions-per-trait version of the Big Five that the
+openpsychometrics questionnaires append to their surveys. The "value indices" are four summary scores
+the World Values Survey computes for each respondent (secular values, emancipative values,
+post-materialism, autonomy); see the [glossary](docs/GLOSSARY.md).
+
 ## How we tested it
 
-- **Ten datasets, about 16,000 person-question pairs, 270,000 model calls.** The lab's own benchmark,
-  BehaviorBench (economic games played on the MobLab platform, and a Big Five personality survey);
-  six online personality questionnaires from openpsychometrics.org that come with rich demographics
-  and a short Big Five measure (Machiavellianism, depression-anxiety-stress, nerdiness, vocational
-  interests, temperament, nonverbal behavior); the 2022 US General Social Survey; SocSci210, a
-  collection of 40 real social-science experiments; and the World Values Survey, covering 66 countries.
 - **Fair comparison.** For each dataset we took the same 1,000 people and the same question for each
   person. The only thing that changed between conditions was the description of the person. One AI
   model (Gemini 3.5 Flash) answered everything.
