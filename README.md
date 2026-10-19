@@ -102,6 +102,26 @@ person's history, adding demographics on top never added more than two points.
 Percentages are how often the model's answer exactly matched the person's. The games row is the
 average distance between the model's choice and the person's choice on a 0-to-100 scale.
 
+The same comparison for **spread** (W, on a 0-to-100 scale; lower means the mix of the model's answers
+across people is closer to the real mix; the sampling-noise floor is about 1 to 2):
+
+| Dataset | nothing | demographics | measured traits | best-fitting type vector | history |
+|---|---|---|---|---|---|
+| MobLab games | 27.3 | - | - | 9.7 | 14.5 |
+| Big Five survey items | 1.1 | 0.9 | 0.5 | 0.6 | 0.4 |
+| Machiavellianism | 27.7 | 18.5 | 15.3 | - | 10.1 |
+| Depression-anxiety-stress | 46.5 | 34.5 | 12.6 | 10.8 | 10.2 |
+| Nerdiness | 28.4 | 20.6 | 18.1 | 18.7 | 16.4 |
+| Vocational interests | 36.4 | 17.1 | 18.1 | 14.5 | 9.8 |
+| Temperament | 22.4 | 17.9 | 11.6 | 14.8 | 8.6 |
+| Nonverbal behavior | 27.2 | 18.3 | 21.3 | - | 7.2 |
+| General Social Survey 2022 | 23.9 | 15.6 | 14.2 | 15.8 | 14.6 |
+| SocSci210 experiments | 12.0 | 10.6 | - | - | 6.1 |
+| World Values Survey | 24.2 | 16.8 | 17.7 | - | 10.5 |
+
+Behavior-derived descriptions bring W down to 6 to 16 on every dataset; the demographic profile lands
+between 10 and 35; with no description the model's answers barely vary (W of 12 to 47).
+
 **3. The demographic profile does contain useful information. The model just cannot use it.** This is
 the finding we think matters most. Our statistical yardstick, given only the demographic profile, beats
 "predict each question's most common answer" by 2 to 5 points on every dataset. So the profile is
