@@ -19,8 +19,9 @@ only the description of the subject varies; one draw per record; the target is o
 | WVS 7 | Values, 66 countries | 11 demographics incl. country; WVS value indices as measured traits | 92, 2 to 10 options | worldvaluessurvey.org (manual download) |
 
 Conditions: `none`, `demographics`, `traits` (measured: TIPI scores, political identity, or WVS value
-indices), `history` (the subject's other answers), combinations, and a fitted three-trait type
-(Extraversion, Agreeableness, Neuroticism on a 3-level scale, fitted on the other answers only,
+indices), `history` (the subject's other answers), combinations, and a best-fitting type vector over
+three Big Five traits (Extraversion, Agreeableness, Neuroticism on a 3-level scale: the trio Jackson et
+al. found best for economic games by search, applied unchanged to every survey; fitted on the other answers only,
 used either for type-based prediction or as the system prompt).
 
 ## Accuracy on the held-out item

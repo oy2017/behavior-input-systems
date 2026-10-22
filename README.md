@@ -27,7 +27,9 @@ there are 5 x 5 x 5 = 125 possible types. Once per model, we ask it how each of 
 in each game. Then, to describe a real person, we look at the games we have seen them play, find the
 type whose behavior matches theirs most closely, and use that type as the description. The question we
 are trying to predict is never used when choosing the type. For the survey data we do the same with
-three Big Five trait names at three levels each (27 types).
+three Big Five trait names at three levels each (27 types): Extraversion, Agreeableness, and
+Neuroticism, the trio Jackson et al. found best for predicting economic-game play, applied unchanged
+to every survey topic.
 
 We measure two things for every prediction:
 
