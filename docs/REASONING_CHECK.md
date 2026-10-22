@@ -43,7 +43,9 @@ tokens) before answering; the non-thinking model answers directly. Accuracy on t
 4. **Reasoning changes the uninformed baseline unpredictably** (-7.7 on MACH, +7.1 on NIS): without
    subject information the model's answer depends on what it talks itself into.
 
-Cost: thinking on used roughly five times the tokens per call and three times the latency.
+Cost, measured on Gemini 3.5 Flash in the feasibility probe: thinking on used about seven times the
+tokens per call (1,707 vs 238 total tokens) and three times the latency (7.7 s vs 2.5 s). The 3.8 Flash
+runs were not separately timed.
 
 The ordering of inputs is unchanged by reasoning: history > fitted or measured traits > demographics
 ≈ nothing. Finding 3 of the main write-up (the model under-uses demographics far more than it

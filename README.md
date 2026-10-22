@@ -38,7 +38,7 @@ We measure two things for every prediction:
 
 ## How we tested it
 
-- **Ten public datasets, about 16,000 person-question pairs, 270,000 model calls.** The lab's own
+- **Ten public datasets, about 16,000 person-question pairs, 240,000 model calls for the main run (270,000 including the reasoning check).** The lab's own
   benchmark, [BehaviorBench](https://huggingface.co/datasets/befm/BehaviorBench) (economic games from
   the [MobLab](https://www.moblab.com/) platform and a Big Five personality survey); six online
   questionnaires from [openpsychometrics.org](https://openpsychometrics.org/_rawdata/) that come with
@@ -60,8 +60,8 @@ We measure two things for every prediction:
 ## What we found
 
 **1. The person's own past behavior is the best description, on every dataset.** Telling the model
-what the person said or did elsewhere beat every other description, on all ten datasets, by 8 to 27
-accuracy points over telling it nothing.
+what the person said or did elsewhere beat every other description, on all ten datasets, by 3 to 27
+accuracy points over telling it nothing (3 on nerdiness, 8 on the General Social Survey, 11 to 27 elsewhere).
 
 **2. The demographic profile is usually close to useless, and sometimes makes things worse.** Across
 the ten datasets, adding demographics changed accuracy by anywhere from minus 7 to plus 7 points. It
@@ -89,7 +89,9 @@ Percentages are how often the model's answer exactly matched the person's. The g
 average distance between the model's choice and the person's choice on a 0-to-100 scale.
 
 The same comparison for **spread** (W, on a 0-to-100 scale; lower means the mix of the model's answers
-across people is closer to the real mix; the sampling-noise floor is about 1 to 2):
+across people is closer to the real mix). W cannot reach zero because any sample of real people differs
+from another by chance: that floor is about 1 to 2 in the games (750 answers per game) and 4 to 8 on
+the surveys (11 to 50 answers per item):
 
 | Dataset | nothing | demographics | measured traits | best-fitting type vector | history |
 |---|---|---|---|---|---|
@@ -105,14 +107,15 @@ across people is closer to the real mix; the sampling-noise floor is about 1 to 
 | SocSci210 experiments | 12.0 | 10.6 | - | - | 6.1 |
 | World Values Survey | 24.1 | 16.4 | 17.4 | 18.4 | 10.5 |
 
-Behavior-derived descriptions bring W down to 6 to 16 on every dataset; the demographic profile lands
-between 10 and 35; with no description the model's answers barely vary (W of 12 to 47).
+Behavior-derived descriptions bring W to 6 to 16 on every dataset, within 0 to 6 points of the floor on
+the surveys; the demographic profile lands between 10 and 35; with no description the model's answers
+barely vary (W of 12 to 47).
 
 **3. The demographic profile does contain useful information. The model just cannot use it.** This is
 the finding we think matters most. Our statistical yardstick, given only the demographic profile, beats
-"predict each question's most common answer" by 2 to 5 points on every dataset. So the profile is
-worth something. The AI model, given the same profile, usually does *worse* than predicting the most
-common answer (on six of eight datasets). In plain terms: when you hand the model a profile, it answers
+"predict each question's most common answer" by 1 to 5 points on every dataset. So the profile is
+worth something. The AI model, given the same profile, does *worse* than predicting the most
+common answer on every one of the nine datasets where that baseline could be computed. In plain terms: when you hand the model a profile, it answers
 as a stereotype of that profile, and the stereotype is wrong more often than just guessing the
 typical answer. Given behavior history instead, the model comes within 3 to 9 points of the yardstick,
 so it uses that information well.
@@ -132,8 +135,8 @@ everything a full record does: on every survey dataset the full history still wo
 failed on nerdiness and on values, where the three traits we used are simply the wrong ones.
 
 **6. Told nothing, the model gives everyone the same answer.** With no description, Gemini gave
-essentially one answer to every "player" in several games (the spread of its answers was 0 to 50% of
-the real spread) and was less accurate than the most common answer on every survey. Any description
+essentially one answer to every "player" in seven of the eight games (the spread of its answers was 0 to
+47% of the real spread; the Trust Banker role was the exception) and was less accurate than the most common answer on every survey. Any description
 drawn from behavior restores a realistic spread. Demographics restore part of the spread while
 lowering individual accuracy, which is the stereotype effect again.
 
@@ -149,9 +152,10 @@ five descriptions did not change.
 
 - Earlier work used one way of describing people and never compared alternatives: demographics in the
   survey benchmarks (BehaviorBench, SubPOP, OpinionQA), written-out personas in OdysSim, behavior
-  history in Centaur. Park et al. (2024) showed that agents built from two-hour interviews beat
-  demographic agents on the General Social Survey, the Big Five, and games; our finding 1 replicates
-  that across ten datasets with a much cheaper form of history.
+  history in Centaur. Park et al. (2024) built agents for 1,052 people from two-hour interviews and found them far more
+  accurate than agents given only demographics (0.85 vs 0.71 normalized accuracy on the General Social
+  Survey, with similar results on the Big Five and economic games); our finding 1 replicates that
+  across ten datasets with a much cheaper form of history.
 - The yardstick comparison (finding 3) is new. It separates "the information is not there" from "the
   model cannot use it," and shows the problem is the second one. That points at how models are prompted
   and trained, not at the data.

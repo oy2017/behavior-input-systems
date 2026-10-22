@@ -73,7 +73,8 @@ distance: the average amount answers would have to be moved to turn one histogra
 Lower is better. Reported per game or per target item, then averaged.
 
 **W floor.** The W you get by comparing the real answers with a bootstrap resample of themselves. It
-is sampling noise; nothing can reliably go below it.
+is sampling noise; nothing can reliably go below it. It depends on how many answers each unit has:
+about 1 to 2 in the games (750 answers per game) and 4 to 8 on the surveys (11 to 50 answers per item).
 
 **sd ratio.** Standard deviation of the predictions divided by the standard deviation of the real
 answers. 1 means the model spreads its answers as much as people do; 0 means it gives everyone the

@@ -41,8 +41,8 @@ used either for type-based prediction or as the system prompt).
 ## Findings across ten datasets
 
 1. **Behavior history wins everywhere.** The subject's own prior answers are the best single input
-   on all ten datasets, by 8 to 27 points over nothing. Adding demographics on top of history
-   changes accuracy by at most 1.7 points in either direction.
+   on all ten datasets, by 3 to 27 points over nothing (3.3 on NPAS, 7.8 on GSS, 11 to 27 elsewhere).
+   Adding demographics on top of history changes accuracy by between -2.3 and +1.7 points.
 2. **Demographics are usually worth little, and on three datasets they hurt.** Gains over nothing:
    MACH -4.7, NPAS -7.1, GSS -0.4, SocSci210 +1.2, FTI +1.5, Big Five +1.7, DASS +4.6, RIASEC +5.0,
    NIS +7.3, WVS +7.1. The two clear positives are the datasets where demographics plausibly
@@ -85,14 +85,14 @@ Accuracy, LLM / ceiling:
 
 7. **Demographics are the input the model extracts the least from, and the one it is usually given.** With history it sits 3 to 9 points
    under the ceiling (NPAS is the outlier at 14). With demographics it sits 2 to 15 points under, and
-   on six of eight datasets the LLM given demographics scores *below* the supervised model given
-   nothing (the per-item modal answer). Demographics do carry 2 to 5 points of information
-   everywhere (ceiling column), so the problem is not that the information is absent; it is that the
+   on all eight datasets the LLM given demographics scores *below* the supervised model given
+   nothing (the per-item modal answer). Demographics do carry 1 to 5 points of information
+   everywhere (ceiling column; 0.8 on NIS, 5.4 on RIASEC), so the problem is not that the information is absent; it is that the
    model turns a demographic profile into a stereotype that is wrong more often than the mode.
    Measured traits show the same gap (up to 15 points on NIS): the model under-reads numeric
    trait scores. Behaviour history is the one input it reads close to its information content.
 8. **Without any subject information the LLM is below the per-item mode on every dataset**
-   (by 3 to 9 points), consistent with run 1's finding that the uninformed model collapses onto one
+   (by 2 to 9 points), consistent with run 1's finding that the uninformed model collapses onto one
    answer that is often not the modal one.
 
 ## Caveats
