@@ -129,7 +129,7 @@ add nothing when predicting temperament, Machiavellianism, or nonverbal behavior
 things. Knowing someone's political identity does not help predict their other social attitudes.
 
 **5. A short personality summary inferred from behavior beats the person's own questionnaire
-scores.** On six of eight datasets, the best-fitting type vector, three trait levels we inferred from the
+scores, and the choice of traits matters (see the follow-ups below).** On six of eight datasets, the best-fitting type vector, three trait levels we inferred from the
 person's other answers, predicted better than the Big Five scores the person reported about themselves,
 by 2 to 16 points. In the economic games it matched the full behavior history on individual accuracy
 and produced a more realistic spread of answers (W 9.7 versus 14.5). But three numbers cannot hold
@@ -141,6 +141,24 @@ essentially one answer to every "player" in seven of the eight games (the spread
 47% of the real spread; the Trust Banker role was the exception) and was less accurate than the most common answer on every survey. Any description
 drawn from behavior restores a realistic spread. Demographics restore part of the spread while
 lowering individual accuracy, which is the stereotype effect again.
+
+## Two follow-ups (October 24; [details](docs/UPDATE_2026-10-24.md))
+
+**Why demographics fail: the model does not know how groups answer.** We gave the model, alongside the
+profile, how respondents with the same gender, age band, and education actually answered each question
+(computed from thousands of other respondents). Accuracy rose on all nine survey datasets, by 1 to 11
+points, to within 0.5 to 5 points of the statistical yardstick. Even the population's answer shares with
+no profile at all beat the demographic profile on six of nine datasets. So most of finding 3 is a
+knowledge gap, and the cheapest fix is to put group answer rates from an existing survey in the prompt.
+
+**Choosing the type-vector traits per questionnaire.** The main study used one Big Five trio on every
+survey. Running Jackson et al.'s search procedure per survey (every subset of a candidate pool, chosen
+on half the people, scored on the other half) on the two datasets where the default did worst: on
+nerdiness the chosen traits lift the type vector from 29% to 38 to 40%, level with or above the person's
+full answer history; on vocational interests they lift it from 30% to 35 to 37%, still 14 points below
+history. Traits the model proposed for the questionnaire did as well as the Big Five; Holland's six
+interest categories did no better. A three-number type works where a questionnaire measures a few
+dispositions, not where it records many specific tastes.
 
 ## Does it help to let the model "think"?
 
