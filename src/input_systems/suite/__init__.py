@@ -46,9 +46,23 @@ def type_text(tv: dict, levels: int = 3) -> str:
             f"where 1 is the lowest level and {levels} is the highest).\n" + "\n".join(f"- {t}: {v} out of {levels}" for t, v in tv.items()))
 
 
+def baserate_text(rec: dict, cond: str) -> str:
+    """Population answer shares for the target item (`baserate`), or the shares within the person's demographic
+    group (`demographics+baserate`; falls back to the population when the group is too small)."""
+    br = rec.get("_baserate") or {}
+    if not br: return ""
+    if "demographics" in cond and br.get("group"):
+        g = br["group"]
+        return (f"For reference, among {g['n']} other respondents with your gender, age range, and education, "
+                f"the answers to this question were distributed as: " + ", ".join(f"{k}: {round(100*v)}%" for k, v in g["dist"].items()) + ".")
+    return ("For reference, across all other respondents the answers to this question were distributed as: "
+            + ", ".join(f"{k}: {round(100*v)}%" for k, v in br["pop"].items()) + ".")
+
+
 def build_system(rec: dict, cond: str, tv: dict | None = None) -> str:
     parts = [rec["base_system"]]
     if "demographics" in cond: parts.append(demographics_text(rec))
+    if "baserate" in cond: parts.append(baserate_text(rec, cond))
     if "traits" in cond and rec.get("traits"): parts.append(traits_text(rec))
     if "type_vector" in cond and tv: parts.append(type_text(tv))
     if "history" in cond: parts.append(history_text(rec))

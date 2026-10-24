@@ -13,6 +13,13 @@ ap.add_argument("--fits", type=Path, default=None); ap.add_argument("--workers",
 a = ap.parse_args()
 recs = [json.loads(l) for l in Path(f"data/suite/{a.dataset}.jsonl").read_text().splitlines()][: a.limit]
 fits = {d["record_idx"]: d["type_vector"] for d in map(json.loads, a.fits.read_text().splitlines())} if a.fits else {}
+brf = Path(f"data/suite_baserates/{a.dataset}.json")
+if brf.exists() and any("baserate" in c for c in a.conditions):
+    sys.path.insert(0, str(Path(__file__).resolve().parent)); from build_baserates import group_key  # noqa: E402
+    BR = json.loads(brf.read_text())["items"]
+    for r in recs:
+        e = BR.get(r["target_item"])
+        if e: r["_baserate"] = {"pop": e["pop"], "group": e["groups"].get(group_key(r["demographics"]))}
 client = GeminiClient(a.model, workers=a.workers)
 for cond in a.conditions:
     if "traits" in cond and not recs[0].get("traits"): print(f"[{cond}] skipped: dataset has no traits"); continue
