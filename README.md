@@ -150,6 +150,9 @@ profile, how respondents with the same gender, age band, and education actually 
 points, to within 0.5 to 5 points of the statistical yardstick. Even the population's answer shares with
 no profile at all beat the demographic profile on six of nine datasets. So most of finding 3 is a
 knowledge gap, and the cheapest fix is to put group answer rates from an existing survey in the prompt.
+The fix does not transfer to new questions, though: rates on the five most similar other questions
+recover only about a quarter of the gain, and a questionnaire-wide average does nothing. It is a lookup
+for questions that have been asked before, not a general method.
 
 **Choosing the type-vector traits per questionnaire.** The main study used one Big Five trio on every
 survey. Running Jackson et al.'s search procedure per survey (every subset of a candidate pool, chosen
