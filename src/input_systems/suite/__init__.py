@@ -46,6 +46,24 @@ def type_text(tv: dict, levels: int = 3) -> str:
             f"where 1 is the lowest level and {levels} is the highest).\n" + "\n".join(f"- {t}: {v} out of {levels}" for t, v in tv.items()))
 
 
+def baserate_related_text(rec: dict) -> str:
+    """Group answer rates on the most similar OTHER items (never the target), for new-question transfer."""
+    rel = rec.get("_baserate_related") or []
+    if not rel: return ""
+    lines = [f'- "{t}": ' + ", ".join(f"{k}: {round(100*v)}%" for k, v in d.items()) for t, d in rel]
+    return ("For reference, this is how other respondents with your gender, age range, and education answered "
+            "some related questions in this questionnaire (the question you are asked is not among them):\n" + "\n".join(lines))
+
+
+def baserate_scale_text(rec: dict) -> str:
+    """One number: the group's mean answer across the whole questionnaire."""
+    m = rec.get("_baserate_scale")
+    if m is None: return ""
+    sc = rec["scale"]
+    return (f"For reference, across all questions in this questionnaire, other respondents with your gender, age range, "
+            f"and education gave an average answer of {m:.1f} on the {sc['min']}-to-{sc['max']} scale.")
+
+
 def baserate_text(rec: dict, cond: str) -> str:
     """Population answer shares for the target item (`baserate`), or the shares within the person's demographic
     group (`demographics+baserate`; falls back to the population when the group is too small)."""
@@ -62,7 +80,9 @@ def baserate_text(rec: dict, cond: str) -> str:
 def build_system(rec: dict, cond: str, tv: dict | None = None) -> str:
     parts = [rec["base_system"]]
     if "demographics" in cond: parts.append(demographics_text(rec))
-    if "baserate" in cond: parts.append(baserate_text(rec, cond))
+    if "baserate_related" in cond: parts.append(baserate_related_text(rec))
+    elif "baserate_scale" in cond: parts.append(baserate_scale_text(rec))
+    elif "baserate" in cond: parts.append(baserate_text(rec, cond))
     if "traits" in cond and rec.get("traits"): parts.append(traits_text(rec))
     if "type_vector" in cond and tv: parts.append(type_text(tv))
     if "history" in cond: parts.append(history_text(rec))

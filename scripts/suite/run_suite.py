@@ -20,6 +20,32 @@ if brf.exists() and any("baserate" in c for c in a.conditions):
     for r in recs:
         e = BR.get(r["target_item"])
         if e: r["_baserate"] = {"pop": e["pop"], "group": e["groups"].get(group_key(r["demographics"]))}
+    if any("baserate_related" in c or "baserate_scale" in c for c in a.conditions):
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.metrics.pairwise import cosine_similarity
+        texts = {}
+        for r in recs:
+            for k, v in r["items"].items(): texts.setdefault(k, v["text"])
+        ids = [k for k in texts if k in BR]; X = TfidfVectorizer(stop_words="english").fit_transform([texts[k] for k in ids]); sim = cosine_similarity(X)
+        pos = {k: i for i, k in enumerate(ids)}
+        for r in recs:
+            g = group_key(r["demographics"]); tgt = r["target_item"]
+            if tgt in pos:
+                order = sorted((k for k in ids if k != tgt), key=lambda k: -sim[pos[tgt], pos[k]])
+                rel = []
+                for k in order:
+                    e = BR[k]; d = (e["groups"].get(g) or {}).get("dist") or e["pop"]
+                    rel.append((texts[k].split(" (")[0][:120], d))
+                    if len(rel) == 5: break
+                r["_baserate_related"] = rel
+            # group mean answer over the questionnaire, only meaningful when all items share one scale
+            scales = {(rr["scale"]["min"], rr["scale"]["max"]) for rr in recs}
+            if len(scales) == 1:
+                tot = n = 0.0
+                for k in ids:
+                    d = (BR[k]["groups"].get(g) or {}).get("dist") or BR[k]["pop"]
+                    tot += sum(int(a) * p for a, p in d.items()); n += 1
+                r["_baserate_scale"] = tot / n if n else None
 client = GeminiClient(a.model, workers=a.workers)
 for cond in a.conditions:
     if "traits" in cond and not recs[0].get("traits"): print(f"[{cond}] skipped: dataset has no traits"); continue
