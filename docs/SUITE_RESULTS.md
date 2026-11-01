@@ -52,14 +52,14 @@ used either for type-based prediction or as the system prompt).
 3. **Demographics can lower individual accuracy while improving the distribution.** On GSS, W per
    item falls from 23.9 to 15.5 with demographics and accuracy does not move: the model shifts its
    answers toward the right groups without placing individuals. On MACH and NPAS the profile
-   pulls the model away from the population mode toward stereotypes and accuracy drops.
+   pulls the model away from the population mode and accuracy drops; whether that is stereotyping is untested.
 4. **Measured traits help only when the trait is the construct.** TIPI scores add 14.6 points on
    DASS (neuroticism is distress) and 11.6 on Big Five items (the same construct), but nothing on
    NIS, FTI, MACH, or NPAS. Political identity does not help on GSS; the WVS value indices add 5.
-5. **A best-fitting type vector beats measured traits on six of eight datasets** where both exist (MACH +7.1,
-   DASS +8.3, RIASEC +4.8, FTI +1.9, NIS +15.6, GSS +3.6), loses on NPAS and WVS, and loses to raw history
+5. **A best-fitting type vector beats measured traits on six of nine datasets** where both exist (MACH +7.1,
+   DASS +8.3, RIASEC +4.8, FTI +1.9, NIS +15.6, GSS +3.6), loses on the Big Five items, NPAS, and WVS, and loses to raw history
    everywhere (by 6 to 19 points). Fitting three trait levels to a person's own answers extracts
-   more than their self-reported scores on the same traits, but a three-dimensional type vector is a lossy
+   more than their measured scores, which are not always the same traits, but a three-dimensional type vector is a lossy
    summary of a response record. Where the fitted axes are wrong for the domain (nerdiness needs
    openness and conscientiousness; values are not personality) it falls below the baseline.
 6. **Distributional alignment follows the same ordering** (see suite_tables.md): history brings W
@@ -88,8 +88,11 @@ Accuracy, LLM / ceiling:
    under the ceiling (NPAS is the outlier at 14). With demographics it sits 2 to 15 points under, and
    on all eight datasets the LLM given demographics scores *below* the supervised model given
    nothing (the per-item modal answer). Demographics do carry 1 to 5 points of information
-   everywhere (ceiling column; 0.8 on NIS, 5.4 on RIASEC), so the problem is not that the information is absent; it is that the
-   model turns a demographic profile into a stereotype that is wrong more often than the mode.
+   everywhere (ceiling column; 0.8 on NIS, 5.4 on RIASEC), so the information is not absent. The below-mode comparison is unfair to
+   the LLM, however: it gives one draw while the supervised model takes its most likely answer. The gap to the
+   mode has a 95% interval excluding zero on five of nine datasets, and the LLM beats a calibrated one-draw
+   population sampler on eight of nine (`scripts/suite/mode_vs_sampler.py`). Stereotyping is not established;
+   the test is the most frequent answer over repeated draws.
    Measured traits show the same gap (up to 15 points on NIS): the model under-reads numeric
    trait scores. Behaviour history is the one input it reads close to its information content.
 8. **Without any subject information the LLM is below the per-item mode on every dataset**

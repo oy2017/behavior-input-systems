@@ -30,8 +30,7 @@ tokens) before answering; the non-thinking model answers directly. Accuracy on t
 1. **Reasoning does not rescue demographics.** Across four datasets the demographics condition moves
    by -1.6 to +1.1 points with thinking on, and stays 4 to 15 points under what a supervised model
    extracts from the same fields. On NIS the gain demographics had over nothing disappears entirely
-   once the model thinks (33.6 vs 34.1). Deliberating over a profile does not make the stereotype more
-   accurate.
+   once the model thinks (33.6 vs 34.1). Deliberating over a profile does not improve its accuracy.
 2. **Reasoning helps the model read numeric trait scores.** Measured scores gain 3.6 to 4.7 points on
    the three personality datasets, closing about half the gap to the ceiling. The model appears to
    work out what "Neuroticism: 42 out of 50" implies instead of pattern-matching on it.

@@ -113,14 +113,16 @@ Behavior-derived descriptions bring W to 6 to 16 on every dataset, within 0 to 6
 the surveys; the demographic profile lands between 10 and 35; with no description the model's answers
 barely vary (W of 12 to 47).
 
-**3. The demographic profile does contain useful information. The model just cannot use it.** This is
-the finding we think matters most. Our statistical yardstick, given only the demographic profile, beats
-"predict each question's most common answer" by 1 to 5 points on every dataset. So the profile is
-worth something. The AI model, given the same profile, does *worse* than predicting the most
-common answer on every one of the nine datasets where that baseline could be computed. In plain terms: when you hand the model a profile, it answers
-as a stereotype of that profile, and the stereotype is wrong more often than just guessing the
-typical answer. Given behavior history instead, the model comes within 3 to 9 points of the yardstick,
-so it uses that information well.
+**3. The demographic profile holds a little information, and the model's single answer does not beat
+guessing the most common answer.** Our statistical yardstick, given only the profile, beats "predict each
+question's most common answer" by 1 to 5 points. The AI model's single answer, given the same profile, is below
+that most common answer on all nine datasets where it can be computed, clearly so on five (the 95% interval
+excludes zero). That comparison is not fair to the AI, though: the yardstick picks its most likely answer,
+while the AI gives one draw. A simulator that drew one answer from the real population distribution would
+itself score below the most common answer, and the AI with a profile beats that benchmark on eight of nine
+datasets (clearly on six). So we cannot yet say the model answers as a stereotype. The next test is to repeat each
+question several times and use the model's most frequent answer. Given behavior history, the model comes within
+3 to 9 points of the yardstick, nerdiness excepted, under the same one-draw handicap.
 
 **4. Questionnaire scores help only when the question is about the same thing the scores measure.**
 Big Five personality scores add 15 points when predicting depression-and-anxiety answers (which are
@@ -129,18 +131,18 @@ add nothing when predicting temperament, Machiavellianism, or nonverbal behavior
 things. Knowing someone's political identity does not help predict their other social attitudes.
 
 **5. A short personality summary inferred from behavior beats the person's own questionnaire
-scores, and the choice of traits matters (see the follow-ups below).** On six of eight datasets, the best-fitting type vector, three trait levels we inferred from the
-person's other answers, predicted better than the Big Five scores the person reported about themselves,
-by 2 to 16 points. In the economic games it matched the full behavior history on individual accuracy
+scores, and the choice of traits matters (see the follow-ups below).** On six of the nine survey datasets with both, the best-fitting type vector, three trait levels we inferred from
+the person's other answers, predicted better than their measured scores (Big Five scores on most datasets,
+political identity on the General Social Survey), by 2 to 16 points. Jackson et al. found that even
+meaningless traits improve fit somewhat, and we have not run that placebo check. In the economic games it matched the full behavior history on individual accuracy
 and produced a more realistic spread of answers (W 9.7 versus 14.5). But three numbers cannot hold
 everything a full record does: on every survey dataset the full history still won, and the summary
 failed on nerdiness and on values, where the three traits we used are simply the wrong ones.
 
 **6. Told nothing, the model gives everyone the same answer.** With no description, Gemini gave
 essentially one answer to every "player" in seven of the eight games (the spread of its answers was 0 to
-47% of the real spread; the Trust Banker role was the exception) and was less accurate than the most common answer on every survey. Any description
-drawn from behavior restores a realistic spread. Demographics restore part of the spread while
-lowering individual accuracy, which is the stereotype effect again.
+47% of the real spread; the Trust Banker role was the exception) and its single answer was less accurate than the most common answer on every survey. Any description
+drawn from behavior restores a realistic spread. Demographics restore part of the spread.
 
 ## Two follow-ups (October 24; [details](docs/UPDATE_2026-10-24.md))
 
@@ -172,24 +174,33 @@ questionnaire scores (+4 to +5 points) and behavior history (+2 to +4). It did n
 demographic profile (within 2 points of before, still well below the yardstick). The ranking of the
 five descriptions did not change.
 
-## What is new here
+## What is new here, and what is not
 
-- Earlier work used one way of describing people and never compared alternatives: demographics in the
-  survey benchmarks (BehaviorBench, SubPOP, OpinionQA), written-out personas in OdysSim, behavior
-  history in Centaur. Park et al. (2024) built agents for 1,052 people from two-hour interviews and found them far more
-  accurate than agents given only demographics (0.85 vs 0.71 normalized accuracy on the General Social
-  Survey, with similar results on the Big Five and economic games); our finding 1 replicates that
-  across ten datasets with a much cheaper form of history.
-- The yardstick comparison (finding 3) is new. It separates "the information is not there" from "the
-  model cannot use it," and shows the problem is the second one. That points at how models are prompted
-  and trained, not at the data.
-- Testing the type vector as a *description of a person* against their own questionnaire scores and
-  against their full history (finding 5) is new; the paper that introduced type vectors tested them on
-  games only and did not compare against measured traits.
+Much of this is already published, and the field moved quickly in 2026:
+
+- **History beats demographics is a replication.** Park et al. (arXiv 2411.10109, now retitled "LLM Agents
+  Grounded in Self-Reports Enable General-Purpose Simulation of Individuals") built agents for 1,052 people and
+  report normalized General Social Survey accuracy of 0.83 from interviews, 0.82 from surveys, and 0.74 from
+  demographics. Pourtaheri and Zareei (arXiv 2610.03998) report the same headline on an 845-person panel.
+- **Comparing the AI with a statistical model on the same inputs is not new.** Peng et al. (Science Advances, 2026;
+  arXiv 2509.19088) ask whether the data or the model is the limit, using XGBoost. Chen, Zhu and Zheng (arXiv
+  2607.26348) compare demographic prompts with the most common answer and logistic regression on the General
+  Social Survey and World Values Survey. Hu and Collier (ACL 2024) did an earlier version for annotation tasks.
+- **Accuracy may overstate person-level skill.** Ahn, Mao and Lee (arXiv 2608.29455) find that AI models mostly track
+  each question's average answer, which our exact-match score rewards. We have not yet run their test on our data.
+
+What we have not found published, as of November 2026, from searches that were not exhaustive:
+
+- The same comparison of five descriptions, each with its own statistical yardstick, across ten domains.
+- A person's fitted type vector tested against their own questionnaire scores and full history on surveys. The
+  paper that introduced type vectors focused on games.
+- Choosing type-vector traits per questionnaire, chosen on some people and scored on others, including traits
+  the model proposes.
+- A controlled test of adding a group's answer rates for the exact question, scored on individual accuracy.
 
 ## Limits
 
-One AI model, one answer per question, 1,000 people per dataset. The type vectors used the same three
+One AI model, one answer per question, 1,000 people per dataset, and no confidence intervals on most numbers yet, so gaps of one or two points may be noise. The type vectors used the same three
 trait names on every survey, which is probably why they failed on nerdiness and values. The
 openpsychometrics respondents are self-selected online test takers; the General Social Survey and
 World Values Survey are representative samples. The Big Five survey conditions use BehaviorBench's
