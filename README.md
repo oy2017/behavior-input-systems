@@ -144,14 +144,15 @@ lowering individual accuracy, which is the stereotype effect again.
 
 ## Two follow-ups (October 24; [details](docs/UPDATE_2026-10-24.md))
 
-**Why demographics fail: the model does not know how groups answer.** We gave the model, alongside the
+**One line of base rates closes most of the demographics gap.** We gave the model, alongside the
 profile, how respondents with the same gender, age band, and education actually answered each question
 (computed from thousands of other respondents). Accuracy rose on all nine survey datasets, by 1 to 11
 points, to within 0.5 to 5 points of the statistical yardstick. Even the population's answer shares with
-no profile at all beat the demographic profile on six of nine datasets. So most of finding 3 is a
-knowledge gap, and the cheapest fix is to put group answer rates from an existing survey in the prompt.
+no profile at all beat the demographic profile on eight of nine datasets, so most of the gain is about
+the question rather than the person. The cheapest fix is to put answer rates from an existing survey in the
+prompt. We cannot yet say whether the model lacks these rates or knows them and does not use them.
 The fix does not transfer to new questions, though: rates on the five most similar other questions
-recover only about a quarter of the gain, and a questionnaire-wide average does nothing. It is a lookup
+recover only about a quarter of the gain, and a questionnaire-wide average gives no net gain. It is a lookup
 for questions that have been asked before, not a general method.
 
 **Choosing the type-vector traits per questionnaire.** The main study used one Big Five trio on every
