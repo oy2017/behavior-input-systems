@@ -158,16 +158,14 @@ recover only about a quarter of the gain, and a questionnaire-wide average gives
 for questions that have been asked before, not a general method.
 
 **Choosing the type-vector traits per questionnaire.** The main study used one Big Five trio on every
-survey. Running Jackson et al.'s search procedure per survey (every subset of a candidate pool, chosen
-on half the people, scored on the other half) on the two datasets where the default did worst: on
-nerdiness the chosen traits lift the type vector from 29% to 38 to 40%, level with or above the person's
-full answer history; on vocational interests they lift it from 30% to 35 to 37%, still 14 points below
-history. Traits the model proposed for the questionnaire did as well as the Big Five; Holland's six
-interest categories did no better. A three-number type works where a questionnaire measures a few
-dispositions, not where it records many specific tastes. On nerdiness, the strongest-looking case, the chosen type vector only
-reaches the most common answer (41.0% on the same people) and printed population rates (39.0%), so it shows no
-person-level gain there yet. Vocational interests is the stronger evidence: 37% against 31.6% for the most
-common answer. In a placebo check with meaningless traits, the three chosen Big Five traits beat the chosen placebo set by 7.0 points on vocational interests (95% interval 1.8 to 12.2), but on nerdiness the gap was within noise. Only one real trait set, the Big Five pair on vocational interests, clearly beat the most common answer, without correcting for multiple comparisons.
+survey. We ran Jackson et al.'s search per questionnaire on the two datasets where that default did worst,
+then rescored on 5,000 new people, with traits picked on one half and scored on the other, and the decision
+rule fixed in advance. Chosen traits beat meaningless placebo traits on both datasets. On vocational
+interests the chosen Big Five set (Openness, Conscientiousness, Agreeableness) reached 38.9%, against 29.6%
+for placebo traits and 32.5% for the most common answer, though still well below the 50.6% that history reached
+on the smaller pilot sample. On nerdiness chosen traits reached 37.8%, beating placebo traits (33.7%) but
+staying below the most common answer (40.3%), so the rule was not met there. Two datasets cannot tell
+us when the method works. The model's own proposed traits did about as well as the Big Five on nerdiness.
 
 ## Does it help to let the model "think"?
 
