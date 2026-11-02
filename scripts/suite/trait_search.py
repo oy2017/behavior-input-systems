@@ -4,7 +4,7 @@ for every candidate subset of a trait pool (sizes --sizes, --levels Likert level
 paper's rule (mean absolute distance to all draws, normalised by range; ties kept), and predict the held-out
 item by type-based prediction (median of the type's draws; ties averaged).
 Selection on held-out people: subsets are chosen on half A (even record index) and reported on half B (odd).
-Pools: bigfive | holland | proposed (the model names traits for this questionnaire; cached) | custom:A,B,C
+Pools: placebo | bigfive | holland | proposed (the model names traits for this questionnaire; cached) | custom:A,B,C
 Writes outputs/suite/<dataset>/trait_search_<pool>.json and the tables under outputs/type_table/search/."""
 from __future__ import annotations
 import argparse, collections, itertools, json, re, statistics, sys, time
@@ -14,7 +14,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 from input_systems.provider import GeminiClient
 from input_systems.suite import item_prompt, type_text, parse_int
 
-POOLS = {"bigfive": ["Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Neuroticism"],
+POOLS = {"placebo": ["Preference for the color orange", "Amount of milk in coffee", "Interest in cloud shapes",
+                     "Enjoyment of the sound of rain", "Fondness for the smell of old books"],  # Jackson et al. 2026, Sec. 4.3
+         "bigfive": ["Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Neuroticism"],
          "holland": ["Realistic (hands-on, practical)", "Investigative (analytical, scientific)", "Artistic (creative, expressive)",
                      "Social (helping, teaching)", "Enterprising (persuading, leading)", "Conventional (organised, detail-oriented)"]}
 ap = argparse.ArgumentParser()
