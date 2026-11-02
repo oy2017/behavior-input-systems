@@ -10,8 +10,8 @@ in this game?" instead of recruiting the person. For that to work, the model has
 person is.
 
 Almost everyone tells it the same thing: the person's age, gender, country, education, and a few
-similar facts. We call that a demographic profile. Nobody had checked whether it is the right thing
-to tell the model. So we compared five ways of describing the same person:
+similar facts. We call that a demographic profile. Recent work has started to question whether that is the right thing
+to tell the model, and we test it across more domains than before. So we compared five ways of describing the same person:
 
 | Way of describing the person | What the model is told | Example |
 |---|---|---|
