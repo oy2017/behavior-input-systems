@@ -164,7 +164,10 @@ nerdiness the chosen traits lift the type vector from 29% to 38 to 40%, level wi
 full answer history; on vocational interests they lift it from 30% to 35 to 37%, still 14 points below
 history. Traits the model proposed for the questionnaire did as well as the Big Five; Holland's six
 interest categories did no better. A three-number type works where a questionnaire measures a few
-dispositions, not where it records many specific tastes.
+dispositions, not where it records many specific tastes. On nerdiness, the strongest-looking case, the chosen type vector only
+reaches the most common answer (41.0% on the same people) and printed population rates (39.0%), so it shows no
+person-level gain there yet. Vocational interests is the stronger evidence: 37% against 31.6% for the most
+common answer. We have not yet run a placebo check.
 
 ## Does it help to let the model "think"?
 
