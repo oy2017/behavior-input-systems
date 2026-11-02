@@ -83,11 +83,11 @@ person's history, adding demographics on top never added more than two points.
 | Vocational interests | 22.5% | 27.5% | 26.1% | 30.9% | 49.7% |
 | Temperament | 40.7% | 42.2% | 41.6% | 43.5% | 55.7% |
 | Nonverbal behavior | 27.0% | 34.3% | 25.3% | 40.9% | 52.2% |
-| General Social Survey 2022 | 47.7% | 47.3% | 45.6% | 50.1% | 55.7% |
+| General Social Survey 2022 | 47.7% | 47.3% | 45.6% | 48.8% | 55.7% |
 | SocSci210 experiments | 26.2% | 27.4% | - | - | 42.5% |
-| World Values Survey | 34.7% | 41.8% | 39.6% | 38.4% | 53.2% |
+| World Values Survey | 34.0% | 41.2% | 38.5% | 37.4% | 52.7% |
 
-**Known error, being recomputed:** the best-fitting type vector numbers for the General Social Survey and World Values Survey below are unreliable. A bug gave 38% and 43% of their table rows the wrong answer scale. The other columns and datasets are not affected.
+**Correction:** a bug gave 38% and 43% of the General Social Survey and World Values Survey table rows the wrong answer scale. Their type-vector numbers below were recomputed after the fix, on all 1,000 people (General Social Survey 50.1% became 48.8%, World Values Survey 38.4% became 37.4%). On these two surveys the type vector's gap to measured traits is within noise.
 
 Percentages are how often the model's answer exactly matched the person's. The games row is the
 average distance between the model's choice and the person's choice on a 0-to-100 scale.
@@ -107,9 +107,9 @@ the surveys (11 to 50 answers per item):
 | Vocational interests | 36.4 | 17.1 | 18.1 | 14.5 | 9.8 |
 | Temperament | 22.4 | 17.9 | 11.6 | 14.8 | 8.6 |
 | Nonverbal behavior | 27.2 | 18.3 | 21.3 | 10.8 | 7.2 |
-| General Social Survey 2022 | 23.9 | 15.6 | 14.2 | 15.8 | 14.6 |
+| General Social Survey 2022 | 23.9 | 15.5 | 14.3 | 15.6 | 14.3 |
 | SocSci210 experiments | 12.0 | 10.6 | - | - | 6.1 |
-| World Values Survey | 24.1 | 16.4 | 17.4 | 18.4 | 10.5 |
+| World Values Survey | 24.2 | 16.8 | 17.7 | 18.6 | 10.5 |
 
 Behavior-derived descriptions bring W to 6 to 16 on every dataset, within 0 to 6 points of the floor on
 the surveys; the demographic profile lands between 10 and 35; with no description the model's answers

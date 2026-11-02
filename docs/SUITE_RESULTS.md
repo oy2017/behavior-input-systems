@@ -24,7 +24,7 @@ three Big Five traits (Extraversion, Agreeableness, Neuroticism on a 3-level sca
 al. found best for economic games by search, applied unchanged to every survey; fitted on the other answers only,
 used either for type-based prediction or as the system prompt).
 
-**Known error, being recomputed:** type-vector numbers for GSS 2022 and WVS 7 are unreliable, because a bug gave 38% and 43% of their table rows the wrong answer scale.
+**Correction:** a bug gave 38% and 43% of the GSS 2022 and WVS 7 table rows the wrong answer scale. Their type-vector numbers were recomputed after the fix, on all 1,000 people.
 
 ## Accuracy on the held-out item
 
@@ -36,9 +36,9 @@ used either for type-based prediction or as the system prompt).
 | RIASEC | 22.5 | 27.5 | 26.1 | 30.9 | 49.7 | 50.5 |
 | FTI | 40.7 | 42.2 | 41.6 | 43.5 | 55.7 | 57.4 |
 | NIS | 27.0 | 34.3 | 25.3 | 40.9 | 52.2 | 53.6 |
-| GSS 2022 | 47.7 | 47.3 | 45.6 | 50.1 | 55.7 | 56.3 |
+| GSS 2022 | 47.7 | 47.3 | 45.6 | 48.8 | 55.7 | 56.3 |
 | SocSci210 | 26.2 | 27.4 | - | - | 42.5 | 42.1 |
-| WVS 7 | 34.7 | 41.8 | 39.6 | 38.4 | 53.2 | 53.2 |
+| WVS 7 | 34.0 | 41.2 | 38.5 | 37.4 | 52.7 | 53.0 |
 | BehaviorBench Big Five (run 1) | 29.2 | 30.9 | 40.8 | 37.2 | 48.4 | 47.9 |
 
 ## Findings across ten datasets
@@ -59,7 +59,7 @@ used either for type-based prediction or as the system prompt).
    DASS (neuroticism is distress) and 11.6 on Big Five items (the same construct), but nothing on
    NIS, FTI, MACH, or NPAS. Political identity does not help on GSS; the WVS value indices add 5.
 5. **A best-fitting type vector beats measured traits on six of nine datasets** where both exist (MACH +7.1,
-   DASS +8.3, RIASEC +4.8, FTI +1.9, NIS +15.6, GSS +3.6), loses on the Big Five items, NPAS, and WVS, and loses to raw history
+   DASS +8.3, RIASEC +4.8, FTI +1.9, NIS +15.6, GSS +3.2, the last within noise), loses on the Big Five items, NPAS, and WVS, and loses to raw history
    everywhere (by 6 to 19 points). Fitting three trait levels to a person's own answers extracts
    more than their measured scores, which are not always the same traits, but a three-dimensional type vector is a lossy
    summary of a response record. Where the fitted axes are wrong for the domain (nerdiness needs
