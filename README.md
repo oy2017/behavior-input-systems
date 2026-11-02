@@ -134,7 +134,7 @@ things. Knowing someone's political identity does not help predict their other s
 scores, and the choice of traits matters (see the follow-ups below).** On six of the nine survey datasets with both, the best-fitting type vector, three trait levels we inferred from
 the person's other answers, predicted better than their measured scores (Big Five scores on most datasets,
 political identity on the General Social Survey), by 2 to 16 points. Jackson et al. found that even
-meaningless traits improve fit somewhat, and we have not run that placebo check. In the economic games it matched the full behavior history on individual accuracy
+meaningless traits improve fit somewhat; our placebo pilot, on two datasets, is in the follow-ups below. In the economic games it matched the full behavior history on individual accuracy
 and produced a more realistic spread of answers (W 9.7 versus 14.5). But three numbers cannot hold
 everything a full record does: on every survey dataset the full history still won, and the summary
 failed on nerdiness and on values, where the three traits we used are simply the wrong ones.
@@ -167,7 +167,7 @@ interest categories did no better. A three-number type works where a questionnai
 dispositions, not where it records many specific tastes. On nerdiness, the strongest-looking case, the chosen type vector only
 reaches the most common answer (41.0% on the same people) and printed population rates (39.0%), so it shows no
 person-level gain there yet. Vocational interests is the stronger evidence: 37% against 31.6% for the most
-common answer. We have not yet run a placebo check.
+common answer. In a placebo check with meaningless traits, the three chosen Big Five traits beat the chosen placebo set by 7.0 points on vocational interests (95% interval 1.8 to 12.2), but on nerdiness the gap was within noise. Only one real trait set, the Big Five pair on vocational interests, clearly beat the most common answer, without correcting for multiple comparisons.
 
 ## Does it help to let the model "think"?
 
