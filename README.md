@@ -166,8 +166,10 @@ rule fixed in advance. Chosen traits beat meaningless placebo traits on both dat
 interests the chosen Big Five set (Openness, Conscientiousness, Agreeableness) reached 38.9%, against 29.6%
 for placebo traits and 32.5% for the most common answer, though still well below the 50.6% that history reached
 on the smaller pilot sample. On nerdiness chosen traits reached 37.8%, beating placebo traits (33.7%) but
-staying below the most common answer (40.3%), so the rule was not met there. Two datasets cannot tell
-us when the method works. The model's own proposed traits did about as well as the Big Five on nerdiness.
+staying below the most common answer (40.3%), so the rule was not met there. On six more surveys under
+the same kind of rule, chosen traits again scored above placebo traits, but met the full rule only on
+depression-anxiety-stress (51.6% against 34.0% for both the most common answer and placebo traits). Across all
+eight surveys the rule is met on two, so choosing traits does not make type vectors generally useful on surveys. The model's own proposed traits did about as well as the Big Five on nerdiness.
 
 ## Does it help to let the model "think"?
 
