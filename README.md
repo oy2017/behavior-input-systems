@@ -87,6 +87,8 @@ person's history, adding demographics on top never added more than two points.
 | SocSci210 experiments | 26.2% | 27.4% | - | - | 42.5% |
 | World Values Survey | 34.7% | 41.8% | 39.6% | 38.4% | 53.2% |
 
+**Known error, being recomputed:** the best-fitting type vector numbers for the General Social Survey and World Values Survey below are unreliable. A bug gave 38% and 43% of their table rows the wrong answer scale. The other columns and datasets are not affected.
+
 Percentages are how often the model's answer exactly matched the person's. The games row is the
 average distance between the model's choice and the person's choice on a 0-to-100 scale.
 

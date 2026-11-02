@@ -24,6 +24,8 @@ three Big Five traits (Extraversion, Agreeableness, Neuroticism on a 3-level sca
 al. found best for economic games by search, applied unchanged to every survey; fitted on the other answers only,
 used either for type-based prediction or as the system prompt).
 
+**Known error, being recomputed:** type-vector numbers for GSS 2022 and WVS 7 are unreliable, because a bug gave 38% and 43% of their table rows the wrong answer scale.
+
 ## Accuracy on the held-out item
 
 | Dataset | none | demographics | measured traits | best-fitting type vector (as system prompt) | history | demographics + history |

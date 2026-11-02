@@ -9,6 +9,11 @@ for l in Path(f"outputs/type_table/suite_{a.dataset}_{a.model}.jsonl").read_text
     if d["choice"] is not None: table[(json.dumps(d["type_vector"], sort_keys=True), d["item_text"])].append(d["choice"])
 med = {k: statistics.median(v) for k, v in table.items()}; vectors = sorted({k[0] for k in med})
 recs = [json.loads(l) for l in Path(f"data/suite/{a.dataset}.jsonl").read_text().splitlines()]
+irng = {}  # each item's own answer range, keyed by item text
+for f in (f"data/suite/{a.dataset}.jsonl", f"data/suite_train/{a.dataset}.jsonl"):
+    if Path(f).exists():
+        for l in Path(f).read_text().splitlines():
+            r = json.loads(l); irng.setdefault(r["items"][r["target_item"]]["text"], max(1, r["scale"]["max"] - r["scale"]["min"]))
 d = Path(f"outputs/suite/{a.dataset}/{a.model}"); d.mkdir(parents=True, exist_ok=True)
 ff = open(d / "fits.jsonl", "w"); tf = open(d / "type_table.jsonl", "w"); nf = 0
 for i, r in enumerate(recs):
@@ -16,7 +21,7 @@ for i, r in enumerate(recs):
     obs = [(v["text"], v["answer"]) for k, v in r["items"].items() if k != tgt and any((vk, v["text"]) in med for vk in vectors[:1])]
     scored = []
     for vk in vectors:
-        errs = [abs(ans - med[(vk, t)]) / rng for t, ans in obs if (vk, t) in med]
+        errs = [abs(ans - med[(vk, t)]) / irng.get(t, rng) for t, ans in obs if (vk, t) in med]
         if errs: scored.append((sum(errs) / len(errs), vk))
     if not scored: continue
     scored.sort(); best = scored[0][0]; ties = [vk for e, vk in scored if e == best]

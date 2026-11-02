@@ -10,10 +10,15 @@ ap = argparse.ArgumentParser(); ap.add_argument("--dataset", required=True); ap.
 ap.add_argument("--samples", type=int, default=5); ap.add_argument("--workers", type=int, default=8); a = ap.parse_args()
 recs = [json.loads(l) for l in Path(f"data/suite/{a.dataset}.jsonl").read_text().splitlines()]
 # item universe: union over records (GSS/SocSci have per-record items); keep one representative record per item for its prompt/scale
+# Each item's prompt and valid range must come from a record whose target is that item: scales differ by item on
+# gss2022 and wvs7, and using any other record gave the wrong scale on 38% and 43% of rows before this fix.
+extra = [json.loads(l) for l in Path(f"data/suite_train/{a.dataset}.jsonl").read_text().splitlines()] if Path(f"data/suite_train/{a.dataset}.jsonl").exists() else []
+owner = {}
+for r in recs + extra: owner.setdefault(r["target_item"], r)
 items = {}
 for r in recs:
     for k in r["items"]:
-        items.setdefault((k, r["items"][k]["text"]), r)
+        items.setdefault((k, r["items"][k]["text"]), owner.get(k, r))
 if len(items) > 120:  # SocSci210 has thousands of distinct stimuli; restrict the table to target items only
     items = {(r["target_item"], r["items"][r["target_item"]]["text"]): r for r in recs}
 vectors = [dict(zip(TRAITS_BF3, v)) for v in itertools.product(range(1, 4), repeat=3)]
