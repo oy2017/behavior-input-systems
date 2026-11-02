@@ -244,6 +244,7 @@ post-materialism, autonomy); see the [glossary](docs/GLOSSARY.md).
 - [docs/SUITE_RESULTS.md](docs/SUITE_RESULTS.md): the nine other datasets in full, with
   [tables](docs/suite_tables.md).
 - [docs/REASONING_CHECK.md](docs/REASONING_CHECK.md): thinking on versus off.
+- [docs/TYPE_VECTOR_DIAGNOSTICS.md](docs/TYPE_VECTOR_DIAGNOSTICS.md): why type vectors fail on most surveys.
 
 ## Reproducing
 
