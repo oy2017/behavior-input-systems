@@ -77,10 +77,9 @@ for ds, pools in POOLS.items():
     for f in (0, 1):
         tr = fold != f
         for it in range(len(items)):
-            sel = tr & (tgt == it)
-            if sel.sum():
-                vals, cnts = np.unique(truth[sel], return_counts=True); mode = vals[cnts.argmax()]
-                te = (fold == f) & (tgt == it); mode_hit[te] = truth[te] == mode
+            # every person answered every item, so use all other-fold answers, not only those whose target this is
+            vals, cnts = np.unique(ans[tr, it], return_counts=True); mode = vals[cnts.argmax()]
+            te = (fold == f) & (tgt == it); mode_hit[te] = truth[te] == mode
     hits, picks = {}, {}
     for pool in pools:
         S = json.load(open(f"outputs/suite/{ds}/trait_search_{pool}.json"))
@@ -95,7 +94,7 @@ for ds, pools in POOLS.items():
         if ("Extraversion", "Agreeableness", "Neuroticism") in H: results[(ds, "borrowed")] = 100 * H[("Extraversion", "Agreeableness", "Neuroticism")].mean()
     print(f"\n## {ds}: n={len(recs)}; most common answer {100*mode_hit.mean():.1f}%" + (f"; borrowed E+A+N trio {results[(ds,'borrowed')]:.1f}%" if (ds, 'borrowed') in results else ""))
     for pool in pools:
-        print(f"  {pool:9s} cross-fit {100*hits[pool].mean():5.1f}% | picked {picks[pool][0]} and {picks[pool][1]} | mean by size {[round(results[(ds,pool,'sizes')][s],1) for s in (1,2,3)]} | range of all subsets {100*results[(ds,pool)]['worst_any']:.1f} to {100*results[(ds,pool)]['best_any']:.1f}")
+        print(f"  {pool:9s} cross-fit {100*hits[pool].mean():5.1f}% | picked {picks[pool][0]} and {picks[pool][1]} | mean by size {[round(float(results[(ds,pool,'sizes')][s]),1) for s in (1,2,3)]} | range of all subsets {100*results[(ds,pool)]['worst_any']:.1f} to {100*results[(ds,pool)]['best_any']:.1f}")
     print(f"  placebo minus most common answer: {'%+.1f (%+.1f, %+.1f) p=%.4f' % boot(hits['placebo'] - mode_hit)}")
     for pool in pools[1:]:
         for name, base in (("placebo", hits["placebo"]), ("most common answer", mode_hit)):
