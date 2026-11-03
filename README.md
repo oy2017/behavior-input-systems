@@ -169,7 +169,9 @@ on the smaller pilot sample. On nerdiness chosen traits reached 37.8%, beating p
 staying below the most common answer (40.3%), so the rule was not met there. On six more surveys under
 the same kind of rule, chosen traits again scored above placebo traits, but met the full rule only on
 depression-anxiety-stress (51.6% against 34.0% for both the most common answer and placebo traits). Across all
-eight surveys the rule is met on two, so choosing traits does not make type vectors generally useful on surveys. The model's own proposed traits did about as well as the Big Five on nerdiness.
+eight surveys the rule is met on two, so choosing traits does not make type vectors generally useful on surveys. Groups learned directly from people's answers predict better than type vectors on all eight surveys, but
+describing those groups to the model in words predicts worse, so the bottleneck is the model's step from a description
+of a person to their answers ([diagnostics](docs/TYPE_VECTOR_DIAGNOSTICS.md)). The model's own proposed traits did about as well as the Big Five on nerdiness.
 
 ## Does it help to let the model "think"?
 

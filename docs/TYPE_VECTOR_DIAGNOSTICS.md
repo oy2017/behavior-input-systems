@@ -63,6 +63,56 @@ the strongest single factor (44%) and the largest gain (+17.6), and its chosen s
 surveys this is a hypothesis: type vectors pay off when a questionnaire is dominated by one factor that a trait word
 names.
 
+## 4. Describing the learned types in words does not help (2026-11-02)
+
+Each of the 27 learned groups was described to the model in plain prose (at most 80 words, no numbers, no quoted items,
+written by Gemini 3.5 Flash from the group's 12 most distinctive items on half A). Each description then answered every
+item three times. "Verbal types" fits each half B person to a description by the type-vector rule; "data assignment"
+gives each person the description of the group the data puts them in. Rule committed before results
+(`scripts/suite/verbalized_types.py`).
+
+| Survey | Most common answer | Type vector | Verbal types | Verbal types, data assignment | Learned types |
+|---|---|---|---|---|---|
+| Nerdiness | 40.5 | 38.0 | 35.7 | 33.9 | 44.8 |
+| Vocational interests | 32.7 | 37.5 | 36.4 | 32.5 | 42.6 |
+| Machiavellianism | 35.5 | 37.7 | 40.0 | 38.4 | 42.4 |
+| Depression-anxiety-stress | 34.0 | 51.6 | 46.5 | 44.7 | 53.8 |
+| Temperament | 44.8 | 46.8 | 38.5 | 34.7 | 49.6 |
+| Nonverbal behavior | 35.9 | 40.8 | 27.3 | 24.4 | 49.0 |
+| General Social Survey | 50.8 | 51.2 | 50.0 | 46.4 | 55.0 |
+| World Values Survey | 41.6 | 40.1 | 37.8 | 33.6 | 46.4 |
+
+| Survey | Verbal types minus | Gain | 95% CI | Holm p |
+|---|---|---|---|---|
+| Nerdiness | type vector | -2.2 | -4.6 to +0.1 | 0.1812 |
+| Nerdiness | learned types | -9.0 | -11.2 to -6.9 | 0.0000 |
+| Vocational interests | type vector | -1.2 | -3.5 to +1.2 | 0.7012 |
+| Vocational interests | learned types | -6.3 | -8.6 to -4.0 | 0.0000 |
+| Machiavellianism | type vector | +2.3 | +0.2 to +4.4 | 0.1620 |
+| Machiavellianism | learned types | -2.4 | -4.4 to -0.5 | 0.0744 |
+| Depression-anxiety-stress | type vector | -5.1 | -7.6 to -2.7 | 0.0000 |
+| Depression-anxiety-stress | learned types | -7.3 | -9.5 to -5.1 | 0.0000 |
+| Temperament | type vector | -8.3 | -11.3 to -5.3 | 0.0000 |
+| Temperament | learned types | -11.1 | -14.0 to -8.3 | 0.0000 |
+| Nonverbal behavior | type vector | -13.4 | -16.1 to -10.8 | 0.0000 |
+| Nonverbal behavior | learned types | -21.7 | -24.3 to -19.1 | 0.0000 |
+| General Social Survey | type vector | -1.1 | -4.0 to +1.7 | 0.7012 |
+| General Social Survey | learned types | -4.9 | -7.7 to -2.1 | 0.0056 |
+| World Values Survey | type vector | -2.3 | -4.4 to -0.1 | 0.1744 |
+| World Values Survey | learned types | -8.6 | -10.9 to -6.4 | 0.0000 |
+
+Verbal types beat type vectors on 0 of 8 surveys and are clearly worse on three (depression-anxiety-stress,
+temperament, nonverbal behavior) after correction. They fall clearly below learned types on 7 of 8. With data
+assignment, where each person gets the description of their own group, accuracy is lower still, often below the most
+common answer (nonverbal behavior 24.4% against 49.0% for the group's own most common answer). So a written description
+of a real group, given back to the model, does not reproduce that group's answers.
+
+By the rule fixed in advance, this means the limit is not only the choice of trait words: the model does not turn a
+description of a kind of person into that person's answers, and plain prose does worse than three numeric trait levels.
+Two explanations remain: an 80-word summary of 12 items may drop information, or the model may not render any
+description faithfully. The data-assignment result favors the second, because even the right description for each
+person loses most of the group's signal; a test with longer, fuller descriptions would separate them.
+
 ## What this adds, positive and negative
 
 Not found in our searches (not exhaustive):
@@ -70,7 +120,8 @@ Not found in our searches (not exhaustive):
    number of types learned from data, and on four of them even a type chosen with the answer in view falls short. The
    limit is the trait-word basis, not the number of dimensions.
 2. **Negative, diagnostic:** the failure is not weak steering or unreachable answers; it is that the model's mapping
-   from traits to answers misses which answers go together for real people.
+   from a description to answers misses which answers go together for real people. Describing data-learned groups in
+   prose does not fix it (section 4), and prose does worse than three numeric trait levels.
 3. **Positive:** chosen traits beat placebo traits on all eight surveys in point estimate (four after correction), and
    type vectors gain strongly where one dominant factor matches a trait (depression-anxiety-stress).
 4. **Hypothesis:** a questionnaire's first-factor share predicts whether type vectors help.
@@ -82,9 +133,8 @@ low-dimensional claim this tests on surveys.
 
 ## Next experiments that would settle the open questions
 
-1. **Verbalized learned types.** Describe each learned cluster in words, use the description as the persona, and test
-   whether it recovers the cluster's accuracy. If it does, the bottleneck is the choice of trait words; if not, the model
-   cannot turn rich descriptions into the right answers. About 25,000 calls for all eight surveys.
+1. **Verbalized learned types.** Done (section 4): descriptions do not recover the groups' accuracy. Next is to test
+   longer, fuller descriptions to separate lost information from unfaithful rendering.
 2. **Factor-matched traits, chosen in advance.** For each survey, name the trait that matches its first factor before
    seeing results and test the first-factor hypothesis on surveys not yet used.
 3. **Transfer.** Fit types on one questionnaire and predict another for the same people (Twin-2K-500), the one setting
