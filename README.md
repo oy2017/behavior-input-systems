@@ -171,7 +171,10 @@ the same kind of rule, chosen traits again scored above placebo traits, but met 
 depression-anxiety-stress (51.6% against 34.0% for both the most common answer and placebo traits). Across all
 eight surveys the rule is met on two, so choosing traits does not make type vectors generally useful on surveys. Groups learned directly from people's answers predict better than type vectors on all eight surveys, but
 describing those groups to the model in words predicts worse, so the bottleneck is the model's step from a description
-of a person to their answers ([diagnostics](docs/TYPE_VECTOR_DIAGNOSTICS.md)). The model's own proposed traits did about as well as the Big Five on nerdiness.
+of a person to their answers ([diagnostics](docs/TYPE_VECTOR_DIAGNOSTICS.md)). A follow-up round-trip study shows why: prose
+descriptions make the model exaggerate the group 1.5 to 2.4 times, while item-level profiles do not, and the remaining gap
+depends on whether the model's picture of which answers go together fits the questionnaire
+([paper draft](docs/PAPER_DRAFT.md), [plan and pre-registered rules](docs/PAPER_PLAN.md)). The model's own proposed traits did about as well as the Big Five on nerdiness.
 
 ## Does it help to let the model "think"?
 

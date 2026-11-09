@@ -113,6 +113,12 @@ Two explanations remain: an 80-word summary of 12 items may drop information, or
 description faithfully. The data-assignment result favors the second, because even the right description for each
 person loses most of the group's signal; a test with longer, fuller descriptions would separate them.
 
+## 5. Round-trip study (2026-11-09)
+
+The follow-up with richer descriptions, mechanism and remedies is in [docs/PAPER_DRAFT.md](PAPER_DRAFT.md); rules in
+`scripts/suite/roundtrip.py`. In short: prose exaggerates, profiles do not, and the shape of the model's picture of a
+questionnaire is fixed regardless of description.
+
 ## What this adds, positive and negative
 
 Not found in our searches (not exhaustive):
