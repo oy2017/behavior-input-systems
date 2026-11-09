@@ -219,7 +219,7 @@ def analyze(datasets, conds):
             if not p.exists() or (cond == "think" and ds not in THINK_DS): continue
             rows = [json.loads(l) for l in open(p)]
             if cond == "elicit":
-                E = {(d["cluster"], d["item"]): d["dist"] for d in rows if d["dist"]}
+                E = {(d["cluster"], d["item"]): {int(k): float(w) for k, w in d["dist"].items()} for d in rows if d["dist"]}  # JSON keys are strings
                 R = np.full((K, I), np.nan); EV = np.full((K, I), np.nan)
                 for (c, k), dist in E.items():
                     i = idx[k]; R[c, i] = max(dist, key=dist.get); tot = sum(dist.values()); EV[c, i] = sum(v * w for v, w in dist.items()) / tot
