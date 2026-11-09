@@ -191,7 +191,11 @@ own typical answer sits. All prose intervals exclude 1.
 
 ### 4.4 Reasoning (family F4)
 
-[Pending: sketch answered with thinking on, four questionnaires.]
+Answering the sketch with thinking on changes accuracy by +1.3 (nerdiness), +0.3 (Machiavellianism), -0.6 (distress)
+and -1.0 (nonverbal behavior) points; none is significant after correction, so the pre-registered rule (3 of 4) is not
+met. Thinking does not reduce the caricature; the extremity ratio moves from 1.92 to 2.09, 1.72 to 1.82, 1.58 to 1.69
+and 2.36 to 2.44 on the four questionnaires, and the pattern correlation is unchanged. The exaggeration is not a
+shortcut the model takes when it answers fast.
 
 ### 4.5 Context: type vectors and capacity
 
