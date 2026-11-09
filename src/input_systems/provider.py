@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import hashlib
-import json
+import json, sys
 import os
 import random
 import threading
@@ -40,7 +40,7 @@ class GeminiClient:
                     d = json.loads(line); self._cache[d["k"]] = d["text"]
                 except Exception:
                     pass
-        self.calls = 0
+        self.calls = 0; self.retries = {}
 
     def _key(self, system: str, user: str, sample: int) -> str:
         return hashlib.sha1(f"{self.model}\x1f{self.thinking}\x1f{system}\x1f{user}\x1f{sample}".encode()).hexdigest()
@@ -57,7 +57,8 @@ class GeminiClient:
                                          headers={"Authorization": f"Bearer {self.key}", "Content-Type": "application/json"})
         for attempt in range(self.max_retries):
             try:
-                with urllib.request.urlopen(req, timeout=(60 if self.thinking else 120)) as r:  # Pro calls occasionally stall; a normal Pro answer takes ~4 s
+                # a normal answer takes about 1 s (about 4 s with thinking); a stalled request is abandoned and retried
+                with urllib.request.urlopen(req, timeout=(60 if self.thinking else 30)) as r:
                     d = json.load(r)
                 if self.thinking:
                     parts = (d.get("candidates") or [{}])[0].get("content", {}).get("parts", [])
@@ -65,13 +66,23 @@ class GeminiClient:
                 return d["choices"][0]["message"]["content"] or ""
             except urllib.error.HTTPError as e:
                 if e.code in (429, 500, 502, 503, 504) and attempt < self.max_retries - 1:
-                    time.sleep(min(120, 2 ** attempt) * (0.5 + random.random()))
+                    self._note_retry(f"http {e.code}")
+                    time.sleep(min(30, 2 ** attempt) * (0.5 + random.random()))
                     continue
                 raise
-            except (urllib.error.URLError, TimeoutError, OSError):
+            except (urllib.error.URLError, TimeoutError, OSError) as e:
                 if attempt < self.max_retries - 1:
-                    time.sleep(min(60, 2 ** attempt)); continue
+                    self._note_retry(type(e).__name__)
+                    time.sleep(min(30, 2 ** attempt)); continue
                 raise
+
+    def _note_retry(self, why: str) -> None:
+        """Count retries by cause; print a summary line to stderr every 50 retries so stalls are visible in the logs."""
+        with self._lock:
+            self.retries[why] = self.retries.get(why, 0) + 1
+            total = sum(self.retries.values())
+        if total % 50 == 0:
+            print(f"[provider] {total} retries so far: {dict(self.retries)}", file=sys.stderr, flush=True)
 
     def complete(self, system: str, user: str, sample: int = 0) -> str:
         k = self._key(system, user, sample)
