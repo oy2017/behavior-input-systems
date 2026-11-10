@@ -190,7 +190,7 @@ communicates with warmth, high energy, and physical closeness..." (result files:
 **Fact list.** The information written as a bare list, one fact per line, with nothing added or interpreted: for a
 group, its typical answer to each question; for demographics, the raw fields. The word list and the number list are
 its two spellings here. It is the control every description is compared with: the description that loses no
-information, not the one that works best. A description can score above it, which means the writing helped the model
+information, not the one that works best. A description can score above it, which means the description helped the model
 use the facts, and the test reports that gain the same way it reports a loss.
 
 **Word list.** Every question other than the held-out one, each with the group's typical answer given as its scale
@@ -594,7 +594,7 @@ such as trait scores, the ceiling is a supervised predictor rather than a cell's
 rather than a strict bound. Two of the three legs already exist for demographics and trait scores from the main study:
 the fields themselves were the demographics and traits conditions, and the supervised yardstick was the ceiling, which
 sat 1 to 5 points above the floor while the model given demographics sat below it. The third leg, a persona written from those
-fields compared with the raw fields, is run in Section 5.5: the writing adds a small loss on top of the model's large
+fields compared with the raw fields, is run in Section 5.5: the description adds a small loss on top of the model's large
 one.
 
 **What to feed a model.** If the aim is one person's answers, give the answer list, in numbers or labels, never a
