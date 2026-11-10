@@ -10,16 +10,17 @@ trait scores, a written persona, or a list of past answers. We ask how much of a
 Usually nobody can check: a persona stands for one noisy respondent, or for no fixed set of people at all, and
 nothing says how well anyone could have predicted the target from the same information. We build personas for groups of
 real people whose answers we hold. On eight questionnaires with 1,500 to 2,500 held-out respondents each, we learn 27
-groups of people from their answers alone, so we know how each group answers every question and what the data itself
-predicts. We describe each group to Gemini 3.5 Flash in four forms, from an 80-word
+groups of people from their answers alone, so we know how each group answers every question and what the group's own answers
+predict. We describe each group to Gemini 3.5 Flash in four forms, from an 80-word
 short paragraph to a complete item-by-item answer list, always withholding the question to be predicted, and score the model's
-answers against the group's own held-out members, next to what the data itself predicts at the same capacity. Two
+answers against the group's own held-out members, next to what the group's own answers predict, the group ceiling, at the same capacity. Two
 failures appear, and they come apart. Described in a paragraph, the model plays a caricature: its answers sit 1.5 to 2.4 times
 as far from the average as the group's own, on every questionnaire, however long the paragraph. Given the item-level
-answer list, it stops exaggerating and matches the data on three questionnaires, but stays 2 to 10 points short on five,
+answer list, it stops exaggerating and reaches the group ceiling on three questionnaires, but stays 2 to 10 points short on five,
 because its picture of which answers go together is wrong for those domains, and no form of description changes that.
 Three remedies tested under pre-registered rules all fail; asking for percentages is the only one that never
-hurts. The round trip is a diagnostic that any persona method, model or questionnaire can be put through: it scores a
+hurts. The group ceiling is itself 4 to 11 points below what a person's own answers predict: reducing a person to a
+kind of person has a cost that no persona can avoid. The round trip is a diagnostic that any persona method, model or questionnaire can be put through: it scores a
 description against the behavior of the people it summarizes and says where the error comes from.
 
 ## 1. Introduction
@@ -85,7 +86,7 @@ The two measurements separate two failures. Described in a paragraph, the model 
 than the 80-word short paragraph. The direction is right about 80 percent of the time; the model knows which way the group leans
 and overshoots. Given the answer list, the exaggeration disappears, the ratio sits near 1, and accuracy rises by
 4 to 22 points on seven of eight questionnaires. But a complete answer list recovers the group only where the model's
-picture of the domain is right. On distress, temperament and the General Social Survey it matches the data. On
+picture of the domain is right. On distress, temperament and the General Social Survey it reaches the group ceiling. On
 nerdiness, Machiavellianism, the World Values Survey and two others it stays 2 to 10 points short, and the shortfall
 tracks the pattern correlation, which is the same under all four descriptions. On nerdiness the model's answer list is
 anti-correlated with the real group's whatever it is told. The form of the description controls exaggeration and does not
@@ -124,7 +125,7 @@ whenever real answers from many such people on a shared set of questions exist. 
 2. A decomposition of persona error into exaggeration and pattern, showing that the form of the description controls the
    first and not the second.
 3. A richness curve on eight questionnaires: paragraph exaggerates regardless of length; answer lists are calibrated
-   and recover the data on three questionnaires out of eight.
+   and reach the group ceiling on three questionnaires out of eight.
 4. A pre-registered comparison of three remedies, showing that fixes for exaggeration are double-edged and that only
    the percentage question is safe.
 5. Context from type vectors: trait words chosen per questionnaire beat placebo words on all eight, yet type vectors
