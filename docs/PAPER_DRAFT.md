@@ -182,6 +182,10 @@ communicates with warmth, high energy, and physical closeness..." (result files:
 
 **Paragraph.** Either the short paragraph or the long paragraph.
 
+**Fact list.** The information written as a bare list, one fact per line, with nothing added or interpreted: for a
+group, its typical answer to each question; for demographics, the raw fields. The word list and the number list are
+its two spellings here. It is the control every description is compared with.
+
 **Word list.** Every question other than the held-out one, each with the group's typical answer given as its scale
 label: "I gesture when I talk to people. Answer: 'Very often'." (result files: verbal)
 
@@ -257,12 +261,12 @@ a group can be one person or a segment, and the count is a parameter. (3) Comput
 half with no model, against which the verdict is read: the floor, the answer most people give; the information ceiling, a supervised predictor of the
 held-out answer from the information source; the group ceiling, the most common answer among a group's training
 members, which for a group of one does not exist, so the information ceiling serves. (4) Generate the descriptions, two texts per
-group from the same information with the held-out question withheld: the plainest form, the facts as a list, and the
+group from the same information with the held-out question withheld: the fact list, the facts written one per line with nothing added, and the
 description produced by the method under test. (5) Simulate and score: the model answers the held-out question as each text; score every test
 respondent and compare the simulated population with the real one. (6) Locate the loss: place the model's scores on the scale the reference scores set and subtract down the ladder, each
 gap being one cause:
 information ceiling minus floor is cause 1, the data; information ceiling minus group ceiling is the cost of grouping;
-description minus plainest form is cause 2, the description, with the exaggeration ratio saying how; plainest form
+description minus fact list is cause 2, the description, with the exaggeration ratio saying how; fact list
 minus group ceiling is cause 3, the model, with the pattern correlation saying how. A persona for one real person, as
 in digital twins, is the case of groups of size one. The choices below are this study's instance of each step.
 
@@ -474,19 +478,19 @@ the model; it returns a floor, a ceiling, accuracy per form, the exaggeration ra
 distribution distance, and the verdict is read from where a form falls between floor and ceiling and from which measure
 explains the gap.
 
-**The roles of the four forms.** The two lists are the reference: the information in its plainest form, which every
+**The roles of the four forms.** The two lists are the reference: the information in its fact list, which every
 comparison needs. The two paragraphs are the forms under test, and they are the method most persona pipelines use, a
 model summarizing a segment into prose. Another generator is added beside the paragraphs and compared with the same
 list; the list stays.
 
 **Testing someone else's description method.** Any generator slots into the test as one more form, provided two
 reference points can be built from the same information the generator uses: a data-only ceiling, what a statistical
-predictor gets from that information with no model, and the plainest form of that information, the facts with no
+predictor gets from that information with no model, and the fact list of that information, the facts with no
 writing. For descriptions built from survey answers, as here, the ceiling is the group's most common answer and the
-plainest form is the list. For descriptions built from demographics, the ceiling is the most common answer within each
-demographic cell and the plainest form is the demographic fields themselves; the main study's supervised yardstick on
-demographics is this comparison. The generator's description against the plainest form then measures what the writing
-lost, and the plainest form against the ceiling measures what the model cannot use. The one condition is that the
+fact list is the list. For descriptions built from demographics, the ceiling is the most common answer within each
+demographic cell and the fact list is the demographic fields themselves; the main study's supervised yardstick on
+demographics is this comparison. The generator's description against the fact list then measures what the writing
+lost, and the fact list against the ceiling measures what the model cannot use. The one condition is that the
 information the descriptions come from must be available for the respondents being scored; a persona built from an
 interview can be tested only on respondents who were interviewed. For information that is continuous and per person,
 such as trait scores, the ceiling is a supervised predictor rather than a cell's most common answer, a strong yardstick
