@@ -60,7 +60,7 @@ person whose behavior we know: its members' answers to every question. We then d
 the model answer as the described person, and score the answers against the group's own held-out members. Two features
 make the test informative. First, the yardstick: the group's own most common answer, which is what the same data
 predicts with no language model at all, at the same capacity, since 27 groups match the 27 cells of a three-trait,
-three-level type vector. Second, the hidden item: every description leaves out the question being predicted, so the
+three-level type vector. Second, the held-out item: every description leaves out the question being predicted, so the
 model can never copy an answer and must infer it from who the group is. That is the use personas are put to, predicting
 what has not been asked.
 
@@ -108,7 +108,7 @@ al., and we confirm it.
 The problem is general to every simulation of people from descriptions. We build the diagnostic for one kind of
 simulation first, survey respondents, because telling the three causes apart needs ingredients that closed-ended
 questionnaires answered by many people provide: a group of known people, a ceiling that can be counted, and a question
-that can be hidden. When a model is asked to answer as a
+that can be held-out. When a model is asked to answer as a
 described person, the test measures how much of the real people's behavior comes back and says which of three causes
 produced the loss: the data, when the target was never predictable; the description, when it dropped or distorted what
 was known; or the model, when it could not use what it was told. The
@@ -131,7 +131,7 @@ whenever real answers from many such people on a shared set of questions exist. 
 ## 2. Terms used in this paper
 
 One name per thing. The running example is group 14 on the nonverbal-behavior questionnaire: 158 people who gesture a
-lot, stand close and speak expressively. The hidden question is "I touch others on the shoulder or arm while talking to
+lot, stand close and speak expressively. The held-out question is "I touch others on the shoulder or arm while talking to
 them", answered 1 (never) to 5 (very often).
 
 **Training half, test half.** Each questionnaire's respondents are split in two. Groups, typical answers, descriptions
@@ -142,11 +142,11 @@ never used to build anything.
 is a kind of person whose behavior we know, because we hold its members' answers to every question.
 
 **Typical answer.** A group's median answer to one question, rounded to a whole number. Group 14's typical answer to the
-hidden question is 3. The answer lists are made of typical answers, and the exaggeration ratio compares with them.
+held-out question is 3. The answer lists are made of typical answers, and the exaggeration ratio compares with them.
 
 **Most common answer.** The single answer given by the most people. It is the best one guess for a set of people.
 
-**Floor.** Everyone's most common answer, used as the prediction for every test person. For the hidden question it is
+**Floor.** Everyone's most common answer, used as the prediction for every test person. For the held-out question it is
 2, right for 35 percent of people.
 
 **Ceiling.** The group's most common answer, used as the prediction for every test member of that group. For group 14
@@ -158,22 +158,22 @@ bound holds for individual accuracy only. It is not a bound on the distribution 
 makes a simulated population too narrow, and it is computed on the training half, so a method can land a fraction
 above it on the test half by chance.
 
-**Hidden question.** The one question we try to predict for a test person. It is removed from every description, so
+**Held-out question.** The one question we try to predict for a test person. It is removed from every description, so
 the model can never copy it.
 
 **Description.** What we tell the model about the group, placed in the system prompt. Four kinds are compared: two
-paragraphs and two answer lists. The hidden question is left out of all four.
+paragraphs and two answer lists. The held-out question is left out of all four.
 
 **Short paragraph.** An 80-word paragraph in the second person, written by the model from the twelve questions, other than the
-hidden one, on which the group differs most from everyone. No numbers, no quoted questions. "You are someone who
+held-out one, on which the group differs most from everyone. No numbers, no quoted questions. "You are someone who
 communicates with warmth, high energy, and physical closeness..." (result files: prose12)
 
-**Long paragraph.** The same kind of paragraph written from all questions other than the hidden one, in at most 200 words.
+**Long paragraph.** The same kind of paragraph written from all questions other than the held-out one, in at most 200 words.
 (result files: proseall)
 
 **Paragraph.** Either the short paragraph or the long paragraph.
 
-**Word list.** Every question other than the hidden one, each with the group's typical answer given as its scale
+**Word list.** Every question other than the held-out one, each with the group's typical answer given as its scale
 label: "I gesture when I talk to people. Answer: 'Very often'." (result files: verbal)
 
 **Number list.** The same with the number instead of the label: "Answer: [5]". (result files: numeric)
@@ -185,7 +185,7 @@ the real group's members. The name follows round-trip translation, where a text 
 what changed; it is not an established term in persona work and is defined here.
 
 **Placed by data.** A test person is put in the group whose members' answers are nearest to their own answers on the
-questions other than the hidden one, and receives the model's answer for that group's description. This is the main
+questions other than the held-out one, and receives the model's answer for that group's description. This is the main
 scoring.
 
 **Placed by fit.** A test person receives the description whose model answers best match the person's own answers on
@@ -194,7 +194,7 @@ the other questions, by the rule Jackson et al. (2026) use for type vectors. Rep
 **Type vector.** Jackson et al.'s description of a person by three traits at three levels each, 27 possible types, the
 same number as our groups.
 
-**Accuracy.** The share of test people whose hidden answer is predicted exactly.
+**Accuracy.** The share of test people whose held-out answer is predicted exactly.
 
 **Exaggeration ratio.** For each group and question: how far the model's answer sits from everyone's average, in
 standard deviations, divided by how far the group's typical answer sits. Averaged over groups and questions. A ratio of
@@ -241,7 +241,7 @@ trip measures.
 ## 4. Method
 
 **Setting.** The data is a table: one row per respondent, one column per question, each cell a numbered answer with a
-word attached by the questionnaire's scale. The method works on that table and nothing else. It hides one cell per row
+word attached by the questionnaire's scale. The method works on that table and nothing else. It holds out one cell per row
 and asks how well that cell can be predicted from the rest of the row, by the data alone and by a model given a
 description. It therefore applies to closed-ended questionnaires answered by enough people to form groups, here 3,000
 to 5,000, and not to open-ended text or to one-off decisions with no shared set of questions.
