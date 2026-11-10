@@ -19,7 +19,8 @@ as far from the average as the group's own, on every questionnaire, however long
 answer list, it stops exaggerating and matches the data on three questionnaires, but stays 2 to 10 points short on five,
 because its picture of which answers go together is wrong for those domains, and no form of description changes that.
 Three remedies tested under pre-registered rules all fail; asking for percentages is the only one that never
-hurts. The round trip gives a way to score any persona against the behavior of the people it summarizes.
+hurts. The round trip is a diagnostic that any persona method, model or questionnaire can be put through: it scores a
+description against the behavior of the people it summarizes and says where the error comes from.
 
 ## 1. Introduction
 
@@ -101,9 +102,11 @@ caricature in generated text for groups whose true answers are unknown; we measu
 against the group's real members. The one remedy that survives here, asking for a distribution, was proposed by Lee et
 al., and we confirm it.
 
-Our contributions are:
-1. The round-trip test: a way to score any persona description against the known behavior of the group it summarizes,
-   with a same-capacity data yardstick and the predicted item withheld.
+What we propose is a diagnostic, not a benchmark: the model is held fixed and the descriptions are what is ranked,
+and the test says where a description's error comes from rather than only how large it is. Our contributions are:
+1. The round trip, a diagnostic for persona descriptions: it scores a description against the known behavior of the
+   group it summarizes, with a same-capacity data ceiling and the predicted item withheld, and separates three causes
+   of error: nothing to recover, loss in the paragraph channel, and limits of what the model knows.
 2. A decomposition of persona error into exaggeration and pattern, showing that the form of the description controls the
    first and not the second.
 3. A richness curve on eight questionnaires: paragraph exaggerates regardless of length; answer lists are calibrated
