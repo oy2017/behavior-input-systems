@@ -263,8 +263,11 @@ trip measures.
 **The procedure in general.** Given a respondent-by-question table, a model to use as the simulator, an information
 source (what is known about each respondent) and a description method under test (which turns that information into
 text), the test has six steps. (1) Split: divide respondents into a training half and a test half, and hold out one
-answer from each test respondent. (2) Group: sort respondents into groups of similar people by the information source;
-a group can be one person or a segment, and the count is a parameter. (3) Compute the reference scores, three accuracies from the training
+answer from each test respondent. (2) Group: identify the real respondents each description stands for; this is the group, and it comes
+with the recipe, one person for an individual persona, the segment's members for a segment persona. When the recipe
+under test brings no segments, as the generic segment-and-summarize pipeline does not, form neutral ones by sorting
+training respondents into groups of similar people by the information source; the count is then a parameter. A
+description that stands for no identifiable respondents cannot be diagnosed. (3) Compute the reference scores, three accuracies from the training
 half with no model, against which the verdict is read: the floor, the answer most people give; the information ceiling, a supervised predictor of the
 held-out answer from the information source; the group ceiling, the most common answer among a group's training
 members, which for a group of one does not exist, so the information ceiling serves. (4) Generate the descriptions, two texts per
