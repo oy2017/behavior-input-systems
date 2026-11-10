@@ -16,6 +16,9 @@ Conditions (Gemini 3.5 Flash, thinking off, 3 draws per item, median taken):
 - elicit:   prose12, but the model is asked what percentage of such people choose each option; the top option is the
             prediction.
 - think:    prose12 answered with thinking on, on npas, mach, dass and nis only.
+- numeric_baserates (added 2026-11-09, rule committed before running): the numeric profile plus, for every question
+  including the held-out one, the share of all training-half respondents choosing each option. Tests whether the
+  model's remaining gap to the group ceiling is missing population facts.
 
 DECISION RULES, committed before any result of this experiment was computed. Accuracy is under data assignment on half
 B, paired bootstrap over people, 10,000 resamples, Holm within each family, alpha 0.05.
@@ -31,6 +34,8 @@ B, paired bootstrap over people, 10,000 resamples, Holm within each family, alph
   condition's extremity ratio computed from half A only; moderate minus prose12; elicit minus prose12. A fix "works" if
   it is positive and significant on at least 6 of 8 surveys and never significantly negative.
 - F4 reasoning (4 tests): think minus prose12. Reasoning "helps" if positive and significant on at least 3 of 4.
+- F5 base rates (8 tests): numeric_baserates minus numeric. Base rates "help" if positive and significant on at least 6
+  of 8 and never significantly negative.
 - Population level (descriptive, no test): for each item, a synthetic sample is built from the 27 described groups,
   each group's draws weighted by its size, and compared with the real half B answer distribution by the Wasserstein-1
   distance as a percentage of the scale range (mean over items), and by the ratio of synthetic to real standard
@@ -114,6 +119,16 @@ def profile(S, c, t, numeric):
     return ("You are a typical member of a group of survey respondents. Members of your group typically answered the "
             "following items as follows:\n" + "\n".join(lines))
 
+def baserate_block(S, t):
+    """Share of training-half respondents choosing each option, for every question including the held-out one."""
+    lines = []
+    for i, k in enumerate(S["keys"]):
+        v = S["ans"][S["A"], i]; v = v[v >= 0]
+        if len(v) == 0: continue
+        sc = S["rep"][k]["scale"]; cnt = np.bincount(v, minlength=sc["max"] + 1)[sc["min"]:sc["max"] + 1]; pct = 100 * cnt / cnt.sum()
+        lines.append(f"- {S['rep'][k]['items'][k]['text']}: " + ", ".join(f"{sc['min']+j}: {pct[j]:.0f}%" for j in range(len(pct))))
+    return "For reference, the share of all respondents choosing each option, for every question:\n" + "\n".join(lines)
+
 def elicit_user(r, k):
     return (f"Consider people like the one described above. For the following item, what percentage of them would choose each "
             f"option {scale_text(r['scale'])}?\n\nItem: {r['items'][k]['text']}\n\nReply with only a JSON object mapping each option "
@@ -142,6 +157,7 @@ def build(ds, cond, client):
         if cond in ("prose12", "proseall", "think"): return base + "\n\n" + desc[(c, t)]
         if cond == "moderate": return base + "\n\n" + desc[(c, t)] + "\n\n" + MODERATE
         if cond == "elicit": return "Here is a description of a typical member of a group of people who answered an online questionnaire, written as if addressed to them:\n\n" + desc[(c, t)]
+        if cond == "numeric_baserates": return base + "\n\n" + profile(S, c, t, True) + "\n\n" + baserate_block(S, t)
         return base + "\n\n" + profile(S, c, t, cond == "numeric")
     path = ans_path(ds, cond); have = {(d["cluster"], d["item"], d.get("sample", 0)) for d in map(json.loads, open(path))} if path.exists() else set()
     draws = 1 if cond == "elicit" else DRAWS
@@ -163,7 +179,7 @@ def holm(ps):
     return adj
 
 def analyze(datasets, conds):
-    rng = np.random.default_rng(0); out = {}; fam = {"F1": [], "F2": [], "F3": [], "F4": []}
+    rng = np.random.default_rng(0); out = {}; fam = {"F1": [], "F2": [], "F3": [], "F4": [], "F5": []}
     def boot(d):
         b = 100 * d[rng.integers(0, len(d), (10000, len(d)))].mean(1)
         return 100 * d.mean(), np.percentile(b, 2.5), np.percentile(b, 97.5), min(1.0, 2 * min((b <= 0).mean(), (b >= 0).mean()))
@@ -264,6 +280,9 @@ def analyze(datasets, conds):
             if "think" in acc_cond: fam["F4"].append([ds, "think minus prose12", *boot(acc_cond["think"] - acc_cond["prose12"])])
         for c2 in ("numeric", "verbal"):
             if c2 in acc_cond: fam["F2"].append([ds, f"learned minus {c2}", *boot(lt - acc_cond[c2])])
+        if "numeric_baserates" in acc_cond and "numeric" in acc_cond:
+            fam["F5"].append([ds, "numeric_baserates minus numeric", *boot(acc_cond["numeric_baserates"] - acc_cond["numeric"])])
+            fam["F2"].append([ds, "learned minus numeric_baserates", *boot(lt - acc_cond["numeric_baserates"])])
         out[ds] = res
     cols = [c for c in conds if any(c in out[d]["cond"] for d in out)]
     print("Accuracy on half B, data assignment (%)\n| Survey | Most common | Type vector | " + " | ".join(cols) + " | Learned groups |\n|---|---|---|" + "---|" * len(cols) + "---|")
