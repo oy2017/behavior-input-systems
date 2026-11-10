@@ -415,6 +415,17 @@ the model; it returns a floor, a ceiling, accuracy per form, the exaggeration ra
 distribution distance, and the verdict is read from where a form falls between floor and ceiling and from which measure
 explains the gap.
 
+**Testing someone else's description method.** Any generator slots into the test as one more form, provided two
+reference points can be built from the same information the generator uses: a data-only ceiling, what a statistical
+predictor gets from that information with no model, and the plainest form of that information, the facts with no
+writing. For descriptions built from survey answers, as here, the ceiling is the group's most common answer and the
+plainest form is the list. For descriptions built from demographics, the ceiling is the most common answer within each
+demographic cell and the plainest form is the demographic fields themselves; the main study's supervised yardstick on
+demographics is this comparison. The generator's description against the plainest form then measures what the writing
+lost, and the plainest form against the ceiling measures what the model cannot use. The one condition is that the
+information the descriptions come from must be available for the respondents being scored; a persona built from an
+interview can be tested only on respondents who were interviewed.
+
 **What to feed a model.** If the aim is one person's answers, give the answer list, in numbers or labels, never a
 paragraph of it; expect it to match data-ceiling where the questionnaire has one dominant construct the
 model understands, and to fall short where the model's folk theory of the domain is off. If the aim is a population
