@@ -264,8 +264,9 @@ half with no model, against which the verdict is read: the floor, the answer mos
 held-out answer from the information source; the group ceiling, the most common answer among a group's training
 members, which for a group of one does not exist, so the information ceiling serves. (4) Generate the descriptions, two texts per
 group from the same information with the held-out question withheld: the fact list, the facts written one per line with nothing added, and the
-description produced by the method under test. (5) Simulate and score: the model answers the held-out question as each text; score every test
-respondent and compare the simulated population with the real one. (6) Locate the loss: place the model's scores on the scale the reference scores set and subtract down the ladder, each
+description produced by the method under test. (5) Simulate and score: run the model twice per group and question, once playing the person the fact list
+describes and once playing the person the description under test describes; score every test respondent under each,
+and compare each simulated population with the real one. (6) Locate the loss: place the model's scores on the scale the reference scores set and subtract down the ladder, each
 gap being one cause:
 information ceiling minus floor is cause 1, the data; information ceiling minus group ceiling is the cost of grouping;
 description minus fact list is cause 2, the description, with the exaggeration ratio saying how; fact list
