@@ -384,7 +384,9 @@ self-selected online samples plus two national surveys. The paragraph descriptio
 answers them, so the design shows that the paragraph channel loses information but does not separate the writing from the
 reading; the right direction on 80 percent of items and the effect of a reader-side typical-member sentence point to the
 reading, and a test that asks the model to estimate the group's answers from the paragraph, rather than act them out, would
-settle it. Also the
+settle it. The population comparison is made on the whole test half per question, not group by group: a group's
+three draws are nearly always identical, so the model offers no within-group distribution to compare with its members'
+spread; only the percentage question produces one, and it is pooled rather than scored per group. Also the
 pre-registered F2 rule returned neither reading, so the "complete answer list" claim is a per-questionnaire statement, not a
 general one.
 
