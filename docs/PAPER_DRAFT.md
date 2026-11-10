@@ -323,6 +323,18 @@ own typical answer sits. All paragraph intervals exclude 1.
   condition and above 0.68 on nonverbal behavior under every condition. What the description form changes is exaggeration.
   Where the model's picture of which answers go together is right (distress, temperament, nonverbal behavior) a full
   answer list recovers the group; where it is wrong (nerdiness, Machiavellianism) no description does.
+- **What the pattern failure looks like, item by item.** Three cases from the number-list condition, where the model had
+  every other typical answer. (1) Machiavellianism, a trusting group whose list said people are not vicious, do work
+  without being forced, and can be trusted: on "most people who get ahead in the world lead clean, moral lives" the
+  model said 4; 61 of the group's 92 members said 1, as did nearly everyone in the population (mean 1.7). The model
+  reasoned from the persona and did not know the item's base rate. (2) Nerdiness, a bookish group whose list said no
+  video games and no novel-writing: on "I like to play RPGs (Ex. D&D)" the model said 2; 69 of 91 members said 5. In
+  this sample RPG play is near-universal (mean 4.2) and almost unrelated to video games (r = 0.12); the model's folk
+  theory links the two. (3) Machiavellianism, a cynical group: on "P.T. Barnum was wrong when he said there's a sucker
+  born every minute" the model said 1, as a literal reading of a cynic implies; 70 of 114 members said 5. The item is a
+  double negative that respondents parse inconsistently, and no reader of the text could predict this group's answer.
+  So the pattern gap mixes two things: population facts about items that the model does not know and the data does,
+  and respondent or dataset quirks that only the data can carry.
 - **At the population level the two failures have opposite signs.** A simulated population built from paragraph-described
   groups is 1.1 to 1.7 times too spread out; one built from answer lists is 0.5 to 0.9 times too narrow, like type vectors
   (0.53 to 0.88) and like Jia et al.'s individual personas. Only percentage questions sit near 1 (1.0 to 1.4).
@@ -392,7 +404,10 @@ self-selected online samples plus two national surveys. The paragraph descriptio
 answers them, so the design shows that the paragraph channel loses information but does not separate the writing from the
 reading; the right direction on 80 percent of items and the effect of a reader-side typical-member sentence point to the
 reading, and a test that asks the model to estimate the group's answers from the paragraph, rather than act them out, would
-settle it. The population comparison is made on the whole test half per question, not group by group: a group's
+settle it. Part of the pattern gap is item base rates and
+respondent quirks that no reader of a description can know, so the ceiling is a ceiling on information, not only on
+reasoning; giving the model each item's population distribution alongside the list is the natural next test, and the
+main study found such base rates help. The population comparison is made on the whole test half per question, not group by group: a group's
 three draws are nearly always identical, so the model offers no within-group distribution to compare with its members'
 spread; only the percentage question produces one, and it is pooled rather than scored per group. Also the
 pre-registered F2 rule returned neither reading, so the "complete answer list" claim is a per-questionnaire statement, not a
