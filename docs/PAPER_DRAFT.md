@@ -111,7 +111,110 @@ Our contributions are:
    beat the most common answer on only two, and an exploratory capacity curve shows why: three trait levels carry about
    as much as one to six data-learned groups.
 
-## 2. Related work
+## 2. Terms used in this paper
+
+The running example is group 14 on the nonverbal-behavior questionnaire: 158 people who gesture a lot, stand close and
+speak expressively. The hidden question is "I touch others on the shoulder or arm while talking to them", answered 1
+(never) to 5 (very often).
+
+**Training half, test half.** Each questionnaire's respondents are split in two by position in the file. Groups,
+typical answers, descriptions and all baselines are built from the training half. Every number reported is scored on
+the test half, whose answers are never used to build anything.
+
+**Group.** A set of training-half people who answered alike, found by k-means with 27 groups per questionnaire. Each
+person is a point whose coordinates are their answers; k-means finds 27 centers and assigns each person to the nearest.
+A group is "a kind of person" whose behavior we know, because we hold its members' answers to every question.
+
+**Centroid.** The mean of a group's scaled answers. Used only to decide which group a test person is nearest to.
+
+**Typical answer.** A group's median answer to one question, rounded to a whole number. Group 14's typical answer to
+the hidden question is 3. Typical answers are what the profiles list and what the exaggeration measure compares with.
+
+**Most common answer.** The single answer given by the most people, also called the mode. It is the best one guess for
+a set of people, because it is right for the most of them.
+
+**Floor.** The most common answer of everyone in the training half, used as the prediction for every test person. For
+the hidden question it is 2, right for 35 percent of people. In the tables this column is "Most common".
+
+**Ceiling.** A group's most common answer to the hidden question, used as the prediction for every test member of that
+group. For group 14 it is 3, right for 56 percent of its members. It is a true ceiling for any method that gives all
+members of a group the same answer, which every method here does: no description of group 14, however good, can make
+the model beat 3 on group 14's members. In the tables this column is "Learned groups".
+
+**Hidden question, hidden item.** The one question whose answer we try to predict for a test person. It is removed from
+every description of the group, so the model can never copy it and must infer it from the rest.
+
+**The information.** What we know about a group from data and are allowed to tell the model: its typical answers to all
+questions other than the hidden one. The same information is delivered in several forms.
+
+**Form.** How the information is written into the model's system prompt. Four forms are compared; the first two are
+prose, the last two are lists.
+
+**Sketch** (prose12 in the tables). An 80-word second-person paragraph, written by the model from the twelve questions
+other than the hidden one on which the group differs most from everyone. No numbers, no quoted questions. "You are
+someone who communicates with warmth, high energy, and physical closeness..."
+
+**Portrait** (proseall). The same, written from all questions other than the hidden one, in at most 200 words.
+
+**Summary.** Either prose form, sketch or portrait, as opposed to a list.
+
+**Verbal profile** (verbal). Every question other than the hidden one, each with the group's typical answer given as
+the scale label: "I gesture when I talk to people. Answer: 'Very often'."
+
+**Numeric profile** (numeric). The same with the number instead of the label: "Answer: [5]". It has the format of the
+history condition in the main study, applied to a group's typical answers instead of one person's past answers.
+
+**List.** Either profile, verbal or numeric, as opposed to a summary.
+
+**Round trip.** Real group, then description of the group, then the model's answers as the described person, then
+comparison with the real group's members. Whatever is lost on the way shows as a gap.
+
+**Data assignment.** A test person is placed in the group whose centroid is nearest to their answers on the questions
+other than the hidden one, and receives the model's answer for that group's description. This is the main scoring; it
+is the clean round trip.
+
+**Fitted assignment.** A test person receives the description whose model answers best match the person's own answers
+on the other questions, by the rule of Jackson et al. (2026) for type vectors. It needs no data on the target and is
+how a type vector is used in practice. Reported as a secondary scoring.
+
+**Type vector.** Jackson et al.'s description of a person by a few trait levels, here three traits at three levels,
+giving 27 possible types, the same number as our groups.
+
+**Accuracy.** The share of test people whose hidden answer is predicted exactly.
+
+**Extremity ratio, amplitude.** For each group and question, how far the model's typical answer sits from everyone's
+average, in standard deviations, divided by how far the group's own typical answer sits. Averaged over groups and
+questions. A ratio of 2 means the model places the group twice as far from average as it really is. Group 14 from the
+sketch: 1.93; from the numeric profile: 1.04.
+
+**Direction agreement.** Among questions where a group departs from the average by more than 0.3 standard deviations,
+the share where the model's answer departs the same way.
+
+**Pattern correlation, shape.** For one group, the correlation across questions between the model's departures from
+average and the group's real departures. Averaged over groups. It asks whether the model moves on the right questions,
+regardless of how far.
+
+**Synthetic sample.** For one question, the model's answers for all 27 described groups pooled, each group weighted by
+its size. It stands for what a population simulation built from these personas would produce.
+
+**Wasserstein distance.** How far the synthetic sample's distribution of answers is from the real test-half
+distribution, as a percentage of the scale. Zero means identical. Reported with the ratio of the synthetic sample's
+spread to the real spread, where above 1 is too wide and below 1 too narrow.
+
+**Damping.** A post-hoc fix: shrink the model's answer toward everyone's average by the extremity ratio measured on the
+training half, then round.
+
+**Moderation instruction.** A prompt fix: one sentence added after the sketch asking the model to answer as a typical,
+not extreme, member.
+
+**Elicited distribution.** A prompt fix: instead of answering as the person, the model is asked what percentage of such
+people choose each option. The top option is the prediction, and the percentages form the synthetic sample.
+
+**Learned groups, type vector, placebo traits.** "Learned groups" is the ceiling above. "Type vector" is the chosen
+Big Five type vector from the earlier study. "Placebo traits" are meaningless traits such as preference for the color
+orange, used in that study to check that choosing real traits matters.
+
+## 3. Related work
 
 Details and the per-paper differences are in docs/RELATED_WORK.md. Beyond the four papers above: Bisbee et al. (2024)
 and Dominguez-Olmedo et al. (2024) on the fragility of model survey responses; Hu and Collier (2024) on how little
@@ -120,7 +223,7 @@ for unasked survey items; Abels et al. (2026) on calibrating under-dispersed val
 the one prose needs here; Salminen and Jansen on data-driven personas, the artifact whose behavioral fidelity the round
 trip measures.
 
-## 3. Method
+## 4. Method
 
 **Data.** Eight questionnaires: six from openpsychometrics.org (nerdiness, vocational interests, Machiavellianism,
 depression-anxiety-stress, temperament, nonverbal behavior), the 2022 General Social Survey, and the World Values
@@ -162,12 +265,12 @@ synthetic to real standard deviation.
 **Pre-registration.** Decision rules, families of tests and Holm correction are in the docstring of
 scripts/suite/roundtrip.py, committed before any result was computed (commit b5fe5d3).
 
-## 4. Results
+## 5. Results
 
-All numbers are from outputs/roundtrip.json (docs/roundtrip_tables.md has every table). Accuracy is on half B under
+All numbers are from outputs/roundtrip.json (docs/roundtrip_tables.md has every table). Column names follow Section 2: "Most common" is the floor, "Learned groups" the ceiling, sketch and portrait are the prose summaries, verbal and numeric profiles are the lists. Accuracy is on half B under
 data assignment unless stated. "Significant" means Holm-adjusted p < 0.05 within the family named in the script.
 
-### 4.1 Richness curve (family F1 and F2)
+### 5.1 Richness curve (family F1 and F2)
 
 | Survey | Most common | Type vector | Sketch | Portrait | Verbal profile | Numeric profile | Learned groups |
 |---|---|---|---|---|---|---|---|
@@ -194,7 +297,7 @@ data assignment unless stated. "Significant" means Holm-adjusted p < 0.05 within
   target): the numeric profile scores 35.8 to 54.5 and beats the chosen type vector on 5 of 8, ties on 1 and loses on 2
   (nerdiness, Machiavellianism).
 
-### 4.2 Mechanism
+### 5.2 Mechanism
 
 | Survey | Sketch | Portrait | Verbal profile | Numeric profile | Pattern correlation, all six conditions |
 |---|---|---|---|---|---|
@@ -224,7 +327,7 @@ own typical answer sits. All prose intervals exclude 1.
   groups is 1.1 to 1.7 times too spread out; one built from profiles is 0.5 to 0.9 times too narrow, like type vectors
   (0.53 to 0.88) and like Jia et al.'s individual personas. Only elicited distributions sit near 1 (1.0 to 1.4).
 
-### 4.3 Remedies (family F3; a fix "works" if it helps significantly on at least 6 of 8 and never significantly hurts)
+### 5.3 Remedies (family F3; a fix "works" if it helps significantly on at least 6 of 8 and never significantly hurts)
 
 | Survey | Sketch | Sketch, damped | Sketch, moderation instruction | Sketch, elicited distribution |
 |---|---|---|---|---|
@@ -247,7 +350,7 @@ own typical answer sits. All prose intervals exclude 1.
   best Wasserstein distance of any model condition on 3 of 8, beating even the learned groups' own population
   prediction on the two national surveys (General Social Survey 5.9 vs 10.6; World Values Survey 8.3 vs 9.5).
 
-### 4.4 Reasoning (family F4)
+### 5.4 Reasoning (family F4)
 
 Answering the sketch with thinking on changes accuracy by +1.3 (nerdiness), +0.3 (Machiavellianism), -0.6 (distress)
 and -1.0 (nonverbal behavior) points; none is significant after correction, so the pre-registered rule (3 of 4) is not
@@ -255,14 +358,14 @@ met. Thinking does not reduce the caricature; the extremity ratio moves from 1.9
 and 2.36 to 2.44 on the four questionnaires, and the pattern correlation is unchanged. The exaggeration is not a
 shortcut the model takes when it answers fast.
 
-### 4.5 Context: type vectors and capacity
+### 5.5 Context: type vectors and capacity
 
 Trait words chosen per questionnaire beat placebo words on 8 of 8 (significantly on 4), yet the chosen type vector beats
 the most common answer on only 2 of 8 (docs/UPDATE_2026-10-24.md). Exploratory capacity curve (scripts/suite/
 capacity_curve.py): a type vector with 27 possible labels predicts about as well as sorting people into 1 to 6
 data-learned groups, two groups on 5 of 8 questionnaires.
 
-## 5. Discussion
+## 6. Discussion
 
 **Two failures, not one.** A description of a kind of person fails in the model's hands in two separable ways. Prose
 inflates amplitude: the model plays a caricature, and more words do not fix it. Independently, the model's picture of
