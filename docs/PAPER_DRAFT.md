@@ -249,22 +249,21 @@ trip measures.
 
 ## 4. Method
 
-**The procedure in general.** Inputs: a respondent-by-question table; a model used as the simulator; an information
-source, what is known about each respondent; and a description method under test, which turns that information into
-text for the model. (1) Split respondents into a training half and a test half; for each test respondent hold out one
-answer. (2) Fix who the description is about: one respondent, described from their own information, as in silicon samples
-and digital twins; or a kind of respondent, a group of similar people described together, as in personas for segments,
-formed by grouping training respondents on the information source, the number of groups being a parameter. For one
-respondent the unit ceiling below coincides with the information ceiling and the cost of the unit is zero. (3) Compute reference points with no
-model: the floor, the most common answer; the information ceiling, a supervised predictor of the held-out answer from
-the information source; the unit ceiling, the unit's most common answer, the best one answer per unit. (4) Write the
-plainest form: the information as a list, with the held-out question withheld. (5) Generate the description under test
-from the same information, held-out question withheld. (6) Have the model answer the held-out question as the
-described unit under each form; score each test respondent, and compare the simulated population with the real one.
-(7) Read the verdict: information ceiling against floor is cause 1, the data; information ceiling against unit ceiling
-is the cost of the unit; description against plainest form is cause 2, the description, with the exaggeration ratio
-saying how; plainest form against unit ceiling is cause 3, the model, with the pattern correlation saying how. The
-choices below are this study's instance of each part.
+**The procedure in general.** Given a respondent-by-question table, a model to use as the simulator, an information
+source (what is known about each respondent) and a description method under test (which turns that information into
+text), the test has six steps. (1) Split: divide respondents into a training half and a test half, and hold out one
+answer from each test respondent. (2) Group: sort respondents into groups of similar people by the information source;
+a group can be one person or a segment, and the count is a parameter. (3) Count the reference points from the training
+half with no model: the floor, the answer most people give; the information ceiling, a supervised predictor of the
+held-out answer from the information source; the group ceiling, the most common answer among a group's training
+members, which for a group of one does not exist, so the information ceiling serves. (4) Write two texts per group
+from the same information with the held-out question withheld: the plainest form, the facts as a list, and the
+description under test. (5) Simulate and score: the model answers the held-out question as each text; score every test
+respondent and compare the simulated population with the real one. (6) Read the verdict from four differences:
+information ceiling minus floor is cause 1, the data; information ceiling minus group ceiling is the cost of grouping;
+description minus plainest form is cause 2, the description, with the exaggeration ratio saying how; plainest form
+minus group ceiling is cause 3, the model, with the pattern correlation saying how. A persona for one real person, as
+in digital twins, is the case of groups of size one. The choices below are this study's instance of each step.
 
 **Setting.** The data is a table: one row per respondent, one column per question, each cell a numbered answer with a
 word attached by the questionnaire's scale. The method works on that table and nothing else. It holds out one cell per row
