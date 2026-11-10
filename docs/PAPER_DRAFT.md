@@ -252,8 +252,10 @@ trip measures.
 **The procedure in general.** Inputs: a respondent-by-question table; a model used as the simulator; an information
 source, what is known about each respondent; and a description method under test, which turns that information into
 text for the model. (1) Split respondents into a training half and a test half; for each test respondent hold out one
-answer. (2) Fix the unit the description describes: an individual, or a kind of person, formed by grouping training
-respondents on the information source; the number of groups is a parameter. (3) Compute reference points with no
+answer. (2) Fix who the description is about: one respondent, described from their own information, as in silicon samples
+and digital twins; or a kind of respondent, a group of similar people described together, as in personas for segments,
+formed by grouping training respondents on the information source, the number of groups being a parameter. For one
+respondent the unit ceiling below coincides with the information ceiling and the cost of the unit is zero. (3) Compute reference points with no
 model: the floor, the most common answer; the information ceiling, a supervised predictor of the held-out answer from
 the information source; the unit ceiling, the unit's most common answer, the best one answer per unit. (4) Write the
 plainest form: the information as a list, with the held-out question withheld. (5) Generate the description under test
