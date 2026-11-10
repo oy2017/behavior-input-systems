@@ -12,7 +12,7 @@ nothing says how well anyone could have predicted the target from the same infor
 real people whose answers we hold. On eight questionnaires with 1,500 to 2,500 held-out respondents each, we learn 27
 groups of people from their answers alone, so we know how each group answers every question and what the data itself
 predicts. We describe each group to Gemini 3.5 Flash in four forms, from an 80-word
-sketch to a complete item-by-item answer list, always withholding the question to be predicted, and score the model's
+short paragraph to a complete item-by-item answer list, always withholding the question to be predicted, and score the model's
 answers against the group's own held-out members, next to what the data itself predicts at the same capacity. Two
 failures appear, and they come apart. Described in a paragraph, the model plays a caricature: its answers sit 1.5 to 2.4 times
 as far from the average as the group's own, on every questionnaire, however long the paragraph. Given the item-level
@@ -26,7 +26,7 @@ hurts. The round trip gives a way to score any persona against the behavior of t
 Simulating people with language models has one step in common across every method. Silicon samples give the model a
 respondent's demographics (Argyle et al. 2023). Digital twins give it an interview transcript or a history of past
 answers (Park et al. 2024; Toubia et al. 2025). Type vectors give it three trait levels (Jackson et al. 2026).
-Data-driven personas in human-computer interaction give it a written portrait generated from a cluster of users
+Data-driven personas in human-computer interaction give it a written long paragraph generated from a cluster of users
 (Salminen et al.). In each case a description of a person goes in, and behavior comes out. Everything downstream, from
 a simulated survey to an agent-based society, inherits whatever that step gets wrong.
 
@@ -60,8 +60,8 @@ three-level type vector. Second, the hidden item: every description leaves out t
 model can never copy an answer and must infer it from who the group is. That is the use personas are put to, predicting
 what has not been asked.
 
-We vary how much the description says, holding the group fixed: the sketch, an 80-word paragraph written from the group's
-twelve most distinctive other items; the portrait, a 200-word paragraph written from all of them; the label list, every
+We vary how much the description says, holding the group fixed: the short paragraph, 80 words written from the group's
+twelve most distinctive other items; the long paragraph, 200 words written from all of them; the word list, every
 other item with the group's typical answer as a scale label; and the number list, the same with numbers. We measure two things that a single accuracy number hides.
 Exaggeration: how far the model's typical answer for the group sits from the population average, relative to how far the
 group's own typical answer sits. Pattern: whether the model's pattern across items correlates with the group's real
@@ -71,8 +71,8 @@ test three remedies, shrinking, a typical-member sentence, and asking for percen
 committed before any result was computed.
 
 The two measurements separate two failures. Described in a paragraph, the model plays a caricature. Its answers sit 1.5 to
-2.4 times as far from average as the real group's, on all eight questionnaires, and the 200-word portrait is no better
-than the 80-word sketch. The direction is right about 80 percent of the time; the model knows which way the group leans
+2.4 times as far from average as the real group's, on all eight questionnaires, and the 200-word long paragraph is no better
+than the 80-word short paragraph. The direction is right about 80 percent of the time; the model knows which way the group leans
 and overshoots. Given the answer list, the exaggeration disappears, the ratio sits near 1, and accuracy rises by
 4 to 22 points on seven of eight questionnaires. But a complete answer list recovers the group only where the model's
 picture of the domain is right. On distress, temperament and the General Social Survey it matches the data. On
@@ -135,7 +135,7 @@ hidden question is 3. The answer lists are made of typical answers, and the exag
 **Ceiling.** The group's most common answer, used as the prediction for every test member of that group. For group 14
 it is 3, right for 88 of its 158 members, 56 percent. It is the highest individual accuracy any method can reach on a
 group's members if it gives all of them the same answer, as every method here does: accuracy counts exact matches, and
-the most common answer is by definition the one answer that matches the most members. The sketch led the model to say
+the most common answer is by definition the one answer that matches the most members. The short paragraph led the model to say
 5, right for 15 members; the number list to say 4, right for 47; nothing could have been right for more than 88. The
 bound holds for individual accuracy only. It is not a bound on the distribution distance, since one answer per group
 makes a simulated population too narrow, and it is computed on the training half, so a method can land a fraction
@@ -147,21 +147,21 @@ the model can never copy it.
 **Description.** What we tell the model about the group, placed in the system prompt. Four kinds are compared: two
 paragraphs and two answer lists. The hidden question is left out of all four.
 
-**Sketch.** An 80-word paragraph in the second person, written by the model from the twelve questions, other than the
+**Short paragraph.** An 80-word paragraph in the second person, written by the model from the twelve questions, other than the
 hidden one, on which the group differs most from everyone. No numbers, no quoted questions. "You are someone who
 communicates with warmth, high energy, and physical closeness..." (result files: prose12)
 
-**Portrait.** The same kind of paragraph written from all questions other than the hidden one, in at most 200 words.
+**Long paragraph.** The same kind of paragraph written from all questions other than the hidden one, in at most 200 words.
 (result files: proseall)
 
-**Paragraph.** Either the sketch or the portrait.
+**Paragraph.** Either the short paragraph or the long paragraph.
 
-**Label list.** Every question other than the hidden one, each with the group's typical answer given as its scale
+**Word list.** Every question other than the hidden one, each with the group's typical answer given as its scale
 label: "I gesture when I talk to people. Answer: 'Very often'." (result files: verbal)
 
 **Number list.** The same with the number instead of the label: "Answer: [5]". (result files: numeric)
 
-**Answer list.** Either the label list or the number list.
+**Answer list.** Either the word list or the number list.
 
 **Round trip.** Real group, then description, then the model's answers as the described person, then comparison with
 the real group's members.
@@ -180,7 +180,7 @@ same number as our groups.
 
 **Exaggeration ratio.** For each group and question: how far the model's answer sits from everyone's average, in
 standard deviations, divided by how far the group's typical answer sits. Averaged over groups and questions. A ratio of
-2 means the model places the group twice as far from average as it really is. Group 14 from the sketch: 1.93; from the
+2 means the model places the group twice as far from average as it really is. Group 14 from the short paragraph: 1.93; from the
 number list: 1.04.
 
 **Direction agreement.** Among questions where a group departs from the average by more than 0.3 standard deviations,
@@ -200,7 +200,7 @@ simulated population's standard deviation over the real one, above 1 too wide, b
 **Shrinking.** A fix applied after the fact: move the model's answer toward everyone's average by the exaggeration ratio
 measured on the training half, then round.
 
-**Typical-member sentence.** A fix in the prompt: one sentence after the sketch asking the model to answer as a typical,
+**Typical-member sentence.** A fix in the prompt: one sentence after the short paragraph asking the model to answer as a typical,
 not extreme, member of the group.
 
 **Percentage question.** A fix in the prompt: instead of answering as the person, the model is asked what percentage of
@@ -232,10 +232,10 @@ nearest centroid over their non-target items ("placement by data"). The group's 
 answer on the target item ("ceiling").
 
 **Descriptions.** For each group and each target item:
-- *Sketch (paragraph12).* Gemini 3.5 Flash writes a second-person description from the 12 non-target items on which the
+- *Short paragraph (paragraph12).* Gemini 3.5 Flash writes a second-person description from the 12 non-target items on which the
   group differs most from everyone, in at most 80 words, with no numbers and no quoted items.
-- *Portrait (paragraphall).* The same from all non-target items, in at most 200 words.
-- *Label list.* Every non-target item with the group's typical answer given as its scale label.
+- *Long paragraph (paragraphall).* The same from all non-target items, in at most 200 words.
+- *Word list.* Every non-target item with the group's typical answer given as its scale label.
 - *Number list.* Every non-target item with the group's typical answer as a number, in the format of the history
   condition of the main study.
 
@@ -262,12 +262,12 @@ scripts/suite/roundtrip.py, committed before any result was computed (commit b5f
 
 ## 5. Results
 
-All numbers are from outputs/roundtrip.json (docs/roundtrip_tables.md has every table). Column names follow Section 2: "Most common" is the floor, "Ceiling" the ceiling, sketch and portrait are the paragraphs, verbal and number lists are the lists. Accuracy is on half B under
+All numbers are from outputs/roundtrip.json (docs/roundtrip_tables.md has every table). Column names follow Section 2: "Most common" is the floor, "Ceiling" the ceiling, short paragraph and long paragraph are the paragraphs, verbal and number lists are the lists. Accuracy is on half B under
 placement by data unless stated. "Significant" means Holm-adjusted p < 0.05 within the family named in the script.
 
 ### 5.1 Richness curve (family F1 and F2)
 
-| Survey | Floor | Type vector | Sketch | Portrait | Label list | Number list | Ceiling |
+| Survey | Floor | Type vector | Short paragraph | Long paragraph | Word list | Number list | Ceiling |
 |---|---|---|---|---|---|---|---|
 | Nerdiness | 40.5 | 38.0 | 31.0 | 30.1 | 30.3 | 35.0 | 44.8 |
 | Vocational interests | 32.7 | 37.5 | 32.2 | 37.1 | 38.4 | 39.1 | 42.6 |
@@ -278,12 +278,12 @@ placement by data unless stated. "Significant" means Holm-adjusted p < 0.05 with
 | General Social Survey | 50.8 | 51.2 | 46.2 | 44.6 | 51.0 | 52.3 | 55.0 |
 | World Values Survey | 41.6 | 40.1 | 33.6 | 36.9 | 43.0 | 42.0 | 46.4 |
 
-- **An 80-word sketch loses most of the group.** It is below the most common answer on 6 of 8 questionnaires and below
+- **An 80-word short paragraph loses most of the group.** It is below the most common answer on 6 of 8 questionnaires and below
   the ceiling on all 8, by 4 to 24 points.
-- **More paragraph does not help.** The 200-word portrait written from every item differs from the sketch by -1.7 to +4.9
+- **More paragraph does not help.** The 200-word long paragraph written from every item differs from the short paragraph by -1.7 to +4.9
   points; it is significantly better on 3 of 8 and never by more than 5.
-- **Item-level answer lists help a lot (F1 rule met).** The number list beats the sketch significantly on 7 of 8, by 4 to
-  22 points (nonverbal behavior 24.6 to 46.6); the label list on 6 of 8. Labels and numbers do about equally well.
+- **Item-level answer lists help a lot (F1 rule met).** The number list beats the short paragraph significantly on 7 of 8, by 4 to
+  22 points (nonverbal behavior 24.6 to 46.6); the word list on 6 of 8. Labels and numbers do about equally well.
 - **A complete answer list recovers the group on some questionnaires and not others (F2: neither pre-registered reading
   met).** The number list matches the ceiling on distress (54.0 vs 53.8), temperament (49.9 vs 49.6) and the
   General Social Survey (52.3 vs 55.0, not significant). It stays significantly short on 5 of 8: nerdiness by 9.8,
@@ -294,7 +294,7 @@ placement by data unless stated. "Significant" means Holm-adjusted p < 0.05 with
 
 ### 5.2 Mechanism
 
-| Survey | Sketch | Portrait | Label list | Number list | Pattern correlation, all six conditions |
+| Survey | Short paragraph | Long paragraph | Word list | Number list | Pattern correlation, all six conditions |
 |---|---|---|---|---|---|
 | Nerdiness | 1.92 | 1.73 | 0.82 | 0.92 | -0.14 to -0.06 |
 | Vocational interests | 1.53 | 1.66 | 1.02 | 1.09 | 0.56 to 0.74 |
@@ -311,8 +311,8 @@ own typical answer sits. All paragraph intervals exclude 1.
 - **Paragraphs makes a caricature.** Described in words, short or long, the model answers 1.5 to 2.4 times as far from the
   average as the group really does, on every questionnaire. Given the answer list it does not exaggerate at all
   (ratios 0.82 to 1.39, mostly within 0.1 of 1).
-- **Direction is mostly right.** Across the sketch, 80 percent of the group's departures of more than 0.3 sd go the
-  right way (72 to 92 percent by questionnaire; docs/sketch_audit.md lists the exceptions).
+- **Direction is mostly right.** Across the short paragraph, 80 percent of the group's departures of more than 0.3 sd go the
+  right way (72 to 92 percent by questionnaire; docs/short paragraph_audit.md lists the exceptions).
 - **The pattern is set by the questionnaire, not the description.** The correlation between the model's pattern across
   items and the group's real pattern barely moves across the six conditions: it is negative on nerdiness under every
   condition and above 0.68 on nonverbal behavior under every condition. What the description form changes is exaggeration.
@@ -324,7 +324,7 @@ own typical answer sits. All paragraph intervals exclude 1.
 
 ### 5.3 Remedies (family F3; a fix "works" if it helps significantly on at least 6 of 8 and never significantly hurts)
 
-| Survey | Sketch | Sketch, shrunk | Sketch, typical-member sentence | Sketch, percentage question |
+| Survey | Short paragraph | Short paragraph, shrunk | Short paragraph, typical-member sentence | Short paragraph, percentage question |
 |---|---|---|---|---|
 | Nerdiness | 31.0 | 25.2 | 22.1 | 30.1 |
 | Vocational interests | 32.2 | 29.5 | 28.4 | 32.4 |
@@ -347,7 +347,7 @@ own typical answer sits. All paragraph intervals exclude 1.
 
 ### 5.4 Reasoning (family F4)
 
-Answering the sketch with thinking on changes accuracy by +1.3 (nerdiness), +0.3 (Machiavellianism), -0.6 (distress)
+Answering the short paragraph with thinking on changes accuracy by +1.3 (nerdiness), +0.3 (Machiavellianism), -0.6 (distress)
 and -1.0 (nonverbal behavior) points; none is significant after correction, so the pre-registered rule (3 of 4) is not
 met. Thinking does not reduce the caricature; the exaggeration ratio moves from 1.92 to 2.09, 1.72 to 1.82, 1.58 to 1.69
 and 2.36 to 2.44 on the four questionnaires, and the pattern correlation is unchanged. The exaggeration is not a
