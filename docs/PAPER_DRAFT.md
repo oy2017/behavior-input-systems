@@ -520,7 +520,11 @@ our model and prompts on our questionnaires (the published numbers cannot be pla
 personas).
 
 **Type vectors (Jackson et al. 2026).** Three trait levels as the description, placed by fit; the fact list placed by the
-same rule is the control; the group ceiling is the yardstick.
+same rule is the control; the group ceiling is the yardstick. This is a contest between descriptions under the recipe's
+matching rule, not yet the round trip with the recipe's own unit: the people each type fits, whose ceiling and fact
+list are computed in scripts/suite/type_vector_roundtrip.py (rule fixed before running; result to be inserted). Fitting
+is very uneven, one type absorbing up to 941 of 2,500 training people on nonverbal behavior, so the recipe's own groups
+are far coarser than ours.
 
 | Questionnaire | Type vector | Fact list, placed by fit | Group ceiling | What 3 levels lose | What the model cannot replace |
 |---|---|---|---|---|---|
