@@ -7,9 +7,11 @@ Working draft, 2026-11-08. Sections 4 and 5 are placeholders until outputs/round
 
 When a language model is asked to stand in for a person, it is first told who the person is: a few demographics, some
 trait scores, a written persona, or a list of past answers. We ask how much of a person's behavior survives that step.
-Usually nobody can check, because the people a persona stands for are not available. We make them available. On eight
-questionnaires with 1,500 to 2,500 held-out respondents each, we learn 27 groups of people from their answers alone, so
-we know how each group answers every question. We describe each group to Gemini 3.5 Flash in four forms, from an 80-word
+Usually nobody can check: a persona stands for one noisy respondent, or for no fixed set of people at all, and
+nothing says how well anyone could have predicted the target from the same information. We build personas for groups of
+real people whose answers we hold. On eight questionnaires with 1,500 to 2,500 held-out respondents each, we learn 27
+groups of people from their answers alone, so we know how each group answers every question and what the data itself
+predicts. We describe each group to Gemini 3.5 Flash in four forms, from an 80-word
 sketch to a complete item-by-item profile, always withholding the question to be predicted, and score the model's
 answers against the group's own held-out members, next to what the data itself predicts at the same capacity. Two
 failures appear, and they come apart. Described in prose, the model plays a caricature: its answers sit 1.5 to 2.4 times
@@ -30,12 +32,16 @@ a synthetic survey to an agent-based society, inherits whatever that step gets w
 
 How faithful is the step? Existing evaluations compare the model's answers with human answers and report a gap. They
 cannot say where the gap comes from. When a persona built from a respondent's history predicts that respondent poorly
-(Jia et al. 2026), three explanations are open: the description lost the information, the model misread the
-description, or the target question was never predictable from the rest. The baselines in use, a model with no context
-or with demographics only, cannot separate these. Nor can they say how much information the description carried in the
-first place, because the people it summarizes are not available for comparison.
+(Jia et al. 2026), three explanations are open: the description dropped or distorted the information; the model could
+not turn the information into the right answers; or the target question was never predictable from the rest. Telling
+them apart needs two things the usual designs lack. One is a ceiling: a prediction made from the same information with
+no language model, which says how predictable the target was and how much the description could have carried. A
+no-context or demographics-only baseline gives only the floor. The other is a fixed set of people whose typical
+behavior defines what the description should have produced. A persona for one respondent has one noisy answer per
+question to be checked against; a written persona for a demographic cell or a market segment has no fixed set of people
+behind it at all.
 
-We make them available with a round trip. On each of eight questionnaires, six from openpsychometrics.org and two
+We supply both with a round trip. On each of eight questionnaires, six from openpsychometrics.org and two
 national surveys, we sort respondents into 27 groups by k-means on their answers alone. Each group is now a kind of
 person whose behavior we know: its members' answers to every question. We then describe the group to the model, have
 the model answer as the described person, and score the answers against the group's own held-out members. Two features
