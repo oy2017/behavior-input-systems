@@ -47,7 +47,8 @@ the description may have dropped or distorted the information. To test this one 
 only its form: a paragraph of the group's typical answers, or the complete list of them, item by item. If the list
 scores higher than the paragraph, the loss sits in the paragraph channel, in how the paragraph was written or in how the model
 read it, and not in the model's ability to use the information once it is stated plainly. Third, the model may be unable to infer the
-answer from the complete facts stated plainly. To test this one gives the model the complete list and compares with the ceiling;
+held-out answer from the group's other answers stated plainly, where the group ceiling has the group's real answers to
+that question. To test this one gives the model the complete list and compares with the ceiling;
 whatever gap remains is the model's own. The usual designs allow none of these comparisons. They compare many inputs,
 demographics, trait scores, type vectors, past answers, a model given nothing, which says which input the model uses
 better but not how much there was to use: a score of 47 percent could be nearly everything the information held or a
@@ -115,7 +116,7 @@ questionnaires answered by many people provide: a group of known people, a ceili
 that can be held-out. When a model is asked to answer as a
 described person, the test measures how much of the real people's behavior comes back and says which of three causes
 produced the loss: the data, when the target was never predictable; the description, when it dropped or distorted what
-was known; or the model, when it could not infer the answer from the complete facts stated plainly. The
+was known; or the model, when it could not infer the held-out answer from the other answers stated plainly. The
 name follows round-trip translation: data goes to a description and back to behavior, and the test reports what
 changed on the way. It applies to any pipeline, a description form read by a model on a kind of people and questions,
 whenever real answers from many such people on a shared set of questions exist. Our contributions are:
@@ -270,8 +271,10 @@ and compare each simulated population with the real one. (6) Locate the loss: pl
 gap being one cause:
 information ceiling minus floor is cause 1, the data; information ceiling minus group ceiling is the cost of grouping;
 description minus fact list is cause 2, the description, with the exaggeration ratio saying how; fact list
-minus group ceiling is cause 3, the model, meaning what it cannot infer from the complete facts stated plainly, with
-the pattern correlation saying how. The fact list is the boundary between causes 2 and 3 because it is the one form
+minus group ceiling is cause 3, the model, meaning what it cannot infer about the held-out answer from the group's
+other answers stated plainly, where the group ceiling is counted from the group's real answers to that question; the
+gap is how much of "having asked" the model's knowledge fails to substitute for, with the pattern correlation saying
+how. The fact list is the boundary between causes 2 and 3 because it is the one form
 that adds nothing and removes nothing; a form that scored above it would move part of cause 3 to the description side,
 which is why any such gain is reported. A persona for one real person, as
 in digital twins, is the case of groups of size one. The choices below are this study's instance of each step.
