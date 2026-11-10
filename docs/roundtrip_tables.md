@@ -475,3 +475,83 @@ From `scripts/suite/information_ceiling.py`.
 | Nonverbal behavior | 35.9 | 49.0 | 58.9 | 0.36 |
 | General Social Survey | 50.8 | 55.0 | 59.3 | 0.12 |
 | World Values Survey | 41.6 | 46.4 | 54.2 | 0.10 |
+
+## Personas written from outside information (demographics; demographics plus trait scores)
+
+From `scripts/suite/persona_fields.py --analyze`, on the main study's 1,000 records per questionnaire. Rules in the script docstring.
+
+
+persona_demographics vs raw fields (demographics); accuracy on the main study's 1,000 records (%)
+| Questionnaire | Floor | Ceiling, same fields | Raw fields | Persona from fields | Ceiling − floor | Raw − ceiling | Persona − raw |
+|---|---|---|---|---|---|---|---|
+| Nerdiness | 40.1 | 41.3 | 27.3 | 24.9 | +1.2 | -14.0 | -2.4 |
+| Vocational interests | 31.3 | 36.7 | 27.5 | 25.4 | +5.4 | -9.2 | -2.1 |
+| Machiavellianism | 38.6 | 42.3 | 28.5 | 26.6 | +3.7 | -13.8 | -1.9 |
+| Distress | 33.8 | 35.7 | 30.1 | 28.1 | +1.9 | -5.6 | -2.0 |
+| Temperament | 45.0 | 47.5 | 42.2 | 36.9 | +2.5 | -5.3 | -5.3 |
+| Nonverbal behavior | 35.7 | 36.5 | 34.3 | 32.0 | +0.8 | -2.2 | -2.3 |
+| General Social Survey | 50.3 | 52.3 | 47.3 | 45.1 | +2.0 | -5.0 | -2.2 |
+| World Values Survey | 42.6 | 47.3 | 41.2 | 37.5 | +4.7 | -6.1 | -3.7 |
+
+Population level: W per item (lower is better) / predicted-to-real spread ratio
+| Questionnaire | Raw fields | Persona |
+|---|---|---|
+| Nerdiness | 20.6 / 0.57 | 17.1 / 0.75 |
+| Vocational interests | 17.1 / 0.80 | 15.4 / 0.84 |
+| Machiavellianism | 18.5 / 0.82 | 29.3 / 0.91 |
+| Distress | 34.5 / 0.46 | 38.9 / 0.39 |
+| Temperament | 17.9 / 0.65 | 13.7 / 0.85 |
+| Nonverbal behavior | 18.3 / 0.87 | 17.4 / 0.98 |
+| General Social Survey | 15.5 / 0.96 | 17.0 / 0.97 |
+| World Values Survey | 16.8 / 0.88 | 17.7 / 0.91 |
+
+persona_demographics+traits vs raw fields (demographics+traits); accuracy on the main study's 1,000 records (%)
+| Questionnaire | Floor | Ceiling, same fields | Raw fields | Persona from fields | Ceiling − floor | Raw − ceiling | Persona − raw |
+|---|---|---|---|---|---|---|---|
+| Nerdiness | 40.1 | 43.7 | 27.6 | 27.8 | +3.6 | -16.1 | +0.2 |
+| Vocational interests | 31.3 | 36.5 | 28.2 | 28.6 | +5.2 | -8.3 | +0.4 |
+| Machiavellianism | 38.6 | 44.4 | 31.4 | 29.0 | +5.8 | -13.0 | -2.4 |
+| Distress | 33.8 | 44.4 | 41.2 | 33.5 | +10.6 | -3.2 | -7.7 |
+| Temperament | 45.0 | 54.9 | 44.3 | 44.8 | +9.9 | -10.6 | +0.5 |
+| Nonverbal behavior | 35.7 | 40.9 | 27.1 | 30.7 | +5.2 | -13.8 | +3.6 |
+| General Social Survey | 50.3 | 53.4 | 47.7 | 47.9 | +3.1 | -5.7 | +0.2 |
+| World Values Survey | 42.6 | 48.1 | 41.8 | 38.9 | +5.5 | -6.3 | -2.9 |
+
+Population level: W per item (lower is better) / predicted-to-real spread ratio
+| Questionnaire | Raw fields | Persona |
+|---|---|---|
+| Nerdiness | 16.1 / 0.67 | 15.6 / 0.80 |
+| Vocational interests | 15.6 / 0.82 | 15.1 / 0.91 |
+| Machiavellianism | 15.9 / 0.86 | 29.9 / 0.95 |
+| Distress | 13.3 / 0.93 | 26.2 / 0.73 |
+| Temperament | 10.6 / 0.99 | 10.6 / 1.03 |
+| Nonverbal behavior | 19.9 / 1.02 | 15.2 / 1.00 |
+| General Social Survey | 14.0 / 0.96 | 13.7 / 0.96 |
+| World Values Survey | 16.2 / 0.88 | 17.2 / 0.91 |
+
+F1: persona minus raw fields
+| Questionnaire | Gain | 95% CI | Holm p |
+|---|---|---|---|
+| Nerdiness | -2.4 | -5.2 to +0.4 | 0.4140 |
+| Vocational interests | -2.1 | -5.1 to +0.9 | 0.4140 |
+| Machiavellianism | -1.9 | -5.0 to +1.2 | 0.4140 |
+| Distress | -2.0 | -4.0 to +0.0 | 0.3372 |
+| Temperament | -5.3 | -8.7 to -2.0 | 0.0160 |
+| Nonverbal behavior | -2.3 | -4.8 to +0.3 | 0.4140 |
+| General Social Survey | -2.2 | -4.9 to +0.5 | 0.4140 |
+| World Values Survey | -3.7 | -6.1 to -1.3 | 0.0308 |
+Significantly negative on 2 of 8; significantly positive on 0 of 8.
+
+F2: persona minus raw fields
+| Questionnaire | Gain | 95% CI | Holm p |
+|---|---|---|---|
+| Nerdiness | +0.2 | -2.7 to +3.0 | 1.0000 |
+| Vocational interests | +0.4 | -2.6 to +3.5 | 1.0000 |
+| Machiavellianism | -2.4 | -5.4 to +0.7 | 0.7200 |
+| Distress | -7.7 | -11.0 to -4.4 | 0.0000 |
+| Temperament | +0.5 | -2.5 to +3.6 | 1.0000 |
+| Nonverbal behavior | +3.6 | +0.7 to +6.6 | 0.1358 |
+| General Social Survey | +0.2 | -2.3 to +2.7 | 1.0000 |
+| World Values Survey | -2.9 | -5.3 to -0.4 | 0.1358 |
+Significantly negative on 1 of 8; significantly positive on 0 of 8.
+

@@ -456,7 +456,36 @@ met. Thinking does not reduce the caricature; the exaggeration ratio moves from 
 and 2.36 to 2.44 on the four questionnaires, and the pattern correlation is unchanged. The exaggeration is not a
 shortcut the model takes when it answers fast.
 
-### 5.5 Context: type vectors and capacity
+### 5.5 The round trip with outside information: personas from demographics and trait scores
+
+The same test on descriptions built from outside the survey, run on the main study's 1,000 records per questionnaire
+with the unit being the individual (so the group ceiling is the information ceiling, the supervised model trained on the
+same fields, and there is no cost of grouping). The fact list is the raw fields, already run in the main study; the
+description under test is an 80-word second-person persona the model writes from the fields. Rules in
+scripts/suite/persona_fields.py; full tables in docs/roundtrip_tables.md.
+
+| Information | Ceiling − floor | Raw fields − ceiling | Persona − raw fields | Rule verdict |
+|---|---|---|---|---|
+| Demographics, 8 questionnaires | +0.8 to +5.4 | −2.2 to −14.0; below the floor on 8 of 8 | −1.9 to −5.3; significant on 2 of 8 | form does not matter |
+| Demographics + trait scores, 8 | +3.1 to +10.6 | −3.2 to −16.1 | −7.7 (distress, significant) to +3.6; significant on 1 of 8 | form does not matter |
+
+Two ladders: nerdiness with demographics, floor 40.1, ceiling 41.3, raw fields 27.3, persona 24.9; distress with
+demographics and trait scores, floor 33.8, ceiling 44.4, raw fields 41.2, persona 33.5.
+
+- **With outside information the dominant loss is the model's.** Given the plain demographics it scores below the
+  floor on every questionnaire: knowing a person's age and gender makes it worse than knowing nothing. This is the main
+  study's demographics result placed on the ladder.
+- **Writing the fields into a persona adds a small loss on top,** 2 to 5 points with demographics, in the same direction
+  on all eight but significant on two, so the pre-committed rule returns "the form does not matter". With trait scores
+  the persona's loss concentrates where the fields carried the most, distress, where Neuroticism predicts the answers.
+- **Mirror image of the main round trip.** There the model used the fact list well and the paragraph destroyed it; here
+  the paragraph matters little because the model has already lost nearly everything by the time it reads the plain
+  fields. The same diagnostic gives opposite verdicts, and both match what the main study found by other means.
+- Deviation from the rule as written: the trait condition was pre-registered for six questionnaires; the two national
+  surveys also carry trait-like scores (political identity; value indices), so eight were run and the same six-of-eight
+  threshold was applied.
+
+### 5.6 Context: type vectors and capacity
 
 Trait words chosen per questionnaire beat placebo words on 8 of 8 (significantly on 4), yet the chosen type vector beats
 the most common answer on only 2 of 8 (docs/UPDATE_2026-10-24.md). Exploratory capacity curve (scripts/suite/
@@ -500,8 +529,9 @@ interview can be tested only on respondents who were interviewed. For informatio
 such as trait scores, the ceiling is a supervised predictor rather than a cell's most common answer, a strong yardstick
 rather than a strict bound. Two of the three legs already exist for demographics and trait scores from the main study:
 the fields themselves were the demographics and traits conditions, and the supervised yardstick was the ceiling, which
-sat 1 to 5 points above the floor while the model given demographics sat below it. The missing leg, a persona written
-from those fields compared with the raw fields, would complete the round trip for outside information.
+sat 1 to 5 points above the floor while the model given demographics sat below it. The third leg, a persona written from those
+fields compared with the raw fields, is run in Section 5.5: the writing adds a small loss on top of the model's large
+one.
 
 **What to feed a model.** If the aim is one person's answers, give the answer list, in numbers or labels, never a
 paragraph of it; expect it to match data-ceiling where the questionnaire has one dominant construct the
