@@ -249,6 +249,21 @@ trip measures.
 
 ## 4. Method
 
+**The procedure in general.** Inputs: a respondent-by-question table; a model used as the simulator; an information
+source, what is known about each respondent; and a description method under test, which turns that information into
+text for the model. (1) Split respondents into a training half and a test half; for each test respondent hold out one
+answer. (2) Fix the unit the description describes: an individual, or a kind of person, formed by grouping training
+respondents on the information source; the number of groups is a parameter. (3) Compute reference points with no
+model: the floor, the most common answer; the information ceiling, a supervised predictor of the held-out answer from
+the information source; the unit ceiling, the unit's most common answer, the best one answer per unit. (4) Write the
+plainest form: the information as a list, with the held-out question withheld. (5) Generate the description under test
+from the same information, held-out question withheld. (6) Have the model answer the held-out question as the
+described unit under each form; score each test respondent, and compare the simulated population with the real one.
+(7) Read the verdict: information ceiling against floor is cause 1, the data; information ceiling against unit ceiling
+is the cost of the unit; description against plainest form is cause 2, the description, with the exaggeration ratio
+saying how; plainest form against unit ceiling is cause 3, the model, with the pattern correlation saying how. The
+choices below are this study's instance of each part.
+
 **Setting.** The data is a table: one row per respondent, one column per question, each cell a numbered answer with a
 word attached by the questionnaire's scale. The method works on that table and nothing else. It holds out one cell per row
 and asks how well that cell can be predicted from the rest of the row, by the data alone and by a model given a
