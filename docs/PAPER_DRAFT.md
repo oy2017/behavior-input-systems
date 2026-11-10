@@ -18,7 +18,7 @@ failures appear, and they come apart. Described in a paragraph, the model plays 
 as far from the average as the group's own, on every questionnaire, however long the paragraph. Given the item-level
 answer list, it stops exaggerating and reaches the group ceiling on three questionnaires, but stays 2 to 10 points short on five,
 because its picture of which answers go together is wrong for those domains, and no form of description changes that.
-Three remedies tested under pre-registered rules all fail; asking for percentages is the only one that never
+Three remedies tested under rules fixed in advance all fail; asking for percentages is the only one that never
 hurts. The group ceiling is itself 4 to 11 points below what a person's own answers predict: reducing a person to a
 kind of person has a cost that no persona can avoid. The round trip is a diagnostic that any persona method, model or questionnaire can be put through: it scores a
 description against the behavior of the people it summarizes and says where the error comes from.
@@ -95,7 +95,7 @@ tracks the pattern correlation, which is the same under all four descriptions. O
 anti-correlated with the real group's whatever it is told. The form of the description controls exaggeration and does not
 touch pattern. At the population level the two forms fail in opposite directions: paragraph-described groups produce a
 simulated population 1.1 to 1.7 times too wide, answer lists one 0.5 to 0.9 times too narrow. None of the three remedies passes
-the pre-registered bar. Shrinking and the typical-member sentence gain up to 19 points where exaggeration was the whole
+the fixed in advance bar. Shrinking and the typical-member sentence gain up to 19 points where exaggeration was the whole
 problem and lose up to 10 where the pattern was wrong too. Asking for percentages never hurts and gives the best
 population-level match on the two national surveys. Reasoning changes none of this.
 
@@ -129,8 +129,8 @@ whenever real answers from many such people on a shared set of questions exist. 
    first and not the second.
 3. A richness curve on eight questionnaires: paragraph exaggerates regardless of length; answer lists are calibrated
    and reach the group ceiling on three questionnaires out of eight.
-4. A pre-registered comparison of three remedies, showing that fixes for exaggeration are double-edged and that only
-   the percentage question is safe.
+4. An intervention test of the split: correcting amplitude alone, by shrinking answers or by a typical-member
+   instruction, helps exactly where exaggeration was the whole loss and hurts where the pattern was also wrong.
 5. Context from type vectors: trait words chosen per questionnaire beat placebo words on all eight, yet type vectors
    beat the most common answer on only two, and an exploratory capacity curve shows why: three trait levels carry about
    as much as one to six data-ceiling.
@@ -330,7 +330,7 @@ such people choose each option; predict the top option.
 with the real half-B distribution by the Wasserstein-1 distance as a percentage of the scale range, and by the ratio of
 simulated-to-real standard deviation.
 
-**Pre-registration.** Decision rules, families of tests and Holm correction are in the docstring of
+**Rules fixed in advance.** Decision rules, families of tests and Holm correction are in the docstring of
 scripts/suite/roundtrip.py, committed before any result was computed (commit b5fe5d3).
 
 ## 5. Results
@@ -390,7 +390,7 @@ paragraph adds a small loss on top.
   points; it is significantly better on 3 of 8 and never by more than 5.
 - **Item-level answer lists help a lot (F1 rule met).** The number list beats the short paragraph significantly on 7 of 8, by 4 to
   22 points (nonverbal behavior 24.6 to 46.6); the word list on 6 of 8. Labels and numbers do about equally well.
-- **A complete answer list recovers the group on some questionnaires and not others (F2: neither pre-registered reading
+- **A complete answer list recovers the group on some questionnaires and not others (F2: neither fixed in advance reading
   met).** The number list matches the ceiling on distress (54.0 vs 53.8), temperament (49.9 vs 49.6) and the
   General Social Survey (52.3 vs 55.0, not significant). It stays significantly short on 5 of 8: nerdiness by 9.8,
   Machiavellianism by 7.4, World Values Survey by 4.4, vocational interests by 3.5, nonverbal behavior by 2.4.
@@ -440,7 +440,7 @@ own typical answer sits. All paragraph intervals exclude 1.
   groups is 1.1 to 1.7 times too spread out; one built from answer lists is 0.5 to 0.9 times too narrow, like type vectors
   (0.53 to 0.88) and like Jia et al.'s individual personas. Only percentage questions sit near 1 (1.0 to 1.4).
 
-### 5.3 Remedies (family F3; a fix "works" if it helps significantly on at least 6 of 8 and never significantly hurts)
+### 5.3 Intervening on amplitude alone: a test of the two-part split (family F3)
 
 | Survey | Short paragraph | Short paragraph, shrunk | Short paragraph, typical-member sentence | Short paragraph, percentage question |
 |---|---|---|---|---|
@@ -453,7 +453,9 @@ own typical answer sits. All paragraph intervals exclude 1.
 | General Social Survey | 46.2 | 44.8 | 49.8 | 50.8 |
 | World Values Survey | 33.6 | 32.4 | 36.2 | 37.7 |
 
-- **None passes.** Shrinking (shrinking answers by the half-A exaggeration ratio) gains 19 points on nonverbal behavior and 10
+- **The prediction of the two-part split holds.** If the loss under a paragraph has an amplitude part and a pattern part, an
+  intervention on amplitude alone should help where amplitude was the whole loss and hurt where the pattern was also
+  wrong. Shrinking (shrinking answers by the half-A exaggeration ratio) gains 19 points on nonverbal behavior and 10
   on temperament, and loses 10 on Machiavellianism and 6 on nerdiness. The typical-member sentence cuts the exaggeration to
   1.0 to 1.4 and has the same double edge: +11, +6, +4 on three questionnaires, -4 to -9 on four. Both help exactly where
   exaggeration was the whole problem and hurt where the pattern was wrong too. Shrinking does nothing to answer lists, which have
@@ -466,7 +468,7 @@ own typical answer sits. All paragraph intervals exclude 1.
 ### 5.4 Reasoning (family F4)
 
 Answering the short paragraph with thinking on changes accuracy by +1.3 (nerdiness), +0.3 (Machiavellianism), -0.6 (distress)
-and -1.0 (nonverbal behavior) points; none is significant after correction, so the pre-registered rule (3 of 4) is not
+and -1.0 (nonverbal behavior) points; none is significant after correction, so the fixed in advance rule (3 of 4) is not
 met. Thinking does not reduce the caricature; the exaggeration ratio moves from 1.92 to 2.09, 1.72 to 1.82, 1.58 to 1.69
 and 2.36 to 2.44 on the four questionnaires, and the pattern correlation is unchanged. The exaggeration is not a
 shortcut the model takes when it answers fast.
@@ -496,7 +498,7 @@ demographics and trait scores, floor 33.8, ceiling 44.4, raw fields 41.2, person
 - **Mirror image of the main round trip.** There the model used the fact list well and the paragraph destroyed it; here
   the paragraph matters little because the model has already lost nearly everything by the time it reads the plain
   fields. The same diagnostic gives opposite verdicts, and both match what the main study found by other means.
-- Deviation from the rule as written: the trait condition was pre-registered for six questionnaires; the two national
+- Deviation from the rule as written: the trait condition was fixed in advance for six questionnaires; the two national
   surveys also carry trait-like scores (political identity; value indices), so eight were run and the same six-of-eight
   threshold was applied.
 
@@ -606,7 +608,7 @@ reasoning; giving the model each item's population distribution alongside the li
 main study found such base rates help. The population comparison is made on the whole test half per question, not group by group: a group's
 three draws are nearly always identical, so the model offers no within-group distribution to compare with its members'
 spread; only the percentage question produces one, and it is pooled rather than scored per group. Also the
-pre-registered F2 rule returned neither reading, so the "complete answer list" claim is a per-questionnaire statement, not a
+fixed in advance F2 rule returned neither reading, so the "complete answer list" claim is a per-questionnaire statement, not a
 general one.
 
 ## References
