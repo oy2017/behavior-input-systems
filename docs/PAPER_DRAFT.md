@@ -68,7 +68,10 @@ group's own typical answer sits. Pattern: whether the model's pattern across ite
 pattern. We score at the individual level, as accuracy on held-out members, and at the population level, as the
 distance between a simulated population built from the described groups and the real distribution of answers. Finally we
 test three remedies, shrinking, a typical-member sentence, and asking for percentages, under decision rules
-committed before any result was computed.
+committed before any result was computed. Throughout, the model is held fixed and used as the instrument: the study
+ranks descriptions and locates the error, it does not rank models. Where it does say something about the model, that
+its picture of which answers go together is wrong on some questionnaires, that is a diagnosis of one model on those
+domains, and the round trip is built so that any other model can be put through it.
 
 The two measurements separate two failures. Described in a paragraph, the model plays a caricature. Its answers sit 1.5 to
 2.4 times as far from average as the real group's, on all eight questionnaires, and the 200-word long paragraph is no better
