@@ -105,7 +105,8 @@ caricature in generated text for groups whose true answers are unknown; we measu
 against the group's real members. The one remedy that survives here, asking for a distribution, was proposed by Lee et
 al., and we confirm it.
 
-What we propose is a diagnostic method for simulating people from descriptions. When a model is asked to answer as a
+What we propose is a diagnostic method for simulating survey respondents from descriptions, for the setting where
+many people have answered the same closed-ended questions. When a model is asked to answer as a
 described person, the test measures how much of the real people's behavior comes back and says which of three causes
 produced the loss: the data, when the target was never predictable; the description, when it dropped or distorted what
 was known; or the model, when it could not use what it was told. The
@@ -236,6 +237,12 @@ the one paragraph needs here; Salminen and Jansen on data-driven personas, the a
 trip measures.
 
 ## 4. Method
+
+**Setting.** The data is a table: one row per respondent, one column per question, each cell a numbered answer with a
+word attached by the questionnaire's scale. The method works on that table and nothing else. It hides one cell per row
+and asks how well that cell can be predicted from the rest of the row, by the data alone and by a model given a
+description. It therefore applies to closed-ended questionnaires answered by enough people to form groups, here 3,000
+to 5,000, and not to open-ended text or to one-off decisions with no shared set of questions.
 
 **Data.** Eight questionnaires: six from openpsychometrics.org (nerdiness, vocational interests, Machiavellianism,
 depression-anxiety-stress, temperament, nonverbal behavior), the 2022 General Social Survey, and the World Values
