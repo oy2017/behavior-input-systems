@@ -379,7 +379,10 @@ flattening and caricature between countries; here both appear within one populat
 described. The failure of type vectors on surveys (2 of 8 above the most common answer) fits the same picture: three
 trait levels are a very short paragraph description.
 
-**Limits.** One model family with thinking off for the main results; three draws; 27 groups; English questionnaires from
+**Limits.** Surveys only: six questionnaires from openpsychometrics.org and two national surveys, no economic games.
+Type vectors were built for games and matched past history there in the main study, so the two failures found here may
+not appear in games; the round trip applies there unchanged, grouping players by their choices, and is the natural next
+test. One model family with thinking off for the main results; three draws; 27 groups; English questionnaires from
 self-selected online samples plus two national surveys. The paragraph descriptions are written by the same model that
 answers them, so the design shows that the paragraph channel loses information but does not separate the writing from the
 reading; the right direction on 80 percent of items and the effect of a reader-side typical-member sentence point to the
