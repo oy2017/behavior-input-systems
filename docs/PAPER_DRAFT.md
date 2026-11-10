@@ -259,7 +259,8 @@ held-out answer from the information source; the group ceiling, the most common 
 members, which for a group of one does not exist, so the information ceiling serves. (4) Generate the descriptions, two texts per
 group from the same information with the held-out question withheld: the plainest form, the facts as a list, and the
 description produced by the method under test. (5) Simulate and score: the model answers the held-out question as each text; score every test
-respondent and compare the simulated population with the real one. (6) Read the verdict from four differences:
+respondent and compare the simulated population with the real one. (6) Locate the loss: place the model's scores on the scale the reference scores set and subtract down the ladder, each
+gap being one cause:
 information ceiling minus floor is cause 1, the data; information ceiling minus group ceiling is the cost of grouping;
 description minus plainest form is cause 2, the description, with the exaggeration ratio saying how; plainest form
 minus group ceiling is cause 3, the model, with the pattern correlation saying how. A persona for one real person, as
@@ -335,6 +336,19 @@ test's, since a description must describe a kind of person, and it is not charge
 Causes 2 and 3 are measured against the group ceiling. Pairwise correlations between a held-out item and the others
 average only 0.10 to 0.43, so correlation understates what the other answers carry together; the supervised model is
 the measure (scripts/suite/information_ceiling.py).
+
+**Reading the verdict as a ladder.** Two questionnaires, scores on half B, each gap labeled by the cause it measures:
+
+| Score | Nonverbal behavior | Gap | Nerdiness | Gap | What the gap is |
+|---|---|---|---|---|---|
+| Information ceiling | 59 | | 52 | | minus the floor: 23 and 11 points to recover |
+| Group ceiling | 49 | 10 | 45 | 7 | cost of 27 kinds |
+| Model, number list | 47 | 2 | 35 | 10 | cause 3, the model |
+| Model, short paragraph | 25 | 22 | 31 | 4 | cause 2, the description |
+| Floor | 36 | | 41 | | |
+
+On nonverbal behavior the description is the culprit; on nerdiness the model's picture of the domain is, and the
+paragraph adds a small loss on top.
 
 ### 5.1 Richness curve (family F1 and F2)
 
