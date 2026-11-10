@@ -34,10 +34,27 @@ for ds in ["npas","riasec","mach","dass","fti","nis","gss2022","wvs7"]:
     for n in Bi:
         x=ans[n].astype(float).copy(); x[~obs[n]]=np.nan; x[tgt[n]]=np.nan; Xb.append(np.concatenate([[tgt[n]],x]))
     sceil=100*np.mean(clf.predict(np.array(Xb))==truth[Bi])
+    # population level without having asked: mean predicted probability vector per item vs the real test distribution
+    lo=np.array([S["rep"][k]["scale"]["min"] for k in S["keys"]]); hi=np.array([S["rep"][k]["scale"]["max"] for k in S["keys"]])
+    Wp=[]; SR=[]
+    for i in range(I):
+        real=ans[Bi,i]; real=real[real>=0]
+        if len(real)<5: continue
+        who=Bi[obs[Bi,i]]; Xi=[]
+        for n in who:
+            x=ans[n].astype(float).copy(); x[~obs[n]]=np.nan; x[i]=np.nan; Xi.append(np.concatenate([[i],x]))
+        P=clf.predict_proba(np.array(Xi)); cls=clf.classes_
+        vals=np.arange(lo[i],hi[i]+1); synth=np.zeros(len(vals))
+        for j,cv in enumerate(cls):
+            if lo[i]<=cv<=hi[i]: synth[int(cv)-lo[i]]+=P[:,j].sum()
+        synth/=synth.sum(); rh=np.bincount(real,minlength=hi[i]+1)[lo[i]:hi[i]+1]/len(real)
+        Wp.append(100*np.abs(np.cumsum(rh)-np.cumsum(synth)).sum()/max(1,hi[i]-lo[i]))
+        m=lambda q:(vals*q).sum(); sd=lambda q:np.sqrt(((vals-m(q))**2*q).sum()); SR.append(sd(synth)/sd(rh))
+    popW=float(np.mean(Wp)); popSR=float(np.mean(SR))
     # pairwise correlation of each item with the others (training half), mean abs, averaged over target items weighted by B counts
     H=ans[A].astype(float); H[ans[A]<0]=np.nan
     cm=np.ma.corrcoef(np.ma.masked_invalid(H),rowvar=False).filled(np.nan); np.fill_diagonal(cm,np.nan)
     w=np.bincount(tgt[Bi],minlength=I); corr=np.nansum(np.nanmean(np.abs(cm),1)*w)/w.sum()
-    out[ds]=dict(floor=floor,group_ceiling=gceil,info_ceiling=sceil,mean_abs_corr=corr)
-    print(f"| {NAME[ds]} | {floor:.1f} | {gceil:.1f} | {sceil:.1f} | {corr:.2f} |")
+    out[ds]=dict(floor=floor,group_ceiling=gceil,info_ceiling=sceil,mean_abs_corr=corr,pop_W_info=popW,pop_sd_info=popSR)
+    print(f"| {NAME[ds]} | {floor:.1f} | {gceil:.1f} | {sceil:.1f} | {corr:.2f} | population W without asking {popW:.1f} [{popSR:.2f}] |")
 json.dump(out,open("outputs/information_ceiling.json","w"),indent=1)
