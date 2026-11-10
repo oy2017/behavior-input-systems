@@ -294,7 +294,11 @@ Survey wave 7. Item counts 20 to 92. Respondents 1000 onward of each file; half 
 and write descriptions, half B (1,500 to 2,500 people) is scored. Each person has one held-out target item; all other
 observed items are available.
 
-**Groups.** k-means with 27 clusters on half A, features scaled by item range, missing values filled with the half-A
+**Groups.** The recipe under test in the main experiment is the generic practice of persona work, segment the
+respondents, summarize each segment, simulate, so a neutral segmentation of our own stands in for any one firm's, and
+it is the only way to have a kind of person whose real answers are known. When a recipe brings its own unit, the test
+uses the recipe's: its segments, its fitting rule, or no grouping at all for recipes that describe individuals
+(Section 5.6). Here: k-means with 27 clusters on half A, features scaled by item range, missing values filled with the half-A
 column mean. 27 matches the capacity of a three-trait, three-level type vector. A half-B person is assigned to the
 nearest centroid over their non-target items ("placement by data"). The group's prediction is its most common half-A
 answer on the target item ("ceiling").
