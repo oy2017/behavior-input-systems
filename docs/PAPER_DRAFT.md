@@ -60,9 +60,9 @@ three-level type vector. Second, the hidden item: every description leaves out t
 model can never copy an answer and must infer it from who the group is. That is the use personas are put to, predicting
 what has not been asked.
 
-We vary how much the description says, holding the group fixed: an 80-word paragraph sketch written from the group's twelve
-most distinctive other items, a 200-word portrait written from all of them, an answer list listing every other item's typical
-answer as a scale label, and the same answer list in numbers. We measure two things that a single accuracy number hides.
+We vary how much the description says, holding the group fixed: the sketch, an 80-word paragraph written from the group's
+twelve most distinctive other items; the portrait, a 200-word paragraph written from all of them; the label list, every
+other item with the group's typical answer as a scale label; and the number list, the same with numbers. We measure two things that a single accuracy number hides.
 Exaggeration: how far the model's typical answer for the group sits from the population average, relative to how far the
 group's own typical answer sits. Pattern: whether the model's pattern across items correlates with the group's real
 pattern. We score at the individual level, as accuracy on held-out members, and at the population level, as the
