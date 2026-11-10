@@ -39,8 +39,9 @@ most common answer to the target, which is the best any single prediction for th
 involved. The floor is the most common answer of everyone. If the ceiling is no higher than the floor, knowing the
 group tells you nothing about this question, and no description of the group, however perfect, could help. Second,
 the description may have dropped or distorted the information. To test this one holds the information fixed and varies
-only its form: a prose summary of the group's typical answers, or the complete list of them, item by item; if the list
-scores higher than the summary, the summary lost it. Third, the model may be unable to turn the
+only its form: a prose summary of the group's typical answers, or the complete list of them, item by item. If the list
+scores higher than the summary, the loss sits in the prose channel, in how the summary was written or in how the model
+read it, and not in the model's ability to use the information once it is stated plainly. Third, the model may be unable to turn the
 information into the right answers. To test this one gives the model the complete list and compares with the ceiling;
 whatever gap remains is the model's own. The usual designs allow none of these comparisons. Their one baseline, a
 model with no context or with demographics, is a floor, not a ceiling. And all three comparisons rest on a stable fact
@@ -281,7 +282,11 @@ described. The failure of type vectors on surveys (2 of 8 above the most common 
 trait levels are a very short prose description.
 
 **Limits.** One model family with thinking off for the main results; three draws; 27 groups; English questionnaires from
-self-selected online samples plus two national surveys; descriptions written by the same model that answers them; the
+self-selected online samples plus two national surveys. The prose descriptions are written by the same model that
+answers them, so the design shows that the prose channel loses information but does not separate the writing from the
+reading; the right direction on 80 percent of items and the effect of a reader-side moderation sentence point to the
+reading, and a test that asks the model to estimate the group's answers from the prose, rather than act them out, would
+settle it. Also the
 pre-registered F2 rule returned neither reading, so the "complete profile" claim is a per-questionnaire statement, not a
 general one.
 
