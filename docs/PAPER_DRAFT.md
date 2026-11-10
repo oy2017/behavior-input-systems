@@ -186,6 +186,8 @@ standard deviations, divided by how far the group's typical answer sits. Average
 2 means the model places the group twice as far from average as it really is. Group 14 from the short paragraph: 1.93; from the
 number list: 1.04.
 
+**Caricature.** The pattern an exaggeration ratio well above 1 describes: the model leans the right way on most questions and leans too far on all of them, like a drawing that keeps every feature and enlarges it. Group 14 is a bit more touchy than average, a 3 where everyone averages 2.1; from the paragraph the model says 5. The word follows Cheng, Durmus and Jurafsky (2023), who used it for persona text; here it is measured in answers, against the real members.
+
 **Direction agreement.** Among questions where a group departs from the average by more than 0.3 standard deviations,
 the share where the model's answer departs the same way.
 
