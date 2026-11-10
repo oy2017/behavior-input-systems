@@ -133,8 +133,13 @@ hidden question is 3. The answer lists are made of typical answers, and the exag
 2, right for 35 percent of people.
 
 **Ceiling.** The group's most common answer, used as the prediction for every test member of that group. For group 14
-it is 3, right for 56 percent of its members. It is a true ceiling because every method here gives all members of a
-group the same answer, so no description of group 14 can beat 3 on group 14's members.
+it is 3, right for 88 of its 158 members, 56 percent. It is the highest individual accuracy any method can reach on a
+group's members if it gives all of them the same answer, as every method here does: accuracy counts exact matches, and
+the most common answer is by definition the one answer that matches the most members. The sketch led the model to say
+5, right for 15 members; the number list to say 4, right for 47; nothing could have been right for more than 88. The
+bound holds for individual accuracy only. It is not a bound on the distribution distance, since one answer per group
+makes a simulated population too narrow, and it is computed on the training half, so a method can land a fraction
+above it on the test half by chance.
 
 **Hidden question.** The one question we try to predict for a test person. It is removed from every description, so
 the model can never copy it.
