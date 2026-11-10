@@ -184,7 +184,9 @@ communicates with warmth, high energy, and physical closeness..." (result files:
 
 **Fact list.** The information written as a bare list, one fact per line, with nothing added or interpreted: for a
 group, its typical answer to each question; for demographics, the raw fields. The word list and the number list are
-its two spellings here. It is the control every description is compared with.
+its two spellings here. It is the control every description is compared with: the description that loses no
+information, not the one that works best. A description can score above it, which means the writing helped the model
+use the facts, and the test reports that gain the same way it reports a loss.
 
 **Word list.** Every question other than the held-out one, each with the group's typical answer given as its scale
 label: "I gesture when I talk to people. Answer: 'Very often'." (result files: verbal)
@@ -481,7 +483,9 @@ explains the gap.
 **The roles of the four forms.** The two lists are the reference: the information in its fact list, which every
 comparison needs. The two paragraphs are the forms under test, and they are the method most persona pipelines use, a
 model summarizing a segment into prose. Another generator is added beside the paragraphs and compared with the same
-list; the list stays.
+list; the list stays. The list is not assumed to be the best description: the group ceiling sits above it on five of
+eight questionnaires, so a better description can exist, and the percentage question already beats it at the
+population level on three.
 
 **Testing someone else's description method.** Any generator slots into the test as one more form, provided two
 reference points can be built from the same information the generator uses: a data-only ceiling, what a statistical
