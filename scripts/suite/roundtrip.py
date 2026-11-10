@@ -16,6 +16,8 @@ Conditions (Gemini 3.5 Flash, thinking off, 3 draws per item, median taken):
 - elicit:   prose12, but the model is asked what percentage of such people choose each option; the top option is the
             prediction.
 - think:    prose12 answered with thinking on, on npas, mach, dass and nis only.
+- numeric_elicit (added 2026-11-09): the numeric profile with the percentage question, so the population-level ladder
+  has a fact-list route that yields a distribution; descriptive, compared with elicit (paragraph + percentages).
 - numeric_baserates (added 2026-11-09, rule committed before running): the numeric profile plus, for every question
   including the held-out one, the share of all training-half respondents choosing each option. Tests whether the
   model's remaining gap to the group ceiling is missing population facts.
@@ -157,14 +159,15 @@ def build(ds, cond, client):
         if cond in ("prose12", "proseall", "think"): return base + "\n\n" + desc[(c, t)]
         if cond == "moderate": return base + "\n\n" + desc[(c, t)] + "\n\n" + MODERATE
         if cond == "elicit": return "Here is a description of a typical member of a group of people who answered an online questionnaire, written as if addressed to them:\n\n" + desc[(c, t)]
+        if cond == "numeric_elicit": return "Here is how a typical member of a group of people who answered an online questionnaire answered its other questions, written as if addressed to them:\n\n" + profile(S, c, t, True)
         if cond == "numeric_baserates": return base + "\n\n" + profile(S, c, t, True) + "\n\n" + baserate_block(S, t)
         return base + "\n\n" + profile(S, c, t, cond == "numeric")
     path = ans_path(ds, cond); have = {(d["cluster"], d["item"], d.get("sample", 0)) for d in map(json.loads, open(path))} if path.exists() else set()
-    draws = 1 if cond == "elicit" else DRAWS
+    draws = 1 if "elicit" in cond else DRAWS
     jobs = [(c, t, s) for c in range(K) for t in range(S["I"]) for s in range(draws) if (c, keys[t], s) not in have]
     def run(job):
         c, t, s = job; r = rep[keys[t]]; sc = r["scale"]
-        if cond == "elicit":
+        if "elicit" in cond:
             return {"cluster": c, "item": keys[t], "sample": 0, "dist": parse_dist(client.complete(system(c, t), elicit_user(r, keys[t]), sample=0), sc)}
         return {"cluster": c, "item": keys[t], "sample": s, "choice": parse_int(client.complete(system(c, t), item_prompt(r, keys[t]), sample=s), sc["min"], sc["max"])}
     with open(path, "a") as f:
@@ -234,7 +237,7 @@ def analyze(datasets, conds):
             p = ans_path(ds, cond)
             if not p.exists() or (cond == "think" and ds not in THINK_DS): continue
             rows = [json.loads(l) for l in open(p)]
-            if cond == "elicit":
+            if "elicit" in cond:
                 E = {(d["cluster"], d["item"]): {int(k): float(w) for k, w in d["dist"].items()} for d in rows if d["dist"]}  # JSON keys are strings
                 R = np.full((K, I), np.nan); EV = np.full((K, I), np.nan)
                 for (c, k), dist in E.items():
