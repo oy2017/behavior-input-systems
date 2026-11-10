@@ -495,7 +495,39 @@ demographics and trait scores, floor 33.8, ceiling 44.4, raw fields 41.2, person
   surveys also carry trait-like scores (political identity; value indices), so eight were run and the same six-of-eight
   threshold was applied.
 
-### 5.6 Context: type vectors and capacity
+### 5.6 Three published recipes on the ladder
+
+The diagnostic is only useful if it can be pointed at real methods. Three recipes from the literature are re-run with
+our model and prompts on our questionnaires (the published numbers cannot be placed without the authors' prompts and
+personas).
+
+**Type vectors (Jackson et al. 2026).** Three trait levels as the description, placed by fit; the fact list placed by the
+same rule is the control; the group ceiling is the yardstick.
+
+| Questionnaire | Type vector | Fact list, placed by fit | Group ceiling | What 3 levels lose | What the model cannot replace |
+|---|---|---|---|---|---|
+| Nonverbal behavior | 40.8 | 47.1 | 49.0 | 6.4 | 1.9 |
+| Vocational interests | 37.5 | 42.2 | 42.6 | 4.7 | 0.4 |
+| Temperament | 46.8 | 50.7 | 49.6 | 3.9 | 0 |
+| Distress | 51.6 | 54.5 | 53.8 | 2.9 | 0 |
+| World Values Survey | 40.1 | 42.9 | 46.4 | 2.8 | 3.6 |
+| General Social Survey | 51.2 | 51.2 | 55.0 | 0.1 | 3.7 |
+| Nerdiness | 38.0 | 36.6 | 44.8 | 0 | 8.2 |
+| Machiavellianism | 37.7 | 35.8 | 42.4 | 0 | 6.6 |
+
+On four questionnaires the short description is the loss, 3 to 6 points, and the model with the full facts is at the
+ceiling. On nerdiness and Machiavellianism the type vector loses nothing beyond what the full facts lose: the limit is
+the model's picture of the domain, and no richer description would help. The type-vector paper's own setting is
+economic games, where the main study found type vectors competitive with history; the diagnosis here is for surveys.
+
+**Silicon samples (Argyle et al. 2023).** A backstory written from demographics: Section 5.5, demographics rows. Little
+to recover; the model given the raw fields is below the floor on 8 of 8; the backstory costs 2 to 5 more.
+
+**Profiles from a person's own history (Jia et al. 2026; Lee et al. 2026).** A profile the model writes from the
+person's answers to the other questions, against those answers as a list (the main study's history condition) and the
+supervised model on them. [Run in progress; rule in scripts/suite/persona_fields.py.]
+
+### 5.7 Context: type vectors and capacity
 
 Trait words chosen per questionnaire beat placebo words on 8 of 8 (significantly on 4), yet the chosen type vector beats
 the most common answer on only 2 of 8 (docs/UPDATE_2026-10-24.md). Exploratory capacity curve (scripts/suite/
