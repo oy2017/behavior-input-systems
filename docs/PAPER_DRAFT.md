@@ -105,8 +105,10 @@ caricature in generated text for groups whose true answers are unknown; we measu
 against the group's real members. The one remedy that survives here, asking for a distribution, was proposed by Lee et
 al., and we confirm it.
 
-What we propose is a diagnostic method for simulating survey respondents from descriptions, for the setting where
-many people have answered the same closed-ended questions. When a model is asked to answer as a
+The problem is general to every simulation of people from descriptions. We build the diagnostic for one kind of
+simulation first, survey respondents, because telling the three causes apart needs ingredients that closed-ended
+questionnaires answered by many people provide: a group of known people, a ceiling that can be counted, and a question
+that can be hidden. When a model is asked to answer as a
 described person, the test measures how much of the real people's behavior comes back and says which of three causes
 produced the loss: the data, when the target was never predictable; the description, when it dropped or distorted what
 was known; or the model, when it could not use what it was told. The
