@@ -3,64 +3,107 @@
 Working draft, 2026-11-08. Sections 4 and 5 are placeholders until outputs/roundtrip.json exists. Numbers in sections
 1 to 3 come from docs/TYPE_VECTOR_DIAGNOSTICS.md and docs/UPDATE_2026-10-24.md and were checked against output files.
 
-## Abstract (draft)
+## Abstract
 
-Language models are asked to stand in for people by being told who the person is. We measure how much of a person's
-behavior survives that step with a round trip. From eight questionnaires with 2,000 to 5,000 respondents each, we learn
-27 groups of people from their answers alone, so we know how each group actually answers. We then describe each group
-to Gemini 3.5 Flash in four ways, from an 80-word sketch to a complete item-by-item profile, always leaving out the item
-to be predicted, and score the model's answers against the group's own held-out members. Described in prose, the model
-plays a caricature: its answers sit 1.5 to 2.4 times as far from the average as the group's own, on every questionnaire,
-and a longer portrait does not help. Given the item-level profile it stops exaggerating and recovers the group's
-accuracy on three questionnaires, but stays 2 to 10 points short on five, because its picture of which answers go
-together is wrong for those domains and no form of description changes it. Of three remedies tested under rules fixed
-in advance, none passes; asking for the answer distribution instead of an answer is the only one that never hurts, and
-it gives the best population-level match on the two national surveys. The groups themselves beat the most common answer
-on all eight questionnaires, so the information is there; the loss is in the description step. We release the test as a
-way to score any persona against the behavior of the people it summarizes.
+When a language model is asked to stand in for a person, it is first told who the person is: a few demographics, some
+trait scores, a written persona, or a list of past answers. We ask how much of a person's behavior survives that step.
+Usually nobody can check, because the people a persona stands for are not available. We make them available. On eight
+questionnaires with 1,500 to 2,500 held-out respondents each, we learn 27 groups of people from their answers alone, so
+we know how each group answers every question. We describe each group to Gemini 3.5 Flash in four forms, from an 80-word
+sketch to a complete item-by-item profile, always withholding the question to be predicted, and score the model's
+answers against the group's own held-out members, next to what the data itself predicts at the same capacity. Two
+failures appear, and they come apart. Described in prose, the model plays a caricature: its answers sit 1.5 to 2.4 times
+as far from the average as the group's own, on every questionnaire, however long the prose. Given the item-level
+profile, it stops exaggerating and matches the data on three questionnaires, but stays 2 to 10 points short on five,
+because its picture of which answers go together is wrong for those domains, and no form of description changes that.
+Three remedies tested under pre-registered rules all fail; asking for the answer distribution is the only one that never
+hurts. The round trip gives a way to score any persona against the behavior of the people it summarizes.
 
 ## 1. Introduction
 
-Every method that simulates people with a language model, from silicon samples (Argyle et al. 2023) to digital twins
-(Park et al. 2024; Toubia et al. 2025) to synthetic survey respondents (Jia et al. 2026; Lee et al. 2026), has one step
-in common: a description of a person goes in, behavior comes out. Descriptions come in many forms, such as demographics,
-trait scores, a few trait levels (Jackson et al. 2026), a written persona, or a list of past answers. Whatever the form,
-the model has to turn "who this person is" into "what this person does". How faithful is that step?
+Simulating people with language models has one step in common across every method. Silicon samples give the model a
+respondent's demographics (Argyle et al. 2023). Digital twins give it an interview transcript or a history of past
+answers (Park et al. 2024; Toubia et al. 2025). Type vectors give it three trait levels (Jackson et al. 2026).
+Data-driven personas in human-computer interaction give it a written portrait generated from a cluster of users
+(Salminen et al.). In each case a description of a person goes in, and behavior comes out. Everything downstream, from
+a synthetic survey to an agent-based society, inherits whatever that step gets wrong.
 
-The question is hard to answer directly because the people a persona stands for are usually not available. We make them
-available. From each of eight questionnaires we learn groups of respondents from their answers alone, with k-means, so
-that each group is a kind of person whose behavior we know. We then run a round trip: describe the group to the model,
-have the model answer as the described person, and compare with the group's own held-out members. Whatever is lost
-between the group and its description, or between the description and the answers, appears as a gap. Because the groups
-are learned from data, they also give a yardstick that no earlier persona study has used: what the same data predicts
-without a language model.
+How faithful is the step? Existing evaluations compare the model's answers with human answers and report a gap. They
+cannot say where the gap comes from. When a persona built from a respondent's history predicts that respondent poorly
+(Jia et al. 2026), three explanations are open: the description lost the information, the model misread the
+description, or the target question was never predictable from the rest. The baselines in use, a model with no context
+or with demographics only, cannot separate these. Nor can they say how much information the description carried in the
+first place, because the people it summarizes are not available for comparison.
 
-We vary how much the description says, from an 80-word sketch written from the group's twelve most distinctive items to
-a complete profile listing every item's typical answer. Every description leaves out the item being predicted, so the
-model can never copy; it has to generalize from who the person is to a question the description did not cover. That is
-the use case for personas: predicting what has not been asked.
+We make them available with a round trip. On each of eight questionnaires, six from openpsychometrics.org and two
+national surveys, we sort respondents into 27 groups by k-means on their answers alone. Each group is now a kind of
+person whose behavior we know: its members' answers to every question. We then describe the group to the model, have
+the model answer as the described person, and score the answers against the group's own held-out members. Two features
+make the test informative. First, the yardstick: the group's own most common answer, which is what the same data
+predicts with no language model at all, at the same capacity, since 27 groups match the 27 cells of a three-trait,
+three-level type vector. Second, the hidden item: every description leaves out the question being predicted, so the
+model can never copy an answer and must infer it from who the group is. That is the use personas are put to, predicting
+what has not been asked.
 
-Contributions.
-1. A round-trip test that scores a persona description against the known behavior of the group it summarizes, at the
-   individual level (accuracy on members' held-out answers) and the population level (distance between a synthetic
-   sample built from the described groups and the real answer distribution).
-2. A richness curve on eight questionnaires, pre-registered, with a same-capacity data baseline.
-3. A mechanism: [exaggeration ratio, direction agreement, pattern correlation], measured against each group's own
-   members rather than against countries or text.
-4. Three remedies compared under criteria fixed in advance: damping, a moderation instruction, and asking for the
-   group's answer distribution (after Lee et al. 2026).
-5. Context from type vectors: trait words chosen per questionnaire beat placebo words on 8 of 8 questionnaires, yet type
-   vectors beat the most common answer on only 2 of 8.
+We vary how much the description says, holding the group fixed: an 80-word prose sketch written from the group's twelve
+most distinctive other items, a 200-word portrait written from all of them, a profile listing every other item's typical
+answer as a scale label, and the same profile in numbers. We measure two things that a single accuracy number hides.
+Amplitude: how far the model's typical answer for the group sits from the population average, relative to how far the
+group's own typical answer sits. Shape: whether the model's pattern across items correlates with the group's real
+pattern. We score at the individual level, as accuracy on held-out members, and at the population level, as the
+distance between a synthetic sample built from the described groups and the real distribution of answers. Finally we
+test three remedies, damping, a moderation instruction, and asking for the answer distribution, under decision rules
+committed before any result was computed.
+
+The two measurements separate two failures. Described in prose, the model plays a caricature. Its answers sit 1.5 to
+2.4 times as far from average as the real group's, on all eight questionnaires, and the 200-word portrait is no better
+than the 80-word sketch. The direction is right about 80 percent of the time; the model knows which way the group leans
+and overshoots. Given the item-level profile, the exaggeration disappears, the ratio sits near 1, and accuracy rises by
+4 to 22 points on seven of eight questionnaires. But a complete profile recovers the group only where the model's
+picture of the domain is right. On distress, temperament and the General Social Survey it matches the data. On
+nerdiness, Machiavellianism, the World Values Survey and two others it stays 2 to 10 points short, and the shortfall
+tracks the shape measure, which is the same under all four descriptions. On nerdiness the model's profile is
+anti-correlated with the real group's whatever it is told. The form of the description controls amplitude and does not
+touch shape. At the population level the two forms fail in opposite directions: prose-described groups produce a
+synthetic sample 1.1 to 1.7 times too wide, profiles one 0.5 to 0.9 times too narrow. None of the three remedies passes
+the pre-registered bar. Damping and the moderation instruction gain up to 19 points where exaggeration was the whole
+problem and lose up to 10 where shape was wrong too. Asking for the distribution never hurts and gives the best
+population-level match on the two national surveys. Reasoning changes none of this.
+
+This differs from the closest prior work in what can be seen. Jia et al. (2026) build a persona for each individual
+from background variables and past answers on a Dutch panel, score against a no-context model, and find that personas
+barely help individuals and compress human variation; with no ground-truth group and no data yardstick, they cannot
+tell description loss from model error, and they see only the compression, not the caricature that prose produces. Lee
+et al. (2026) have a model write personas from behavioral records and score demographic-group distributions, finding
+that personas improve with in-domain history but a demographics-only baseline stays close; their unit is a demographic
+cell whose behavior is heterogeneous, not a behavioral type whose behavior is known, and they have no baseline that uses
+the same history without a model. Chae et al. (2026) diagnose flattening and caricature between countries; we find both
+inside one population, determined only by how the group is described. Cheng et al. (2023) and Wang et al. (2024) measure
+caricature in generated text for groups whose true answers are unknown; we measure it in behavior, on the answer scale,
+against the group's real members. The one remedy that survives here, asking for a distribution, was proposed by Lee et
+al., and we confirm it.
+
+Our contributions are:
+1. The round-trip test: a way to score any persona description against the known behavior of the group it summarizes,
+   with a same-capacity data yardstick and the predicted item withheld.
+2. A decomposition of persona error into amplitude and shape, showing that the form of the description controls the
+   first and not the second.
+3. A richness curve on eight questionnaires: prose exaggerates regardless of length; item-level profiles are calibrated
+   and recover the data on three questionnaires out of eight.
+4. A pre-registered comparison of three remedies, showing that fixes for exaggeration are double-edged and that only
+   distribution elicitation is safe.
+5. Context from type vectors: trait words chosen per questionnaire beat placebo words on all eight, yet type vectors
+   beat the most common answer on only two, and an exploratory capacity curve shows why: three trait levels carry about
+   as much as one to six data-learned groups.
 
 ## 2. Related work
 
-See docs/RELATED_WORK.md for details. In brief: persona studies measure fidelity against no-context or demographic
-baselines at the level of demographic groups or countries. Jia et al. (2026) find that individual personas compress
-human variation and fail to recover respondent clusters. Lee et al. (2026) find that personas induced from behavioral
-data rarely beat demographics, improve with in-domain history, and that asking for a distribution beats single answers.
-Chae et al. (2026) diagnose flattening and caricature at the country level. Caricature in persona text is documented by
-Cheng et al. (2023) and others. None scores a persona against the known behavior of the group it summarizes, varies
-description richness with the predicted item left out, or compares remedies under pre-committed criteria.
+Details and the per-paper differences are in docs/RELATED_WORK.md. Beyond the four papers above: Bisbee et al. (2024)
+and Dominguez-Olmedo et al. (2024) on the fragility of model survey responses; Hu and Collier (2024) on how little
+variance persona variables explain; Peng et al. (2025) on the digital-twin mega-study; Kim and Lee (2023) on fine-tuning
+for unasked survey items; Abels et al. (2026) on calibrating under-dispersed value personas, the opposite correction to
+the one prose needs here; Salminen and Jansen on data-driven personas, the artifact whose behavioral fidelity the round
+trip measures.
 
 ## 3. Method
 
