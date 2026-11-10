@@ -415,6 +415,11 @@ the model; it returns a floor, a ceiling, accuracy per form, the exaggeration ra
 distribution distance, and the verdict is read from where a form falls between floor and ceiling and from which measure
 explains the gap.
 
+**The roles of the four forms.** The two lists are the reference: the information in its plainest form, which every
+comparison needs. The two paragraphs are the forms under test, and they are the method most persona pipelines use, a
+model summarizing a segment into prose. Another generator is added beside the paragraphs and compared with the same
+list; the list stays.
+
 **Testing someone else's description method.** Any generator slots into the test as one more form, provided two
 reference points can be built from the same information the generator uses: a data-only ceiling, what a statistical
 predictor gets from that information with no model, and the plainest form of that information, the facts with no
@@ -424,7 +429,12 @@ demographic cell and the plainest form is the demographic fields themselves; the
 demographics is this comparison. The generator's description against the plainest form then measures what the writing
 lost, and the plainest form against the ceiling measures what the model cannot use. The one condition is that the
 information the descriptions come from must be available for the respondents being scored; a persona built from an
-interview can be tested only on respondents who were interviewed.
+interview can be tested only on respondents who were interviewed. For information that is continuous and per person,
+such as trait scores, the ceiling is a supervised predictor rather than a cell's most common answer, a strong yardstick
+rather than a strict bound. Two of the three legs already exist for demographics and trait scores from the main study:
+the fields themselves were the demographics and traits conditions, and the supervised yardstick was the ceiling, which
+sat 1 to 5 points above the floor while the model given demographics sat below it. The missing leg, a persona written
+from those fields compared with the raw fields, would complete the round trip for outside information.
 
 **What to feed a model.** If the aim is one person's answers, give the answer list, in numbers or labels, never a
 paragraph of it; expect it to match data-ceiling where the questionnaire has one dominant construct the
