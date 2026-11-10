@@ -105,9 +105,10 @@ caricature in generated text for groups whose true answers are unknown; we measu
 against the group's real members. The one remedy that survives here, asking for a distribution, was proposed by Lee et
 al., and we confirm it.
 
-What we propose is a diagnostic method for the description step in persona-based simulation. It takes a way of
-describing people to a model, measures how much of the people's real behavior the model recovers from it, and attributes
-the loss to one of three causes: nothing to recover, lost in the description, or beyond what the model can use. The
+What we propose is a diagnostic method for simulating people from descriptions. When a model is asked to answer as a
+described person, the test measures how much of the real people's behavior comes back and says which of three causes
+produced the loss: the data, when the target was never predictable; the description, when it dropped or distorted what
+was known; or the model, when it could not use what it was told. The
 name follows round-trip translation: data goes to a description and back to behavior, and the test reports what
 changed on the way. It applies to any pipeline, a description form read by a model on a kind of people and questions,
 whenever real answers from many such people on a shared set of questions exist. Our contributions are:
