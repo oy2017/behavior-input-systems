@@ -44,8 +44,9 @@ only its form: a paragraph of the group's typical answers, or the complete list 
 scores higher than the paragraph, the loss sits in the paragraph channel, in how the paragraph was written or in how the model
 read it, and not in the model's ability to use the information once it is stated plainly. Third, the model may be unable to turn the
 information into the right answers. To test this one gives the model the complete list and compares with the ceiling;
-whatever gap remains is the model's own. The usual designs allow none of these comparisons. Their one baseline, a
-model with no context or with demographics, is a floor, not a ceiling. And all three comparisons rest on a stable fact
+whatever gap remains is the model's own. The usual designs allow none of these comparisons. They compare many inputs,
+demographics, trait scores, type vectors, past answers, a model given nothing, but every one is a floor; none is a
+ceiling built from the same information without a model. And all three comparisons rest on a stable fact
 about what this kind of person typically answers. One respondent's single answer to a question cannot supply it: if the
 respondent answered 4 and the model says 5, nothing says whether that is a miss or a correct reading of a kind of
 person who typically answers 5. A demographic cell supplies it only weakly, because its members answer very
