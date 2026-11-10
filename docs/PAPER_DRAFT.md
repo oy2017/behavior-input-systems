@@ -294,8 +294,9 @@ Survey wave 7. Item counts 20 to 92. Respondents 1000 onward of each file; half 
 and write descriptions, half B (1,500 to 2,500 people) is scored. Each person has one held-out target item; all other
 observed items are available.
 
-**Groups.** The recipe under test in the main experiment is the generic practice of persona work, segment the
-respondents, summarize each segment, simulate, so a neutral segmentation of our own stands in for any one firm's, and
+**Groups.** The recipe under test in the main experiment is a common pipeline in data-driven persona work, segment the
+respondents, summarize each segment, simulate (An et al. 2018; Salminen et al. 2021; Jansen et al. 2021; with a
+language model as the summarizer, Lee et al. 2026), so a neutral segmentation of our own stands in for any one firm's, and
 it is the only way to have a kind of person whose real answers are known. When a recipe brings its own unit, the test
 uses the recipe's: its segments, its fitting rule, or no grouping at all for recipes that describe individuals
 (Section 5.6). Here: k-means with 27 clusters on half A, features scaled by item range, missing values filled with the half-A

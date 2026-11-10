@@ -49,8 +49,11 @@ improves response diversity. Details of the calibration not yet read.
   identity groups. EMNLP 2025 "Who Holds the Pen?": caricature as individuation plus exaggeration.
 - Jackson, Manning, Xie, Yuan, Mei 2026, type vectors (arXiv 2608.18265). Wang, Wu, Zeevi, ICML 2026, personas as latent
   classes. Kim and Lee 2023, AI-augmented surveys (fine-tuning predicts unasked items).
-- Salminen, Jansen and colleagues, data-driven personas in HCI: personas generated from clustered user data, which is
-  exactly the artifact whose behavioral fidelity the round trip measures.
+- Data-driven personas in HCI, the segment-then-describe pipeline the main experiment diagnoses. To verify before
+  submission: An, Kwak, Salminen, Jung, Jansen (2018), "Imaginary People Representing Real Numbers", ACM Transactions
+  on the Web (clusters users from behavioral data and generates a persona per cluster); Salminen, Guan, Jung, Jansen
+  (2021), "A Survey of 15 Years of Data-Driven Persona Development", International Journal of Human-Computer
+  Interaction; Jansen, Salminen, Jung, Guan (2021), Data-Driven Personas, Morgan and Claypool.
 - "The Prompt Makes the Person(a)" (arXiv 2507.16076): persona prompt wording changes stereotyping and alignment.
 - "Assessing the Reliability of Persona-Conditioned LLMs as Synthetic Survey Respondents" (arXiv 2602.18462): aggregate
   fidelity can hold while subgroup claims fail.
