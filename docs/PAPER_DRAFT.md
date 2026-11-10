@@ -32,12 +32,15 @@ a synthetic survey to an agent-based society, inherits whatever that step gets w
 
 How faithful is the step? Existing evaluations compare the model's answers with human answers and report a gap. They
 cannot say where the gap comes from. When a persona built from a respondent's history predicts that respondent poorly
-(Jia et al. 2026), three explanations are open, and each calls for a different comparison. First, the target question
-may never have been predictable from the rest. To rule this out one needs a ceiling: a prediction made from the same
-information with no language model. If the ceiling is no better than the most common answer, there was nothing to
-recover. Second, the description may have dropped or distorted the information. To test this one holds the
-information fixed and varies only its form, from a prose summary to the complete list of what the person typically
-answers; if the list scores higher than the summary, the summary lost it. Third, the model may be unable to turn the
+(Jia et al. 2026), three explanations are open, and each calls for a different comparison. The information in play is
+what we know about the person from data: here, a group's typical answers to the other questions. First, the target
+question may never have been predictable from that information. To rule this out one needs a ceiling: the group's own
+most common answer to the target, which is the best any single prediction for the group can do, with no language model
+involved. The floor is the most common answer of everyone. If the ceiling is no higher than the floor, knowing the
+group tells you nothing about this question, and no description of the group, however perfect, could help. Second,
+the description may have dropped or distorted the information. To test this one holds the information fixed and varies
+only its form: a prose summary of the group's typical answers, or the complete list of them, item by item; if the list
+scores higher than the summary, the summary lost it. Third, the model may be unable to turn the
 information into the right answers. To test this one gives the model the complete list and compares with the ceiling;
 whatever gap remains is the model's own. The usual designs allow none of these comparisons. Their one baseline, a
 model with no context or with demographics, is a floor, not a ceiling. And all three comparisons rest on a stable fact
