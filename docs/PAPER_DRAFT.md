@@ -32,16 +32,21 @@ a synthetic survey to an agent-based society, inherits whatever that step gets w
 
 How faithful is the step? Existing evaluations compare the model's answers with human answers and report a gap. They
 cannot say where the gap comes from. When a persona built from a respondent's history predicts that respondent poorly
-(Jia et al. 2026), three explanations are open: the description dropped or distorted the information; the model could
-not turn the information into the right answers; or the target question was never predictable from the rest. Telling
-them apart needs two things the usual designs lack. One is a ceiling: a prediction made from the same information with
-no language model, which says how predictable the target was and how much the description could have carried. A
-no-context or demographics-only baseline gives only the floor. The other is a fixed set of people whose typical
-behavior defines what the description should have produced. A persona for one respondent has one noisy answer per
-question to be checked against; a written persona for a demographic cell or a market segment has no fixed set of people
-behind it at all.
+(Jia et al. 2026), three explanations are open, and each calls for a different comparison. First, the target question
+may never have been predictable from the rest. To rule this out one needs a ceiling: a prediction made from the same
+information with no language model. If the ceiling is no better than the most common answer, there was nothing to
+recover. Second, the description may have dropped or distorted the information. To test this one holds the
+information fixed and varies only its form, from a prose summary to the complete list of what the person typically
+answers; if the list scores higher than the summary, the summary lost it. Third, the model may be unable to turn the
+information into the right answers. To test this one gives the model the complete list and compares with the ceiling;
+whatever gap remains is the model's own. The usual designs allow none of these comparisons. Their one baseline, a
+model with no context or with demographics, is a floor, not a ceiling. And all three comparisons rest on a stable fact
+about what this kind of person typically answers. One respondent's single answer to a question cannot supply it: if the
+respondent answered 4 and the model says 5, nothing says whether that is a miss or a correct reading of a kind of
+person who typically answers 5. A demographic cell supplies it only weakly, because its members answer very
+differently. What is needed is a group of people who answer alike.
 
-We supply both with a round trip. On each of eight questionnaires, six from openpsychometrics.org and two
+We build such groups and run a round trip. On each of eight questionnaires, six from openpsychometrics.org and two
 national surveys, we sort respondents into 27 groups by k-means on their answers alone. Each group is now a kind of
 person whose behavior we know: its members' answers to every question. We then describe the group to the model, have
 the model answer as the described person, and score the answers against the group's own held-out members. Two features
