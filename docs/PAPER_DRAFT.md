@@ -35,10 +35,13 @@ How faithful is the step? Existing evaluations compare the model's answers with 
 cannot say where the gap comes from. When a persona built from a respondent's history predicts that respondent poorly
 (Jia et al. 2026), three explanations are open, and each calls for a different comparison. The information in play is
 what we know about the person from data: here, a group's typical answers to the other questions. First, the target
-question may never have been predictable from that information. To rule this out one needs a ceiling: the group's own
-most common answer to the target, which is the best any single prediction for the group can do, with no language model
-involved. The floor is the most common answer of everyone. If the ceiling is no higher than the floor, knowing the
-group tells you nothing about this question, and no description of the group, however perfect, could help. Second,
+question may never have been predictable from that information. To rule this out one needs an information ceiling:
+what a supervised model predicts for the target from the person's other answers directly, with no language model and
+no grouping involved. The floor is the most common answer of everyone. If the information ceiling is no higher than
+the floor, the other answers carry nothing about this question, and no description built from them, however perfect,
+could help. A second reference, the group ceiling, is the group's most common answer to the target: the best any
+method that gives a group one answer can do, and the yardstick for descriptions, which describe a kind of person. The
+gap between the two ceilings is the cost of reducing a person to one of 27 kinds, a design choice of the test. Second,
 the description may have dropped or distorted the information. To test this one holds the information fixed and varies
 only its form: a paragraph of the group's typical answers, or the complete list of them, item by item. If the list
 scores higher than the paragraph, the loss sits in the paragraph channel, in how the paragraph was written or in how the model
@@ -149,7 +152,12 @@ held-out question is 3. The answer lists are made of typical answers, and the ex
 **Floor.** Everyone's most common answer, used as the prediction for every test person. For the held-out question it is
 2, right for 35 percent of people.
 
-**Ceiling.** The group's most common answer, used as the prediction for every test member of that group. For group 14
+**Information ceiling.** A supervised model's prediction of the held-out answer from the person's other answers
+directly, trained on the training half with every observed answer masked in turn, the item id as a feature. It does
+not depend on grouping and says whether the held-out answer is predictable from the rest at all. It sits 4 to 11
+points above the group ceiling on the eight questionnaires (docs/roundtrip_tables.md).
+
+**Ceiling, group ceiling.** The group's most common answer, used as the prediction for every test member of that group. For group 14
 it is 3, right for 88 of its 158 members, 56 percent. It is the highest individual accuracy any method can reach on a
 group's members if it gives all of them the same answer, as every method here does: accuracy counts exact matches, and
 the most common answer is by definition the one answer that matches the most members. The short paragraph led the model to say
@@ -290,6 +298,26 @@ scripts/suite/roundtrip.py, committed before any result was computed (commit b5f
 
 All numbers are from outputs/roundtrip.json (docs/roundtrip_tables.md has every table). Column names follow Section 2: "Most common" is the floor, "Ceiling" the ceiling, short paragraph and long paragraph are the paragraphs, verbal and number lists are the lists. Accuracy is on half B under
 placement by data unless stated. "Significant" means Holm-adjusted p < 0.05 within the family named in the script.
+
+### 5.0 Reference points (no model involved)
+
+| Questionnaire | Floor | Group ceiling, 27 groups | Information ceiling, supervised from all other answers | Cost of grouping |
+|---|---|---|---|---|
+| Nerdiness | 40.5 | 44.8 | 51.5 | 6.7 |
+| Vocational interests | 32.7 | 42.6 | 53.5 | 10.9 |
+| Machiavellianism | 35.5 | 42.4 | 48.4 | 6.0 |
+| Distress | 34.0 | 53.8 | 57.9 | 4.1 |
+| Temperament | 44.8 | 49.6 | 55.8 | 6.2 |
+| Nonverbal behavior | 35.9 | 49.0 | 58.9 | 9.9 |
+| General Social Survey | 50.8 | 55.0 | 59.3 | 4.3 |
+| World Values Survey | 41.6 | 46.4 | 54.2 | 7.8 |
+
+The held-out answer is predictable from the rest on every questionnaire, by 8 to 23 points over the floor, so cause 1
+is ruled out everywhere. Reducing a person to one of 27 groups costs 4 to 11 of those points; that cost is the
+test's, since a description must describe a kind of person, and it is not charged to the description or the model.
+Causes 2 and 3 are measured against the group ceiling. Pairwise correlations between a held-out item and the others
+average only 0.10 to 0.43, so correlation understates what the other answers carry together; the supervised model is
+the measure (scripts/suite/information_ceiling.py).
 
 ### 5.1 Richness curve (family F1 and F2)
 
