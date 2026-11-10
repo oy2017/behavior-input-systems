@@ -281,8 +281,14 @@ the test does not split, the model's reasoning about which answers go together a
 knowledge contains; the pattern correlation measures the first, and handing the model population base rates (Section
 5.6) probes the second. The fact list is the boundary between causes 2 and 3 because it is the one form
 that adds nothing and removes nothing; a form that scored above it would move part of cause 3 to the description side,
-which is why any such gain is reported. A persona for one real person, as
-in digital twins, is the case of groups of size one. The choices below are this study's instance of each step.
+which is why any such gain is reported. The two gaps are an exact accounting, not
+likelihoods: the loss from the group ceiling down to the description's score splits into the part above the fact list
+and the part below it, each reported in accuracy points with a confidence interval from a paired bootstrap over
+people; a part counts as present when its interval excludes zero after Holm correction, and both can be present at
+once. Cause 1 is read from the information ceiling, not the group ceiling: "the other answers do not predict this
+question" is not the same as "the groups do not differ on it", and only the first means the data is the limit. A
+persona for one real person, as in digital twins, is the case of groups of size one. The choices below are this
+study's instance of each step.
 
 **Setting.** The data is a table: one row per respondent, one column per question, each cell a numbered answer with a
 word attached by the questionnaire's scale. The method works on that table and nothing else. It holds out one cell per row
@@ -607,7 +613,9 @@ reading, and a test that asks the model to estimate the group's answers from the
 settle it. Part of the pattern gap is item base rates and
 respondent quirks that no reader of a description can know, so the ceiling is a ceiling on information, not only on
 reasoning; giving the model each item's population distribution alongside the list is the natural next test, and the
-main study found such base rates help. The population comparison is made on the whole test half per question, not group by group: a group's
+main study found such base rates help. The number of groups is a choice: the group ceiling rises with it to a plateau around 14 groups
+(scripts/suite/capacity_curve.py) and the descriptions change with it, and whether paragraphs exaggerate and lists do
+not at other group counts has not been tested. The population comparison is made on the whole test half per question, not group by group: a group's
 three draws are nearly always identical, so the model offers no within-group distribution to compare with its members'
 spread; only the percentage question produces one, and it is pooled rather than scored per group. Also the
 fixed in advance F2 rule returned neither reading, so the "complete answer list" claim is a per-questionnaire statement, not a
