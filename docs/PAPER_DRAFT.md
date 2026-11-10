@@ -153,7 +153,8 @@ held-out question is 3. The answer lists are made of typical answers, and the ex
 
 **Most common answer.** The single answer given by the most people. It is the best one guess for a set of people.
 
-**Floor.** Everyone's most common answer, used as the prediction for every test person. For the held-out question it is
+**Floor.** Everyone's most common answer, used as the prediction for every test person: knowing nothing about the
+person, only what the population most often answers. For the held-out question it is
 2, right for 35 percent of people.
 
 **Information ceiling.** A supervised model's prediction of the held-out answer from the person's other answers
@@ -163,7 +164,8 @@ points above the group ceiling on the eight questionnaires (docs/roundtrip_table
 
 **Ceiling, group ceiling.** The group's most common answer, used as the prediction for every test member of that group. For group 14
 it is 3, right for 88 of its 158 members, 56 percent. It is the highest individual accuracy any method can reach on a
-group's members if it gives all of them the same answer, as every method here does: accuracy counts exact matches, and
+group's members if it gives all of them the same answer (for matching a population's distribution it is not a bound
+at all; a method that spreads answers can do better), as every method here does: accuracy counts exact matches, and
 the most common answer is by definition the one answer that matches the most members. The short paragraph led the model to say
 5, right for 15 members; the number list to say 4, right for 47; nothing could have been right for more than 88. The
 bound holds for individual accuracy only. It is not a bound on the distribution distance, since one answer per group
