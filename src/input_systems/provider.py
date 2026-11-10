@@ -63,7 +63,7 @@ class GeminiClient:
                 if self.thinking:
                     parts = (d.get("candidates") or [{}])[0].get("content", {}).get("parts", [])
                     return "".join(p.get("text", "") for p in parts if not p.get("thought"))
-                return d["choices"][0]["message"]["content"] or ""
+                return ((d.get("choices") or [{}])[0].get("message") or {}).get("content") or ""  # a filtered or empty choice counts as no answer
             except urllib.error.HTTPError as e:
                 if e.code in (429, 500, 502, 503, 504) and attempt < self.max_retries - 1:
                     self._note_retry(f"http {e.code}")
