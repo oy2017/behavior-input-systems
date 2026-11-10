@@ -102,8 +102,12 @@ caricature in generated text for groups whose true answers are unknown; we measu
 against the group's real members. The one remedy that survives here, asking for a distribution, was proposed by Lee et
 al., and we confirm it.
 
-What we propose is a diagnostic, not a benchmark: the model is held fixed and the descriptions are what is ranked,
-and the test says where a description's error comes from rather than only how large it is. Our contributions are:
+What we propose is a diagnostic method for the description step in persona-based simulation. It takes a way of
+describing people to a model, measures how much of the people's real behavior the model recovers from it, and attributes
+the loss to one of three causes: nothing to recover, lost in the description, or beyond what the model can use. The
+name follows round-trip translation: data goes to a description and back to behavior, and the test reports what
+changed on the way. It applies to any pipeline, a description form read by a model on a kind of people and questions,
+whenever real answers from many such people on a shared set of questions exist. Our contributions are:
 1. The round trip, a diagnostic for persona descriptions: it scores a description against the known behavior of the
    group it summarizes, with a same-capacity data ceiling and the predicted item withheld, and separates three causes
    of error: nothing to recover, loss in the paragraph channel, and limits of what the model knows.
@@ -170,7 +174,8 @@ label: "I gesture when I talk to people. Answer: 'Very often'." (result files: v
 **Answer list.** Either the word list or the number list.
 
 **Round trip.** Real group, then description, then the model's answers as the described person, then comparison with
-the real group's members.
+the real group's members. The name follows round-trip translation, where a text is translated out and back to see
+what changed; it is not an established term in persona work and is defined here.
 
 **Placed by data.** A test person is put in the group whose members' answers are nearest to their own answers on the
 questions other than the hidden one, and receives the model's answer for that group's description. This is the main
@@ -386,6 +391,16 @@ data-ceiling, two groups on 5 of 8 questionnaires.
 inflates exaggeration: the model plays a caricature, and more words do not fix it. Independently, the model's picture of
 which answers go together, the pattern, is right on some questionnaires and wrong on others, and no form of description
 changes it. The two can be told apart because answer lists remove the first without touching the second.
+
+**When to use the diagnostic.** Before trusting a persona pipeline, run the round trip on questions that have already
+been asked. A market researcher who builds personas from customer segments learns which form to write them in and how
+far to trust their answers to new questions. A social scientist building silicon samples or digital twins learns
+whether a gap comes from the description or from the model's picture of the domain before interpreting the twins. A
+model developer gets an audit of the model's folk psychology: the pattern correlation by questionnaire, and the item
+audit behind it, show which domains the model misreads. The test needs respondents on a shared item set, a split, and
+the model; it returns a floor, a ceiling, accuracy per form, the exaggeration ratio, the pattern correlation and the
+distribution distance, and the verdict is read from where a form falls between floor and ceiling and from which measure
+explains the gap.
 
 **What to feed a model.** If the aim is one person's answers, give the answer list, in numbers or labels, never a
 paragraph of it; expect it to match data-ceiling where the questionnaire has one dominant construct the
