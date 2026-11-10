@@ -12,6 +12,9 @@ Conditions (Gemini 3.5 Flash, thinking off, one answer per record as in the main
 - persona_demographics: an 80-word second-person persona written by the model from the record's demographics only,
   which then replaces the demographics in the system prompt.
 - persona_demographics+traits: the same from demographics plus Big Five scores, on the six questionnaires that have them.
+- persona_history (added 2026-11-09, rule committed before running): the same from the person's own answers to the
+  other questions, the recipe of Jia et al. 2026 and Lee et al. 2026; raw form = the main study's history condition;
+  ceiling = the supervised model on history. Rule F3 (8 tests): as F1.
 
 DECISION RULES, committed before any result was computed. Paired bootstrap over records, 10,000 resamples, Holm within
 each family, alpha 0.05.
@@ -28,16 +31,16 @@ from pathlib import Path
 import numpy as np
 from scipy.stats import wasserstein_distance
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
-from input_systems.suite import demographics_text, traits_text, item_prompt, parse_int
+from input_systems.suite import demographics_text, traits_text, history_text, item_prompt, parse_int
 MODEL = "gemini-3.5-flash"
 ALL = ["npas", "riasec", "mach", "dass", "fti", "nis", "gss2022", "wvs7"]
 NAME = {"npas": "Nerdiness", "riasec": "Vocational interests", "mach": "Machiavellianism", "dass": "Distress",
         "fti": "Temperament", "nis": "Nonverbal behavior", "gss2022": "General Social Survey", "wvs7": "World Values Survey"}
 DESC_SYS = "You are a researcher who writes short descriptions of survey respondents."
-RAW = {"persona_demographics": "demographics", "persona_demographics+traits": "demographics+traits"}
+RAW = {"persona_demographics": "demographics", "persona_demographics+traits": "demographics+traits", "persona_history": "history"}
 
 def persona_prompt(rec, cond):
-    facts = demographics_text(rec) + ("\n\n" + traits_text(rec) if "traits" in cond else "")
+    facts = history_text(rec) if cond == "persona_history" else demographics_text(rec) + ("\n\n" + traits_text(rec) if "traits" in cond else "")
     return (f"Here is what is known about one respondent to an online questionnaire:\n\n{facts}\n\nWrite a description of "
             "this person, addressed to them in the second person (\"You are someone who...\"). Describe the dispositions, "
             "values, habits or tendencies you would expect of such a person. Use 3 to 5 sentences and at most 80 words. "
@@ -68,7 +71,7 @@ def holm(ps):
     return adj
 
 def analyze():
-    rng = np.random.default_rng(0); out = {}; fam = {"F1": [], "F2": []}
+    rng = np.random.default_rng(0); out = {}; fam = {"F1": [], "F2": [], "F3": []}
     def load(ds, c):
         p = Path(f"outputs/suite/{ds}/{MODEL}/{c}.jsonl")
         return {d["record_idx"]: d for d in map(json.loads, open(p))} if p.exists() else None
@@ -93,7 +96,7 @@ def analyze():
             out[ds][cond] = {"n": len(common), "ceiling": 100 * ceil[raw]["acc"], "raw": 100 * a_r.mean(), "persona": 100 * a_p.mean(),
                              "gain": 100 * d.mean(), "ci": [float(np.percentile(b, 2.5)), float(np.percentile(b, 97.5))], "p": pv,
                              "W_raw": Wr, "W_persona": Wp, "sd_raw": sr, "sd_persona": sp}
-            fam["F1" if cond == "persona_demographics" else "F2"].append([ds, cond, 100 * d.mean(), *out[ds][cond]["ci"], pv])
+            fam[{"persona_demographics": "F1", "persona_demographics+traits": "F2", "persona_history": "F3"}[cond]].append([ds, cond, 100 * d.mean(), *out[ds][cond]["ci"], pv])
     for cond, raw in RAW.items():
         rows = [(ds, out[ds][cond]) for ds in ALL if cond in out[ds]]
         if not rows: continue
